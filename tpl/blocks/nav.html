@@ -1,0 +1,331 @@
+<div class="block text-center mt ambiente">
+    <label class="label" > EMPRESA </label>
+    <select class="form-control input-sm" ng-change="onChangeEmpresaSession(); $event.preventDefault();" ng-model="arrMain.empresaadmin" 
+      ng-options="item as item.descripcion for item in arrMain.listaEmpresaAdminSession"> </select>
+</div>
+<li class="line dk"></li>
+<!-- list -->
+<ul class="nav" ng-show="isLoggedIn">
+  <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+    <span> Navegación </span> 
+  </li>
+  <!-- DASHBOARD --> 
+  <li ui-sref-active="active">
+    <a ui-sref="app.dashboard">
+      <i class="glyphicon glyphicon-stats icon text-primary-dker"></i>
+      <span class="font-bold"> Dashboard </span>
+    </a>
+  </li>
+  <!-- SEGURIDAD -->
+  <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-user icon text-primary-dker"></i>
+      <span class="font-bold"> Seguridad 
+    </a>
+    <ul class="nav nav-sub dk">
+      <li>
+        <a ui-sref="app.colaborador"> 
+          <span>Colaboradores</span>
+        </a>
+      </li>
+      <li>
+        <a ui-sref="app.usuario"> 
+          <span>Usuario</span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.tipo_usuario"> 
+          <span>Niveles de Acceso</span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.rol"> 
+          <span>Roles</span> 
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.log-eventos"> 
+          <span>Log de Eventos</span>
+        </a>
+      </li>
+    </ul>
+  </li> 
+  <!-- TABLAS MAESTRAS -->
+  <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-user icon text-primary-dker"></i>
+      <span class="font-bold"> Tablas Maestras </span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <!-- <li class="nav-sub-header">
+        <a href>
+          <span> </span>
+        </a>
+      </li> -->
+      <li >
+        <a ui-sref="app.xyz"> 
+          <span> Diagnosticos CIE10 </span> 
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.analisis-laboratorio"> 
+          <span> Producto </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.xz"> 
+          <span> Especialidades </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.medico"> 
+          <span> Médicos </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.medicamento"> 
+          <span> Medicamento </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.canal-venta"> 
+          <span> Canales de Venta </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.medico"> 
+          <span> Redes </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.medico"> 
+          <span> Banco </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.medico"> 
+          <span> Empresa </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.medico"> 
+          <span> Formas de Pago </span>
+        </a>
+      </li>
+      <li>
+        <a ui-sref="app.medico"> 
+          <span> Variables de Plan </span>
+        </a>
+      </li>
+    </ul>
+  </li> 
+  <!-- PROVEEDORES -->
+  <li>
+    <a ui-sref="app.dashboard">      
+      <i class="glyphicon glyphicon-user icon text-primary-dker"></i>
+      <span class="font-bold"> Proveedores </span>
+    </a>
+  </li> 
+  <!-- CLIENTES --> 
+  <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-th-large icon text-primary-dker"></i>
+      <span class="font-bold"> Clientes </span>
+    </a>
+    <ul class="nav nav-sub dk">
+      <li>
+        <a ui-sref="app.unidad-medida"> 
+          <span> Persona Natural </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.banco"> 
+          <span> Persona Jurídica </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.empresa-admin"> 
+          <span> Categoria de Cliente </span>
+        </a>
+      </li>
+    </ul>
+  </li> 
+  <!-- CARGA MASIVA --> 
+  <li>
+    <a ui-sref="app.carga-masiva">      
+      <i class="glyphicon glyphicon-user icon text-primary-dker"></i>
+      <span class="font-bold"> Carga Masiva </span>
+    </a>
+  </li> 
+  <!-- PLANES Y COBERTURAS -->
+  <li >
+    <a ui-sref="app.dashboard">      
+      <i class="glyphicon glyphicon-user icon text-primary-dker"></i>
+      <span class="font-bold"> Planes y Coberturas </span>
+    </a>
+  </li> 
+  <!-- GESTIÓN DE CITAS -->
+  <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-th-large icon text-primary-dker"></i>
+      <span class="font-bold" > Citas </span>
+    </a>
+    <ul class="nav nav-sub dk"> 
+      <li >
+        <a ui-sref="app.nue"> 
+          <span> Reserva de Cita </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.historial-cotizacion"> 
+          <span> Historial </span>
+        </a>
+      </li>
+    </ul>
+  </li> 
+  <!-- GESTIÓN DE SINIESTROS -->
+  <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-th-large icon text-primary-dker"></i>
+      <span class="font-bold" > Siniestros </span>
+    </a>
+    <ul class="nav nav-sub dk"> 
+      <li >
+        <a ui-sref="app.nue"> 
+          <span> Por Consulta </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.historial-cotizacion"> 
+          <span> Por Exámenes </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.historial-cotizacion"> 
+          <span> Por Procedimiento </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.historial-cotizacion"> 
+          <span> Desbloquear Asegurado </span>
+        </a>
+      </li>
+    </ul>
+  </li> 
+  <!-- GESTIÓN DE INCIDENCIAS -->
+  <li >
+    <a ui-sref="app.dashboard">      
+      <i class="glyphicon glyphicon-user icon text-primary-dker"></i>
+      <span class="font-bold"> Incidencias </span> 
+    </a>
+  </li>
+  <!-- FACTURACIÓN PROVEEDOR -->
+  <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-th-large icon text-primary-dker"></i>
+      <span class="font-bold"> Fact. Proveedor </span>
+    </a>
+    <ul class="nav nav-sub dk"> 
+      <li >
+        <a ui-sref="app.nuevdo"> 
+          <span> Nuevo </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.histido"> 
+          <span> Historial </span>
+        </a>
+      </li> 
+    </ul>
+  </li>
+  <!-- FACTURACION CLIENTE -->
+  <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-th-large icon text-primary-dker"></i>
+      <span class="font-bold" > Fact. Cliente </span>
+    </a>
+    <ul class="nav nav-sub dk"> 
+      <li >
+        <a ui-sref="app.nueva-venta"> 
+          <span> Nuevo </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.historial-caja"> 
+          <span> Historial </span>
+        </a>
+      </li> 
+      <li >
+        <a ui-sref="app.historial-venta"> 
+          <span> Documentos y Series </span>
+        </a>
+      </li>  
+    </ul>
+  </li>
+  <!-- TESORERIA --> 
+  <li>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-th-large icon text-primary-dker"></i>
+      <span class="font-bold"> Tesorería </span>
+    </a>
+    <ul class="nav nav-sub dk"> 
+      <li >
+        <a ui-sref="app.nueva-guia-remision"> 
+          <span> Nueva Pago </span>
+        </a>
+      </li>
+      <li >
+        <a ui-sref="app.historial-guia"> 
+          <span> Historial de Pagos </span>
+        </a>
+      </li> 
+    </ul>
+  </li> 
+  <!-- CENTRAL DE REPORTES --> 
+  <li >
+    <a ui-sref="app.central-reportes">
+      <i class="glyphicon glyphicon-stats icon text-primary-dker"></i>
+      <span class="font-bold" > Central de Reportes </span> 
+    </a>
+  </li>
+  <!-- GRÁFICOS ESTADÍSTICOS --> 
+  <li >
+    <a ui-sref="app.centr">
+      <i class="glyphicon glyphicon-stats icon text-primary-dker"></i>
+      <span class="font-bold" > Gráficos </span> 
+    </a>
+  </li>
+  <li class="line dk hidden-folded"></li>
+</ul> 
