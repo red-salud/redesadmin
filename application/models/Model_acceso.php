@@ -6,12 +6,14 @@ class Model_acceso extends CI_Model {
 	}
  	// ACCESO AL SISTEMA
 	public function m_logging_user($data){
-		$this->db->select('COUNT(*) AS logged, us.idusuario, us.estado_us, us.username, us.idtipousuario',FALSE);
+		$this->db->select('COUNT(*) AS logged, us.idusuario, us.estado_us, us.username, 
+			tu.idtipousuario, tu.key_tu',FALSE); 
 		$this->db->from('usuario us');
 		$this->db->join('colaborador co', 'us.idusuario = co.idusuario AND co.estado_col = 1');
+		$this->db->join('tipo_usuario tu', 'us.idtipousuario = tu.idtipousuario AND tu.estado_tu = 1');
 		$this->db->where('us.username', $data['usuario']);
 		$this->db->where('us.password', do_hash($data['password'] , 'md5'));
-		$this->db->where('us.estado_us', 1);
+		$this->db->where('us.estado_us', 1); 
 		$this->db->group_by('us.idusuario'); 
 		$this->db->limit(1);
 		return $this->db->get()->row_array();

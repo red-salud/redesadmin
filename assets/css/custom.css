@@ -86,7 +86,7 @@
     font-weight: 400;
 }
 
-form.edit-form input, form.edit-form select { 
+form.edit-form input, form.edit-form select, .edit-form input, .edit-form select { 
 	background-color: #fcfcbc; 
 }
 
@@ -125,4 +125,145 @@ form.edit-form input, form.edit-form select {
 /* login */
 .bg-white-tr {
     background-color: rgba(255,255,255,0.7);
+}
+
+.{
+    background-color: rgba(255,255,255,0.8);    
+}
+
+.btn-xs .dropdown-menu > li > a { 
+    padding: 3px 10px;
+    font-size: 12px; 
+}
+
+.btn-xs .dropdown-menu > li > a.text-danger { 
+    color: red;
+}
+
+.nav-tabs-alt .nav-tabs > li.active > a.bg-celeste-tab { 
+    background-color: #23b7e5 !important;
+    color: white;
+}
+.waterMarkEmptyData {
+    position: absolute;
+    top : 80px;
+    opacity: 0.25;
+    font-size: 3em;
+    width: 100%;
+    text-align: center;
+    z-index: 1000;
+}
+
+/* CALENDAR */
+.fc-event.b-primary{
+    background-color: #7266ba !important;
+    color: #fff !important;
+}
+
+.fc-event.b-success{
+    background-color: #27c24c !important;
+    color: #fff !important;
+}
+
+.menu-dropdown.right{
+    margin-left:10%;
+}
+
+.fc-title{
+    font-size: 10px;
+    letter-spacing: 0px;
+}
+
+.fc-body .fc-time-grid-container{
+    overflow-y: visible !important;
+    height: auto !important;
+}
+
+.fc-event .fc-bg{
+    background: transparent !important;
+}
+
+.fc-event.unico{
+    right: 0% !important;
+    left: 0% !important;
+    margin-right: 0 !important;
+}
+
+.seleccionado{
+    background: #1199d3;
+    padding: 3px 5px;
+    border-radius: 3px;
+    color: white;
+    font-weight: 900;
+}
+
+.fc-event{
+    border: 1px solid #dddddd !important;
+}
+
+/* dropdown menu contextual */
+.dropdown .dropdown-menu.with-arrow {
+  margin-top: 10px;
+}
+.dropdown .dropdown-menu.with-arrow:before {
+  content: "";
+  position: absolute;
+  right: 10px;
+  top: -10px;
+}
+.dropdown .dropdown-menu.with-arrow:after {
+  content: "";
+  position: absolute;
+  right: 11px;
+  top: -8px;
+}
+.dropdown .dropdown-menu.pull-right.with-arrow:before {
+  left: auto;
+  right: 11px;
+}
+.dropdown .dropdown-menu.pull-right.with-arrow:after {
+  left: auto;
+  right: 12px;
+}
+.dropdown .dropdown-menu > li > a > i {
+  width: 20px;
+  display: inline-block;
+}
+.dropdown .dropdown-menu.dropdown-menu-custom {
+  display: block;
+  top: -2px;
+  left: auto;
+  right: 0;
+  border: 0;
+  border-radius: 2px;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12);
+  transition: opacotity 0.3s cubic-bezier(0.19, 1, 0.22, 1), transform 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  transform: scale(0);
+  transform-origin: 90% 0;
+  backface-visibility: hidden;
+  opacity: 0;
+}
+.dropdown .dropdown-menu.dropdown-menu-custom > li a {
+  padding: 8px 20px;
+}
+.dropdown.open .dropdown-menu-custom {
+  transform: scale(1);
+  opacity: 1;
+}
+.dropdown.dropup .dropdown-menu.dropdown-menu-custom {
+  top: auto;
+  bottom: -2px;
+}
+
+/* CUSTOM TOOLTIP */
+.tooltip-event {
+    width: auto;
+    height: auto;
+    background: #000;
+    color: #fff;
+    position: absolute;
+    z-index: 999;
+    padding: 4px;
+    border-radius: 8px;
+    font-size: 11px;
 }

@@ -1,0 +1,151 @@
+<div class="" ng-controller="ReservaCitasCtrl" style="background-color: rgba(255,255,255,0.85);">
+	<div class="bg-light lter b-b wrapper-md">
+	  <h1 class="m-n font-thin h3"> Reserva de Citas </h1>
+	</div>
+	<div class="hbox hbox-auto-xs hbox-auto-sm dker b-b"> 
+		<div class="col wrapper-sm">
+			<div class="pull-left"> 
+				<div class="inline"> 
+	        <label class="control-label mb-n"> Buscar N° Doc de Asegurado </label> 
+	        <input type="text" ng-enter="btnConsultarAseguradoDNI();" class="form-control input-sm" ng-model="fPrimerDato.numero_documento" placeholder="Busque por N° de Documento" tabindex="100" /> 
+	      </div> 
+	      <div class="inline"> 
+		      <button type="button" class="btn btn-sm btn-info" ng-click="btnConsultarAseguradoDNI();" style="margin-bottom: 4px;"> 
+					  <i class="fa fa-search"></i> CONSULTAR 
+					</button> 
+					<button type="button" class="btn btn-sm btn-info" ng-click="btnConsultarExternoDNI()" style="margin-bottom: 4px;">
+					  <i class="fa fa-bars"></i> CONSULTAR... (avanzado)
+					</button> 
+				</div>
+	      <div ng-if="fPrimerDato.asegurado_cert && fPrimerDato.asegurado_cert.flag == 1" class="block"> 
+	      	<div class="well well-sm col-md-12 p-n m-n pt-sm pb-sm" style="background-color: white;"> 
+	      		<h3 class="col-md-12 mt text-primary text-bold" > 
+	      			{{fPrimerDato.asegurado_cert.asegurado}}
+	      		</h3>
+	      		<label class="control-label mb-n col-md-4 text-primary"> N° Doc. Identidad: 
+	      			<small class="text-primary text-bold"> {{ fPrimerDato.asegurado_cert.numero_doc_aseg }} </small> </label> 
+	      		<label class="control-label mb-n col-md-4 text-primary"> Estado: 
+		      		<small class="text-primary text-bold" style="text-decoration: underline;"> {{ fPrimerDato.asegurado_cert.estado_atencion.descripcion }} </small> 
+		      	</label> 
+		      	<label class="control-label mb-n col-md-4 text-primary"> Plan / Prima: 
+		      		<small class="text-primary text-bold"> {{ fPrimerDato.asegurado_cert.nombre_plan }} / {{ fPrimerDato.asegurado_cert.prima_monto }} PEN. </small> 
+		      	</label> 
+		      	<label class="control-label mb-n col-md-4 text-primary"> Vigencia: 
+		      		<small class="text-primary text-bold"> {{ fPrimerDato.asegurado_cert.fecha_inicio_vig }} - {{ fPrimerDato.asegurado_cert.fecha_fin_vig }} </small> </label>
+		      	<label class="control-label mb-n col-md-4 text-primary"> Fecha Ult. Atención: 
+		      		<small class="text-primary text-bold"> {{ fPrimerDato.asegurado_cert.ultima_atencion }} </small> </label>
+		      	<label class="control-label mb-n col-md-4 text-primary"> 
+		      		<div class="text-ellipsis"> Lugar Ult. Atención: 
+		      			<small title="{{ fPrimerDato.asegurado_cert.lugar_ultima_atencion }}" class="text-primary text-bold"> 
+		      				{{ fPrimerDato.asegurado_cert.lugar_ultima_atencion }} </small>
+		      		</div> 
+		      	</label>
+		      	<hr class="col-xs-12 mt mb" />
+		      	<label class="control-label mb-n col-md-4 text-primary"> Fecha de Nac.: 
+		      		<small class="text-primary text-bold {{ fCont.classLabels }}"> {{ fPrimerDato.asegurado_cert.fecha_nacimiento }} </small> 
+		      		<input type="text" ng-model="fPrimerDato.asegurado_cert.fecha_nacimiento_edit" class="form-control input-xs mask {{ fCont.classInputs }}" 
+		      			input-mask mask-options="{alias: 'dd-mm-yyyy'}" /> 
+		      	</label> 
+		      	<label class="control-label mb-n col-md-4 text-primary"> Edad Actual: 
+		      		<small class="text-primary text-bold"> {{ fPrimerDato.asegurado_cert.edad_actual }} </small> 
+		      	</label> 
+		      	<label class="control-label mb-n col-md-4 text-primary"> Sexo: 
+		      		<small class="text-primary text-bold {{ fCont.classLabels }}"> {{ fPrimerDato.asegurado_cert.sexo }} </small> 
+		      		<select class="form-control input-xs {{ fCont.classInputs }}" ng-model="fPrimerDato.asegurado_cert.sexo" ng-options="item.id as item.descripcion for item in fArr.listaSexo"></select>
+		      	</label> 
+		      	<label class="control-label mb-n col-md-4 text-primary"> Dirección: 
+		      		<small class="text-primary text-bold {{ fCont.classLabels }}"> {{ fPrimerDato.asegurado_cert.direccion }} </small> 
+		      		<input type="text" ng-model="fPrimerDato.asegurado_cert.direccion" class="form-control input-xs {{ fCont.classInputs }}" /> 
+		      	</label> 
+		      	<label class="control-label mb-n col-md-4 text-primary"> Teléfono: 
+		      		<small class="text-primary text-bold {{ fCont.classLabels }}"> {{ fPrimerDato.asegurado_cert.telefono }} </small> 
+		      		<input type="text" ng-model="fPrimerDato.asegurado_cert.telefono" class="form-control input-xs {{ fCont.classInputs }}" /> 
+		      	</label> 
+		      	<label class="control-label mb-n col-md-4 text-primary"> Correo Electrónico: 
+		      		<small class="text-primary text-bold {{ fCont.classLabels }}"> {{ fPrimerDato.asegurado_cert.correo_electronico }} </small> 
+		      		<input type="text" ng-model="fPrimerDato.asegurado_cert.correo_electronico" class="form-control input-xs {{ fCont.classInputs }}" /> 
+		      	</label> 
+		      	<div class="mb-n col-md-12 text-right">
+		      		<button class="btn btn-xs btn-success" ng-click="btnVerCondicionesPlan();" type="button"> 
+		      			<i class="fa fa-edit"></i> CONDICIONES DEL PLAN </button>
+		      		<button class="btn btn-xs btn-warning {{ fCont.classLabels }}" ng-click="btnEditarInformacion();" type="button"> 
+		      			<i class="fa fa-edit"></i> EDITAR INFORMACIÓN </button>
+		      		<button class="btn btn-xs btn-success {{ fCont.classInputs }}" ng-click="btnEditarInformacionExec();" type="button"> 
+		      			<i class="fa fa-edit"></i> GUARDAR </button> 
+		      		
+		      	</div> 
+	      	</div>
+	      </div>
+	      <div ng-if="fPrimerDato.asegurado_cert.flag == 'none'" class="block"> 
+	      	<div class="well well-sm col-md-12 mb-n" style="background-color: white;"> 
+	      		<div class="text-center text-danger"> No se encontraron resultados para esta búsqueda. <br /> 
+	      			Consulte la búsqueda avanzada. </div> 
+	      	</div>
+	      </div>
+			</div>
+		</div>
+	</div>
+	<div class="hbox hbox-auto-xs hbox-auto-sm">
+		<div class="col wrapper-sm">
+		  <div class="clearfix mb-sm">
+		    <div class="pull-left">
+		    	<!-- <div class="text-gray inline"> LEYENDA </div>  -->
+		    	<div class="text-gray inline" style="font-size: 10px; box-shadow: 0 1px 0px rgba(0,0,0,0.05);"> RESERVA DE CITA 
+		    		<div class="bg-primary" style="height: 20px;width: 100px;"></div>
+		    	</div>
+		    	<div class="text-gray inline" style="font-size: 10px; box-shadow: 0 1px 0px rgba(0,0,0,0.05);"> ATENCIÓN 
+		    		<div class="bg-success" style="height: 20px;width: 100px;"></div>
+		    	</div>
+		    </div>
+		    <div class="pull-right" style="margin-top: 8px;"> 
+		      <button type="button" class="btn btn-sm btn-default" ng-click="today()">HOY</button>
+		      <div class="btn-group m-l-xs m-r-xs">
+		        <button class="btn btn-sm btn-default" ng-click="changeView('agendaDay')">DÍA</button>
+		        <button class="btn btn-sm btn-default" ng-click="changeView('agendaWeek')">SEMANA</button>
+		        <button class="btn btn-sm btn-default" ng-click="changeView('month')">MES</button>
+		      </div>
+		      <button type="button" class="btn btn-sm btn-primary btn-addon" ng-click="btnAgregarCita()">
+		      	<i class="fa fa-plus"></i> AGREGAR CITA 
+		    	</button>
+		    </div>
+		  </div>
+		  <div class="pos-rlt">
+		  	<div class="menu-dropdown" uib-dropdown style="position:absolute; top:{{event.posY}}px;left:{{event.posX}}px;" 
+		  		ng-mouseleave="closeMenu();">
+          <div class="my-dropdown">
+            <ul class="dropdown-menu dropdown-menu-custom" uib-dropdown-menu role="menu"> 
+              <li role="menuitem" ng-if="!event.atencion.idatencion" ng-click="btnGenerarAtencion(event);">
+                <a ><i class="fa fa-check-square-o"></i>Generar Atención</a>
+              </li>
+              <li role="menuitem" ng-if="!event.atencion.idatencion" ng-click="btnEditarCita(event);">
+                <a ><i class="fa fa-calendar"></i>Modificar Cita</a>
+              </li>
+              <li role="menuitem" ng-if="!event.atencion.idatencion" ng-click="btnAnular(event);">
+                <a ><i class="fa fa-remove"></i>Anular Cita</a>
+              </li>
+              <li role="menuitem" ng-if="event.atencion.idatencion" ng-click="">
+                <a ><i class="fa fa-pencil-square-o"></i>Ir a Atención</a>
+              </li>
+              <li role="menuitem" ng-if="event.atencion.idatencion" ng-click="btnAnularAtencion(event)">
+                <a ><i class="fa fa-remove"></i>Anular Atención</a>
+              </li>
+            </ul>
+          </div>
+	      </div>
+		    <!-- <div class="fc-overlay">
+		      <div class="panel bg-white b-a pos-rlt">
+		        <span class="arrow"></span>
+		        <div class="h4 font-thin m-b-sm">{{event.title}}</div>
+		        <div class="line b-b b-light"></div>
+		        <div><i class="icon-calendar text-muted m-r-xs"></i> {{event.start | date:'medium'}}</div>
+		        <div class="ng-hide" ng-show='event.end'><i class="icon-clock text-muted m-r-xs"></i> {{event.end | date:'medium'}}</div>
+		        <div class="ng-hide" ng-show='event.location'><i class="icon-pointer text-muted m-r-xs"></i> {{event.location}}</div>
+		        <div class="m-t-sm">{{event.info}}</div>
+		        <div class="m-t-sm">{{event.url}}</div>
+		      </div>
+		    </div> -->
+		    <div class="calendar" ng-model="eventSources" config="uiConfig.calendarCitas" ui-calendar="uiConfig.calendarCitas"></div>
+		  </div>
+		</div>
+	</div>
+</div>

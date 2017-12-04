@@ -6,12 +6,11 @@ class Colaborador extends CI_Controller {
     {
         parent::__construct();
         // Se le asigna a la informacion a la variable $sessionVP.
-        $this->sessionRS = @$this->session->userdata('sess_fact_'.substr(base_url(),-20,7));
+        $this->sessionRS = @$this->session->userdata('sess_reds_'.substr(base_url(),-20,7));
         $this->load->helper(array('fechas','otros')); 
         $this->load->model(array('model_colaborador','model_usuario')); 
 
-    }
-
+    } 
 	public function listar_colaboradores(){ 
 		$allInputs = json_decode(trim($this->input->raw_input_stream),true);
 		$paramPaginate = $allInputs['paginate'];
@@ -50,7 +49,47 @@ class Colaborador extends CI_Controller {
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($arrData));
 	}
-
+	public function listar_colaboradores_sin_usuario()
+	{
+		$allInputs = json_decode(trim($this->input->raw_input_stream),true);
+		$paramPaginate = $allInputs['paginate'];
+		$paramDatos = @$allInputs['datos'];
+		$lista = $this->model_colaborador->m_cargar_colaboradores_sin_usuario($paramPaginate,$paramDatos);
+		$fCount = $this->model_colaborador->m_count_colaboradores_sin_usuario($paramPaginate,$paramDatos);
+		//var_dump('hola'); exit();
+		$arrListado = array();
+		foreach ($lista as $row) { 
+			array_push($arrListado,
+				array(
+					'id' => trim($row['idcolaborador']),
+					'nombres' => strtoupper($row['nombres_col']),
+					'apellidos' => strtoupper($row['ap_paterno_col'].' '.$row['ap_materno_col']),
+					'ap_paterno' => strtoupper($row['ap_paterno_col']),
+					'ap_materno' => strtoupper($row['ap_materno_col']),
+					'num_documento' => $row['numero_documento_col'],
+					'celular' => $row['celular_col'],
+					'email' => strtoupper($row['correo_laboral']),
+					'fecha_nacimiento' => darFormatoDMY($row['fecha_nacimiento_col']),
+					'tipo_usuario' => array(
+						'id'=> $row['idtipousuario'],
+						'descripcion'=> $row['descripcion_tu']
+					), 
+					'username' => $row['username'],
+					'idusuario' => $row['idusuario']
+				)
+			);
+		} 
+    	$arrData['datos'] = $arrListado;
+    	$arrData['paginate']['totalRows'] = $fCount['contador'];
+    	$arrData['message'] = '';
+    	$arrData['flag'] = 1; 
+		if(empty($lista)){
+			$arrData['flag'] = 0;
+		}
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($arrData));
+	}
 	public function ver_popup_formulario()
 	{
 		$this->load->view('colaborador/mant_colaborador');

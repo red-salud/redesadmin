@@ -3,8 +3,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Acceso extends CI_Controller {
 	public function __construct(){
 		parent::__construct();
-		$this->load->helper(array('security'));
-		$this->load->model(array('model_acceso','model_colaborador'));
+		$this->load->helper(array('security','config_helper'));
+		$this->load->model(array('model_acceso','model_colaborador','model_configuracion'));
 		//cache
 		$this->output->set_header("Cache-Control: no-store, no-cache, must-revalidate, no-transform, max-age=0, post-check=0, pre-check=0"); 
 		$this->output->set_header("Pragma: no-cache");
@@ -21,7 +21,12 @@ class Acceso extends CI_Controller {
     			if($loggedUser['estado_us'] == 1){
 					$arrData['flag'] = 1;
 					$arrPerfilUsuario = array();
-					$arrPerfilUsuario = $this->model_colaborador->m_cargar_perfil($loggedUser['idusuario']);
+					if( $loggedUser['key_tu'] == 'key_proveedor' ){
+						$arrPerfilUsuario = $this->model_colaborador->m_cargar_perfil_proveedor($loggedUser['idusuario']);
+					}else{
+						$arrPerfilUsuario = $this->model_colaborador->m_cargar_perfil($loggedUser['idusuario']);
+					}
+					
 					$arrPerfilUsuario['nombre_foto'] = empty($arrPerfilUsuario['nombre_foto']) ? 'sin-imagen.png' : $arrPerfilUsuario['nombre_foto']; 
 					// GUARDAMOS EN EL LOG DE LOGEO LA SESION INICIADA. 
 					//$this->model_acceso->m_registrar_log_sesion($arrPerfilUsuario); 
@@ -108,6 +113,8 @@ class Acceso extends CI_Controller {
 			!empty($_SESSION['sess_reds_'.substr(base_url(),-20,7) ]['idusuario']) ){
 			$arrData['flag'] = 1;
 			$arrData['datos'] = $_SESSION['sess_reds_'.substr(base_url(),-20,7) ];
+			$arrConfig = obtener_parametros_configuracion(); 
+			$arrData['datos']['config'] = $arrConfig;
 		} 
 		$this->output
 		    ->set_content_type('application/json')

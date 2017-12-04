@@ -5,10 +5,10 @@ class Usuario extends CI_Controller {
 	public function __construct()
     {
         parent::__construct();
-        // Se le asigna a la informacion a la variable $sessionVP.
-        $this->sessionFactur = @$this->session->userdata('sess_fact_'.substr(base_url(),-20,7));
+        // Se le asigna a la informacion a la variable $sessionRS.
+        $this->sessionRS = @$this->session->userdata('sess_reds_'.substr(base_url(),-20,7));
         $this->load->helper(array('fechas','otros')); 
-        $this->load->model(array('model_usuario')); 
+        $this->load->model(array('model_usuario','model_proveedor','model_colaborador')); 
     }
 
 	public function listar_usuario(){ 
@@ -26,7 +26,11 @@ class Usuario extends CI_Controller {
 						'descripcion'=> $row['descripcion_tu']
 					),					
 					'username' => strtoupper($row['username']),
-					'ult_inicio_sesion' => formatoFechaReporte4($row['ultimo_inicio_sesion'])
+					'ult_inicio_sesion' => formatoFechaReporte4($row['ultimo_inicio_sesion']),
+					'idcolaborador'=> $row['idcolaborador'],
+					'colaborador'=> $row['colaborador'],
+					'idproveedor'=> $row['idproveedor'],
+					'proveedor'=> $row['proveedor'] 
 				)
 			);
 		}
@@ -46,7 +50,14 @@ class Usuario extends CI_Controller {
 	{
 		$this->load->view('usuario/mant_usuario');
 	}
-
+	public function ver_popup_asociar_proveedor()
+	{
+		$this->load->view('usuario/mant_asociar_proveedor');
+	}
+	public function ver_popup_asociar_colaborador()
+	{
+		$this->load->view('usuario/mant_asociar_colaborador');
+	}
 	public function registrar()
 	{
 		$allInputs = json_decode(trim($this->input->raw_input_stream),true);
@@ -84,12 +95,44 @@ class Usuario extends CI_Controller {
 			    ->set_output(json_encode($arrData));
 			return;
    		}   	
-
+   		/* VALIDAR QUE SE ASOCIE UN PROVEEDOR */ 
+   		if( $allInputs['tipo_usuario']['key_tu'] == 'key_proveedor' ){ 
+   			if( empty($allInputs['proveedor']) || empty($allInputs['idproveedor']) ){
+   				$arrData['message'] = 'No se asoció ningún proveedor.';
+				$arrData['flag'] = 0;
+				$this->output
+				    ->set_content_type('application/json')
+				    ->set_output(json_encode($arrData));
+				return;
+   			}
+   			
+   		}else{ 
+   		/* VALIDAR QUE SE ASOCIE UN COLABORADOR */
+   			if( empty($allInputs['colaborador']) || empty($allInputs['idcolaborador']) ){
+   				$arrData['message'] = 'No se asoció ningún colaborador.';
+				$arrData['flag'] = 0;
+				$this->output
+				    ->set_content_type('application/json')
+				    ->set_output(json_encode($arrData));
+				return; 
+   			} 
+   		} 
 		$this->db->trans_start();
 		if($this->model_usuario->m_registrar($allInputs)) { // registro de usuario 
-			$arrData['idusuario'] = GetLastId('idusuario','usuario');
-			$arrData['message'] = 'Se registraron los datos correctamente';
+			$allInputs['idusuario'] = GetLastId('idusuario','usuario'); 
+			$arrData['message'] = '- Se registraron los datos correctamente'; 
 			$arrData['flag'] = 1; 
+			if( $allInputs['tipo_usuario']['key_tu'] == 'key_proveedor' ){ 
+				// asociar un proveedor 
+				if( $this->model_proveedor->m_asociar_usuario_a_proveedor($allInputs) ){ 
+					$arrData['message'] .= '<br/> - Se asoció al proveedor'; 
+				}
+			}else{
+				// asociar un colaborador 
+				if( $this->model_colaborador->m_asociar_usuario_a_colaborador($allInputs) ){ 
+					$arrData['message'] .= '<br/> - Se asoció al colaborador'; 
+				}
+			} 
 		} 
 		$this->db->trans_complete();
 
@@ -139,15 +182,16 @@ class Usuario extends CI_Controller {
 		    ->set_output(json_encode($arrData));
 	} 	
 
-	 public function listar_usuario_cbo(){ 
+	 public function listar_tipo_usuario_cbo(){ 
 		$allInputs = json_decode(trim($this->input->raw_input_stream),true);
 		$lista = $this->model_usuario->m_cargar_usuario_cbo();
 		$arrListado = array();
-		foreach ($lista as $row) {
+		foreach ($lista as $row) { 
 			array_push($arrListado,
 				array(
 					'id' => $row['idtipousuario'],
-					'descripcion' => strtoupper($row['descripcion_tu']) 
+					'descripcion' => strtoupper($row['descripcion_tu']),
+					'key_tu'=> $row['key_tu']
 				)
 			);
 		} 

@@ -53,56 +53,77 @@ angular.module('app')
             resolve: load([
               'angular/controllers/ClienteEmpresaCtrl.js',
               'angular/controllers/CategoriaClienteCtrl.js',
-              'angular/controllers/ContactoEmpresaCtrl.js',
+              'angular/controllers/ContactoClienteCtrl.js',
               'angular/controllers/ColaboradorCtrl.js'
             ])
           })
-          .state('app.nueva-cotizacion', {
-            url: '/nueva-cotizacion',
-            templateUrl: 'tpl/nueva-cotizacion.html',
+          .state('app.nueva-venta', {
+            url: '/nueva-venta',
+            templateUrl: 'tpl/nueva-venta.html',
             resolve: load([
-              'angular/controllers/NuevaCotizacionCtrl.js',
+              'angular/controllers/NuevaVentaCtrl.js',
               'angular/controllers/ClienteEmpresaCtrl.js',
               'angular/controllers/ClientePersonaCtrl.js',
-              'angular/controllers/ElementoCtrl.js',
-              'angular/controllers/ProductoCtrl.js',
-              'angular/controllers/ServicioCtrl.js',
               'angular/controllers/ClienteCtrl.js',
               'angular/controllers/ColaboradorCtrl.js',
               'angular/controllers/CategoriaClienteCtrl.js',
+              'angular/controllers/ConceptoCtrl.js',
               'angular/controllers/CategoriaElementoCtrl.js',
-              'angular/controllers/CaracteristicaCtrl.js',
-              'angular/controllers/TipoDocumentoClienteCtrl.js',
-              'angular/controllers/SedeCtrl.js',
+              'angular/controllers/ElementoCtrl.js',
+              'angular/controllers/TipoDocumentoIdentidadCtrl.js',
               'angular/controllers/FormaPagoCtrl.js',
-              'angular/controllers/UnidadMedidaCtrl.js',
-              'angular/controllers/ContactoEmpresaCtrl.js' 
+              'angular/controllers/SerieCtrl.js',
+              'angular/controllers/ContactoClienteCtrl.js', 
+              'angular/controllers/TipoDocumentoMovCtrl.js' 
             ])
           })
-          .state('app.historial-cotizacion', {
-            url: '/historial-cotizacion',
-            templateUrl: 'tpl/historial-cotizacion.html',
+          .state('app.historial-venta', {
+            url: '/historial-venta',
+            templateUrl: 'tpl/historial-venta.html',
             resolve: load([
-              'angular/controllers/HistorialCotizacionCtrl.js',
-              'angular/controllers/NuevaCotizacionCtrl.js',
-              'angular/controllers/SedeCtrl.js',
+              'angular/controllers/HistorialVentaCtrl.js',
+              'angular/controllers/NuevaVentaCtrl.js',
+              'angular/controllers/ConceptoCtrl.js',
             ])
           })
-          .state('app.producto', {
-            url: '/producto',
-            templateUrl: 'tpl/producto.html',
+          .state('app.boletaje-masivo', {
+            url: '/boletaje-masivo',
+            templateUrl: 'tpl/boletaje-masivo.html',
             resolve: load([
-              'angular/controllers/ProductoCtrl.js',
-              'angular/controllers/CategoriaElementoCtrl.js',
-              'angular/controllers/UnidadMedidaCtrl.js'
-            ]) 
+              'angular/controllers/BoletajeMasivoCtrl.js',
+              'angular/controllers/PlanCtrl.js',
+              'angular/controllers/HistorialCobroCtrl.js' 
+            ])
           })
-          .state('app.servicio', {
-            url: '/servicio',
-            templateUrl: 'tpl/servicio.html',
+          .state('app.historial-cobro', {
+            url: '/historial-cobro',
+            templateUrl: 'tpl/historial-cobro.html',
             resolve: load([
-              'angular/controllers/ServicioCtrl.js',
-              'angular/controllers/CategoriaElementoCtrl.js' 
+              'angular/controllers/HistorialCobroCtrl.js',
+              'angular/controllers/PlanCtrl.js',
+            ])
+          })
+          .state('app.historial-siniestro', {
+            url: '/historial-siniestro',
+            templateUrl: 'tpl/historial-siniestro.html',
+            resolve: load([
+              'angular/controllers/HistorialSiniestroCtrl.js',
+              'angular/controllers/PlanCtrl.js',
+            ])
+          })
+          .state('app.historial-certificado', {
+            url: '/historial-certificado/:identifyNumDoc',
+            templateUrl: 'tpl/historial-certificado.html',
+            resolve: load([
+              'angular/controllers/HistorialCertificadoCtrl.js',
+              'angular/controllers/PlanCtrl.js'
+            ])
+          })
+          .state('app.concepto', {
+            url: '/concepto',
+            templateUrl: 'tpl/concepto.html',
+            resolve: load([
+              'angular/controllers/ConceptoCtrl.js' 
             ]) 
           })
           .state('app.unidad-medida', {
@@ -134,6 +155,14 @@ angular.module('app')
               'angular/controllers/BancoCtrl.js',
               'angular/controllers/BancoEmpresaAdminCtrl.js'
             ]) 
+          }) 
+          .state('app.elemento', {
+            url: '/elemento',
+            templateUrl: 'tpl/elemento.html',
+            resolve: load([
+              'angular/controllers/ElementoCtrl.js',
+              'angular/controllers/CategoriaElementoCtrl.js' 
+            ]) 
           })  
           .state('app.categoria-elemento', {
             url: '/categoria-elemento',
@@ -150,27 +179,33 @@ angular.module('app')
               'angular/controllers/UsuarioCtrl.js'         
             ]) 
           })    
-          .state('app.sede', {
-            url: '/sede',
-            templateUrl: 'tpl/sede.html',
+          .state('app.proveedor', {
+            url: '/proveedor',
+            templateUrl: 'tpl/proveedor.html',
             resolve: load([
-              'angular/controllers/SedeCtrl.js'      
+              'angular/controllers/ProveedorCtrl.js',
+              'angular/controllers/TipoProveedorCtrl.js',
+              'angular/controllers/ContactoProveedorCtrl.js', 
+              'angular/controllers/UbigeoCtrl.js',
+              'angular/controllers/UsuarioCtrl.js',
+              'https://maps.googleapis.com/maps/api/js?key=AIzaSyB2FjjCqepP3ZXx6xFbxEKjijPtcNTCcXM' 
+              // 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCEQA0xoHHCFZYeA3lW9vBceD5OxOQOsAo' 
             ]) 
-          })  
+          }) 
           .state('app.usuario', {
             url: '/usuario',
             templateUrl: 'tpl/usuario.html',
             resolve: load([
-              'angular/controllers/UsuarioCtrl.js',   
+              'angular/controllers/UsuarioCtrl.js', 
               'angular/controllers/ColaboradorCtrl.js',
-              'angular/controllers/UsuarioEmpresaAdminCtrl.js'          
+              'angular/controllers/ProveedorCtrl.js'  
             ]) 
           })    
-          .state('app.contacto', {
-            url: '/contacto',
-            templateUrl: 'tpl/contacto.html',
+          .state('app.contacto-cliente', {
+            url: '/contacto-cliente',
+            templateUrl: 'tpl/contacto-cliente.html',
             resolve: load([      
-              'angular/controllers/ContactoEmpresaCtrl.js', 
+              'angular/controllers/ContactoClienteCtrl.js', 
               'angular/controllers/ClienteEmpresaCtrl.js',
               'angular/controllers/ClienteCtrl.js'   
             ]) 
@@ -181,7 +216,32 @@ angular.module('app')
             resolve: load([
               'angular/controllers/VariableCarCtrl.js'      
             ]) 
-          })                                                       
+          }) 
+          .state('app.forma-pago', {
+            url: '/formas-pago',
+            templateUrl: 'tpl/forma-pago.html',
+            resolve: load([
+              'angular/controllers/FormaPagoCtrl.js',
+              'angular/controllers/PlazoFormaPagoCtrl.js'        
+            ]) 
+          })
+          /* CITAS */
+          .state('app.reserva-citas', { 
+            url: '/reserva-citas/:identifyNumDoc/:editable',
+            templateUrl: 'tpl/reserva-citas.html',
+            resolve: load([ 
+              // 'moment',
+              'fullcalendar',
+              'ui.calendar',
+              'ui.select',
+              'angular/controllers/ReservaCitasCtrl.js', 
+              'angular/controllers/ProveedorCtrl.js',
+              'angular/controllers/ProductoCtrl.js',
+              'angular/controllers/HistorialCertificadoCtrl.js',
+              'angular/controllers/AseguradoCtrl.js',
+              'angular/controllers/PlanCtrl.js'  
+            ]) 
+          })
           .state('lockme', {
               url: '/lockme',
               templateUrl: 'tpl/page_lockme.html'
@@ -211,7 +271,7 @@ angular.module('app')
               url: '/mail',
               templateUrl: 'tpl/mail.html',
               // use resolve to load other dependences
-              resolve: load( ['angular/app/mail/mail.js','angular/app/mail/mail-service.js','moment'] )
+              resolve: load( ['angular/app/mail/mail.js','angular/app/mail/mail-service.js'/*,'moment'*/] )
           })
           .state('app.mail.list', {
               url: '/inbox/{fold}',

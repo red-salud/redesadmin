@@ -151,17 +151,17 @@ angular.module('app')
         });
       }
       $scope.getConfiguracionSys = function() {
-        // rootServices.sGetConfiguracionSys().then(function (response) { 
-        //   if(response.flag == 1){
-        //     $scope.fConfigSys = response.datos;
-        //   }else{
-        //     $scope.fSessionCI = {};
-        //     $scope.fConfigSys = {};
-        //     $scope.logOut();
-        //     $location.path('/access/login'); 
-        //     return false; 
-        //   }
-        // }); 
+        rootServices.sGetConfiguracionSys().then(function (response) { 
+          if(response.flag == 1){
+            $scope.fConfigSys = response.datos;
+          }else{
+            $scope.fSessionCI = {};
+            $scope.fConfigSys = {};
+            $scope.logOut();
+            $location.path('/access/login'); 
+            return false; 
+          }
+        }); 
       }
       $scope.onChangeEmpresaSession = function() {
         var arrData = { 
@@ -203,7 +203,7 @@ angular.module('app')
     return({
         sLogoutSessionCI: sLogoutSessionCI,
         sGetSessionCI: sGetSessionCI,
-        // sGetConfiguracionSys : sGetConfiguracionSys,
+        sGetConfiguracionSys : sGetConfiguracionSys,
         sListarEmpresaAdminSession: sListarEmpresaAdminSession, 
         sCambiarEmpresaSession: sCambiarEmpresaSession,
         sLoginToSystem: sLoginToSystem 
@@ -226,15 +226,15 @@ angular.module('app')
       });
       return (request.then(handleBehavior.success,handleBehavior.error));
     }
-    // function sGetConfiguracionSys(datos) {
-    //   var datos = datos || {};
-    //   var request = $http({
-    //         method : "post",
-    //         url :  angular.patchURLCI + "Configuracion/getConfigSys",
-    //         data : datos
-    //   });
-    //   return (request.then(handleBehavior.success,handleBehavior.error));
-    // }
+    function sGetConfiguracionSys(datos) {
+      var datos = datos || {};
+      var request = $http({
+            method : "post",
+            url :  angular.patchURLCI + "Configuracion/getConfigSys",
+            data : datos
+      });
+      return (request.then(handleBehavior.success,handleBehavior.error));
+    }
     function sListarEmpresaAdminSession(datos) {
       var request = $http({
             method : "post",

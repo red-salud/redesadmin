@@ -7,8 +7,12 @@ class Model_usuario extends CI_Model {
 
 	public function m_cargar_usuario($paramPaginate){ 
 		$this->db->select("u.idusuario, u.idtipousuario, u.username, u.password_view, u.password, u.ultimo_inicio_sesion, tu.descripcion_tu");
+		$this->db->select("col.idcolaborador, CONCAT(col.nombres_col, ' ', col.ap_paterno_col, ' ', col.ap_materno_col) AS colaborador",FALSE);
+		$this->db->select("prov.idproveedor, prov.nombre_comercial_pr AS proveedor",FALSE);
 		$this->db->from('usuario u');
 		$this->db->join('tipo_usuario tu', 'u.idtipousuario = tu.idtipousuario');
+		$this->db->join("proveedor prov", "u.idusuario = prov.idusuario AND tu.key_tu = 'key_proveedor'",'left');
+		$this->db->join("colaborador col", "u.idusuario = col.idusuario AND tu.key_tu <> 'key_proveedor'",'left');
 		$this->db->where('estado_us', 1);
 		$this->db->where('estado_tu', 1);
 		if( isset($paramPaginate['search'] ) && $paramPaginate['search'] ){
@@ -46,10 +50,10 @@ class Model_usuario extends CI_Model {
 	}
 
 	public function m_cargar_usuario_cbo(){
-		$this->db->select("tu.idtipousuario, tu.descripcion_tu",FALSE);
+		$this->db->select("tu.idtipousuario, tu.descripcion_tu, tu.key_tu",FALSE);
 		$this->db->from('tipo_usuario tu');
 		$this->db->where('estado_tu', 1);
-		if($this->sessionFactur['key_tu']!='key_root'){
+		if($this->sessionRS['key_tu']!='key_root'){
 			$this->db->where_not_in( 'tu.key_tu', array('key_root')); 
 		}
 		return $this->db->get()->result_array();
@@ -81,27 +85,22 @@ class Model_usuario extends CI_Model {
 			'updatedat' => date('Y-m-d H:i:s')
 		);
 		return $this->db->insert('usuario', $data);
-	}	
-	public function m_editar_foto($datos){
-		$data = array(
-			'nombre_foto' => $datos['nombre_foto'],
-			'updatedat' => date('Y-m-d H:i:s')
-		);
-		$this->db->where('idcolaborador',$datos['idcolaborador']);
-		return $this->db->update('colaborador', $data);
-	}	
-	public function m_editar($datos){
-		// var_dump($datos);exit();
+	}
+	
+	// public function m_editar_foto($datos){
+	// 	$data = array(
+	// 		'nombre_foto' => $datos['nombre_foto'],
+	// 		'updatedat' => date('Y-m-d H:i:s')
+	// 	);
+	// 	$this->db->where('idcolaborador',$datos['idcolaborador']);
+	// 	return $this->db->update('colaborador', $data);
+	// }	
+	public function m_editar($datos){ 
 		$data = array(
 			'idtipousuario' => $datos['tipo_usuario']['id'],
 			'username' => $datos['username'],
-			// 'password'=> md5($datos['password_view']),			
-			// 'password_view'=>strtoupper_total($datos['password_view']),		
-			//'ultimo_inicio_sesion' => date('Y-m-d H:i:s'),	
-			//'ip_address'=>  $_SERVER['REMOTE_ADDR'], 
 			'updatedat' => date('Y-m-d H:i:s')
 		);
-		// var_dump($datos['fecha_nacimiento'],darFormatoYMD($datos['fecha_nacimiento'])); exit();
 		$this->db->where('idusuario',$datos['idusuario']);
 		return $this->db->update('usuario', $data);
 	}	

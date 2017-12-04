@@ -1,0 +1,56 @@
+<div class="" ng-controller="BoletajeMasivoCtrl" style="background-color: rgba(255,255,255,0.85);">
+  <div class="bg-light lter b-b wrapper-md">
+    <div class="m-n font-thin h3"> Boletaje Masivo </div>
+  </div>
+  <div class="hbox hbox-auto-xs hbox-auto-sm dker b-b"> 
+    <div class="col wrapper-sm"> 
+      <div class="row">
+        <div class="col-sm-12">
+          <!-- <h4 class="text-info"> <b> 1ER PASO </b> PROCESAMOS COBROS EN UN RANGO DE FECHAS </h4> -->
+          <div class="form-group mb-n"> 
+            <div class="inline w-md mr-xs"> 
+              <label class="control-label text-ellipsis"> Desde </label> 
+              <div class="input-group block clearfix"> 
+                <input tabindex="110" type="text" class="form-control input-sm mask" ng-model="fBusqueda.desde" style="width: 50%;" input-mask mask-options="{alias: 'dd-mm-yyyy'}" />
+                <input tabindex="115" type="text" class="form-control input-sm" ng-model="fBusqueda.desdeHora" style="width: 22%; margin-left: 4px;" />
+                <input tabindex="116" type="text" class="form-control input-sm" ng-model="fBusqueda.desdeMinuto" style="width: 22%; margin-left: 4px;" />
+              </div>
+            </div>
+            <div class="inline w-md mr-xs"> 
+              <label class="control-label text-ellipsis"> Hasta </label> 
+              <div class="input-group block clearfix"> 
+                <input tabindex="120" type="text" class="form-control input-sm mask" ng-model="fBusqueda.hasta" style="width: 50%;" input-mask mask-options="{alias: 'dd-mm-yyyy'}" />
+                <input tabindex="122" type="text" class="form-control input-sm" ng-model="fBusqueda.hastaHora" style="width: 22%; margin-left: 4px;" />
+                <input tabindex="123" type="text" class="form-control input-sm" ng-model="fBusqueda.hastaMinuto" style="width: 22%; margin-left: 4px;" />
+              </div> 
+            </div>
+            <div class="inline w-sm mr" > 
+              <label class="control-label text-ellipsis"> Plan </label> 
+              <div class="input-group block clearfix"> 
+                <select class="form-control input-sm" ng-model="fBusqueda.plan" ng-options="item as item.descripcion for item in fArr.listaPlanes" 
+                  ng-change="metodos.getPaginationServerSide(true);" > </select> 
+              </div>
+            </div>
+            <div class="inline w-xs mr" > 
+              <label class="control-label text-ellipsis"> </label> 
+              <button type="button" style="position: absolute;width: 100px;" class="btn btn-info btn-sm" ng-click="metodos.getPaginationServerSide(true);"> BUSCAR </button> 
+            </div>
+            <div class="inline w-xs mr" > 
+              <label class="control-label text-ellipsis"> </label> 
+              <button type="button" style="position: absolute;width: 100px;" class="btn btn-dark btn-sm" ng-click="convertirAComprobante();"> CONVERTIR </button> 
+            </div>
+          </div>
+          <div class="line line-dashed b-b line-sm"></div>
+          <div class="form-group mb-n text-right">
+            <button type="button" class="btn m-b-xs btn-info pull-left btn-xs" ng-click="btnBuscar();"> 
+              <i class="fa fa-search"> </i> Buscar </button>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <div ui-grid="gridOptions" ui-grid-pagination ui-grid-selection ui-grid-resize-columns ui-grid-auto-resize 
+            class="grid table-responsive fs-mini-grid"></div> 
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -27,27 +27,27 @@
       <span class="font-bold"> Seguridad 
     </a>
     <ul class="nav nav-sub dk">
-      <li>
-        <a ui-sref="app.colaborador"> 
+      <li ui-sref-active="active">
+        <a ui-sref="app.colaborador" > 
           <span>Colaboradores</span>
         </a>
       </li>
-      <li>
+      <li ui-sref-active="active">
         <a ui-sref="app.usuario"> 
           <span>Usuario</span>
         </a>
       </li>
-      <li >
+      <li ui-sref-active="active" >
         <a ui-sref="app.tipo_usuario"> 
           <span>Niveles de Acceso</span>
         </a>
       </li>
-      <li >
+      <li ui-sref-active="active" >
         <a ui-sref="app.rol"> 
           <span>Roles</span> 
         </a>
       </li>
-      <li >
+      <li ui-sref-active="active" >
         <a ui-sref="app.log-eventos"> 
           <span>Log de Eventos</span>
         </a>
@@ -70,66 +70,76 @@
           <span> </span>
         </a>
       </li> -->
-      <li >
+      <li ui-sref-active="active" >
         <a ui-sref="app.xyz"> 
           <span> Diagnosticos CIE10 </span> 
         </a>
       </li>
-      <li >
-        <a ui-sref="app.analisis-laboratorio"> 
-          <span> Producto </span>
+      <li ui-sref-active="active" >
+        <a ui-sref="app.concepto"> 
+          <span> Concepto </span>
         </a>
       </li>
-      <li >
+      <li ui-sref-active="active">
         <a ui-sref="app.xz"> 
           <span> Especialidades </span>
         </a>
       </li>
-      <li >
+      <li ui-sref-active="active">
         <a ui-sref="app.medico"> 
           <span> Médicos </span>
         </a>
       </li>
-      <li >
+      <li ui-sref-active="active">
         <a ui-sref="app.medicamento"> 
           <span> Medicamento </span>
         </a>
       </li>
-      <li >
+      <li ui-sref-active="active">
         <a ui-sref="app.canal-venta"> 
           <span> Canales de Venta </span>
         </a>
       </li>
-      <li >
+      <li ui-sref-active="active">
         <a ui-sref="app.medico"> 
           <span> Redes </span>
         </a>
       </li>
-      <li >
+      <li ui-sref-active="active">
         <a ui-sref="app.medico"> 
           <span> Banco </span>
         </a>
       </li>
-      <li >
+      <li ui-sref-active="active">
         <a ui-sref="app.medico"> 
           <span> Empresa </span>
         </a>
       </li>
-      <li >
-        <a ui-sref="app.medico"> 
+      <li ui-sref-active="active">
+        <a ui-sref="app.forma-pago"> 
           <span> Formas de Pago </span>
         </a>
       </li>
-      <li>
+      <li ui-sref-active="active">
         <a ui-sref="app.medico"> 
           <span> Variables de Plan </span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.elemento"> 
+          <span> Elemento </span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.categoria-elemento"> 
+          <span> Categoria de Elemento </span>
         </a>
       </li>
     </ul>
   </li> 
   <!-- PROVEEDORES -->
-  <li>
-    <a ui-sref="app.dashboard">      
+  <li ui-sref-active="active">
+    <a ui-sref="app.proveedor">      
       <i class="glyphicon glyphicon-user icon text-primary-dker"></i>
       <span class="font-bold"> Proveedores </span>
     </a>
@@ -144,18 +154,28 @@
       <i class="glyphicon glyphicon-th-large icon text-primary-dker"></i>
       <span class="font-bold"> Clientes </span>
     </a>
-    <ul class="nav nav-sub dk">
-      <li>
-        <a ui-sref="app.unidad-medida"> 
+    <ul class="nav nav-sub dk"> 
+      <li class="nav-sub-header">
+        <a href>
+          <span> Clientes </span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.persona-natural"> 
           <span> Persona Natural </span>
         </a>
       </li>
-      <li >
-        <a ui-sref="app.banco"> 
+      <li ui-sref-active="active">
+        <a ui-sref="app.persona-juridica"> 
           <span> Persona Jurídica </span>
         </a>
       </li>
-      <li >
+      <li ui-sref-active="active">
+        <a ui-sref="app.contacto-cliente"> 
+          <span>Contactos</span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
         <a ui-sref="app.empresa-admin"> 
           <span> Categoria de Cliente </span>
         </a>
@@ -164,16 +184,44 @@
   </li> 
   <!-- CARGA MASIVA --> 
   <li>
-    <a ui-sref="app.carga-masiva">      
-      <i class="glyphicon glyphicon-user icon text-primary-dker"></i>
+    <a href class="auto">      
+      <span class="pull-right text-muted">
+        <i class="fa fa-fw fa-angle-right text"></i>
+        <i class="fa fa-fw fa-angle-down text-active"></i>
+      </span>
+      <i class="glyphicon glyphicon-th-large icon text-primary-dker"></i>
       <span class="font-bold"> Carga Masiva </span>
     </a>
+    <ul class="nav nav-sub dk">
+      <li ui-sref-active="active">
+        <a ui-sref="app.cm-altas"> 
+          <span> Altas </span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.cm-cancelaciones"> 
+          <span> Cancelaciones </span>
+        </a>
+      </li>
+      <li ui-sref-active="active">
+        <a ui-sref="app.cm-cobros"> 
+          <span> Bajas </span>
+        </a>
+      </li> 
+    </ul>
   </li> 
   <!-- PLANES Y COBERTURAS -->
-  <li >
-    <a ui-sref="app.dashboard">      
+  <li ui-sref-active="active">
+    <a ui-sref="app.csdfg">      
       <i class="glyphicon glyphicon-user icon text-primary-dker"></i>
       <span class="font-bold"> Planes y Coberturas </span>
+    </a>
+  </li> 
+  <!-- CERTIFICADOS -->
+  <li ui-sref-active="active"> 
+    <a ui-sref="app.historial-certificado"> 
+      <i class="glyphicon glyphicon-user icon text-primary-dker"></i>
+      <span class="font-bold"> Certificados </span>
     </a>
   </li> 
   <!-- GESTIÓN DE CITAS -->
@@ -187,13 +235,13 @@
       <span class="font-bold" > Citas </span>
     </a>
     <ul class="nav nav-sub dk"> 
-      <li >
-        <a ui-sref="app.nue"> 
-          <span> Reserva de Cita </span>
-        </a>
+      <li ui-sref-active="active"> 
+        <a ui-sref="app.reserva-citas"> 
+          <span> Reserva de Cita </span> 
+        </a> 
       </li>
-      <li >
-        <a ui-sref="app.historial-cotizacion"> 
+      <li ui-sref-active="active">
+        <a ui-sref="app.historial-citas"> 
           <span> Historial </span>
         </a>
       </li>
@@ -210,31 +258,31 @@
       <span class="font-bold" > Siniestros </span>
     </a>
     <ul class="nav nav-sub dk"> 
-      <li >
-        <a ui-sref="app.nue"> 
-          <span> Por Consulta </span>
+      <li ui-sref-active="active">
+        <a ui-sref="app.historial-siniestro"> 
+          <span> Historial </span>
         </a>
       </li>
-      <li >
+      <!-- <li ui-sref-active="active">
         <a ui-sref="app.historial-cotizacion"> 
           <span> Por Exámenes </span>
         </a>
       </li>
-      <li >
+      <li ui-sref-active="active">
         <a ui-sref="app.historial-cotizacion"> 
           <span> Por Procedimiento </span>
         </a>
       </li>
-      <li >
+      <li ui-sref-active="active">
         <a ui-sref="app.historial-cotizacion"> 
           <span> Desbloquear Asegurado </span>
         </a>
-      </li>
+      </li> -->
     </ul>
   </li> 
   <!-- GESTIÓN DE INCIDENCIAS -->
-  <li >
-    <a ui-sref="app.dashboard">      
+  <li ui-sref-active="active">
+    <a ui-sref="app.wwwwwwww">      
       <i class="glyphicon glyphicon-user icon text-primary-dker"></i>
       <span class="font-bold"> Incidencias </span> 
     </a>
@@ -250,12 +298,12 @@
       <span class="font-bold"> Fact. Proveedor </span>
     </a>
     <ul class="nav nav-sub dk"> 
-      <li >
+      <li ui-sref-active="active">
         <a ui-sref="app.nuevdo"> 
           <span> Nuevo </span>
         </a>
       </li>
-      <li >
+      <li ui-sref-active="active">
         <a ui-sref="app.histido"> 
           <span> Historial </span>
         </a>
@@ -273,19 +321,24 @@
       <span class="font-bold" > Fact. Cliente </span>
     </a>
     <ul class="nav nav-sub dk"> 
-      <li >
+      <li ui-sref-active="active">
         <a ui-sref="app.nueva-venta"> 
           <span> Nuevo </span>
         </a>
       </li>
-      <li >
-        <a ui-sref="app.historial-caja"> 
+      <li ui-sref-active="active">
+        <a ui-sref="app.historial-venta"> 
           <span> Historial </span>
         </a>
       </li> 
-      <li >
-        <a ui-sref="app.historial-venta"> 
+      <li ui-sref-active="active">
+        <a ui-sref="app.documento-series"> 
           <span> Documentos y Series </span>
+        </a>
+      </li> 
+      <li ui-sref-active="active">
+        <a ui-sref="app.boletaje-masivo"> 
+          <span> Boletaje Masivo </span>
         </a>
       </li>  
     </ul>
@@ -301,27 +354,27 @@
       <span class="font-bold"> Tesorería </span>
     </a>
     <ul class="nav nav-sub dk"> 
-      <li >
+      <!-- <li ui-sref-active="active">
         <a ui-sref="app.nueva-guia-remision"> 
-          <span> Nueva Pago </span>
+          <span> Nuevo Cobro </span>
         </a>
-      </li>
-      <li >
-        <a ui-sref="app.historial-guia"> 
-          <span> Historial de Pagos </span>
+      </li> -->
+      <li ui-sref-active="active">
+        <a ui-sref="app.historial-cobro"> 
+          <span> Historial de Cobros </span> 
         </a>
       </li> 
     </ul>
   </li> 
   <!-- CENTRAL DE REPORTES --> 
-  <li >
+  <li ui-sref-active="active">
     <a ui-sref="app.central-reportes">
       <i class="glyphicon glyphicon-stats icon text-primary-dker"></i>
       <span class="font-bold" > Central de Reportes </span> 
     </a>
   </li>
   <!-- GRÁFICOS ESTADÍSTICOS --> 
-  <li >
+  <li ui-sref-active="active">
     <a ui-sref="app.centr">
       <i class="glyphicon glyphicon-stats icon text-primary-dker"></i>
       <span class="font-bold" > Gráficos </span> 

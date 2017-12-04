@@ -1,0 +1,335 @@
+<div class="" ng-controller="HistorialCertificadoCtrl" style="background-color: rgba(255,255,255,0.85);">
+  <div class="bg-light lter b-b wrapper-md">
+    <div class="m-n font-thin h3"> Historial de Certificados </div>
+  </div> 
+  <div class="nav-tabs-alt" >
+    <ul class="nav nav-tabs nav-justified">
+      <li>
+        <a data-target="#certificado" role="tab" data-toggle="tab"> CERTIFICADOS </a>
+      </li>
+      <li >
+        <a data-target="#det-certificado" role="tab" data-toggle="tab"> DETALLE DE CERTIFICADOS </a>
+      </li> 
+      <li class="active">
+        <a data-target="#busqueda" role="tab" data-toggle="tab"> BÚSQUEDA </a>
+      </li> 
+    </ul>
+  </div>
+  <div class="row-row">
+    <div class="cell scrollable hover">
+      <div class="cell-inner">
+        <div class="tab-content">
+          <div class="tab-pane" id="certificado">
+            <div class="wrapper-md">
+              <div class="row">
+                <div class="col-xs-12"> 
+                  <div class="form-group mb-n"> 
+                    <div class="inline w-md mr-xs"> 
+                      <label class="control-label text-ellipsis"> Desde </label> 
+                      <div class="input-group block clearfix"> 
+                        <input tabindex="110" type="text" class="form-control input-sm mask" ng-model="fBusqueda.desde" style="width: 50%;" input-mask mask-options="{alias: 'dd-mm-yyyy'}" />
+                        <input tabindex="115" type="text" class="form-control input-sm" ng-model="fBusqueda.desdeHora" style="width: 22%; margin-left: 4px;" />
+                        <input tabindex="116" type="text" class="form-control input-sm" ng-model="fBusqueda.desdeMinuto" style="width: 22%; margin-left: 4px;" />
+                      </div>
+                    </div>
+                    <div class="inline w-md mr-xs"> 
+                      <label class="control-label text-ellipsis"> Hasta </label> 
+                      <div class="input-group block clearfix"> 
+                        <input tabindex="120" type="text" class="form-control input-sm mask" ng-model="fBusqueda.hasta" style="width: 50%;" input-mask mask-options="{alias: 'dd-mm-yyyy'}" />
+                        <input tabindex="122" type="text" class="form-control input-sm" ng-model="fBusqueda.hastaHora" style="width: 22%; margin-left: 4px;" />
+                        <input tabindex="123" type="text" class="form-control input-sm" ng-model="fBusqueda.hastaMinuto" style="width: 22%; margin-left: 4px;" />
+                      </div> 
+                    </div>
+                    <div class="inline w-sm mr" > 
+                      <label class="control-label text-ellipsis"> Plan </label> 
+                      <div class="input-group block clearfix"> 
+                        <select class="form-control input-sm" ng-model="fBusqueda.plan" ng-options="item as item.descripcion for item in fArr.listaPlanes" 
+                          ng-change="metodos.getPaginationServerSide(true);" > </select> 
+                      </div>
+                    </div>
+                    <div class="inline w-xs mr" > 
+                      <label class="control-label text-ellipsis">  </label> 
+                      <div class="input-group block clearfix"> 
+                        <button type="button" class="btn btn-info btn-sm" style="position:absolute;" ng-click="metodos.getPaginationServerSide(true);"> PROCESAR </button> 
+                      </div>
+                    </div>
+                  </div>
+                  <div class="line line-dashed b-b line-sm"></div>
+                  <div class="form-group mb-n text-right">
+                    <button type="button" class="btn m-b-xs btn-info pull-left btn-xs" ng-click="btnBuscar();"> 
+                      <i class="fa fa-search"> </i> Buscar </button> 
+                    <button type="button" ng-if="mySelectionGrid.length == 1" ng-click="btnVerAsegurados();" class="btn m-b-xs btn-info btn-xs"> 
+                      <i class="fa fa-users"></i> Asegurados </button> 
+                    <button type="button" ng-if="mySelectionGrid.length == 1" ng-click="btnVerCobros();" class="btn m-b-xs btn-info btn-xs"> 
+                      <i class="fa fa-money"></i> Cobros </button> 
+                    <button type="button" ng-click="btnActivacionManual('cert');" class="btn m-b-xs btn-warning btn-xs" 
+                      ng-if="mySelectionGrid.length == 1 && mySelectionGrid[0].estado.valor == 1 && !(mySelectionGrid[0].estado_atencion.valor == 4)"> 
+                        <i class="fa fa-check-square-o"></i> ACTIVACION MANUAL </button> 
+                    <button type="button" class="btn m-b-xs btn-warning btn-xs" ng-click="btnDeshacerActivacionManual('cert');" 
+                      ng-if="mySelectionGrid.length == 1 && mySelectionGrid[0].estado.valor == 1 && mySelectionGrid[0].estado_atencion.valor == 4"> 
+                        <i class="fa fa-undo"></i> DESHACER ACTIVACION </button> 
+                  </div>
+                </div>
+                <div class="col-xs-12">
+                  <div ui-grid="gridOptions" ui-grid-pagination ui-grid-selection ui-grid-resize-columns ui-grid-auto-resize class="grid table-responsive fs-mini-grid"></div>
+                </div>
+              </div>
+            </div>
+          </div> 
+          <div class="tab-pane" id="det-certificado">
+            <div class="wrapper-md">
+              <div class="row">
+                <div class="col-xs-12"> 
+                  <div class="form-group mb-n"> 
+                    <div class="inline w-md mr-xs"> 
+                      <label class="control-label text-ellipsis"> Desde </label> 
+                      <div class="input-group block clearfix"> 
+                        <input tabindex="110" type="text" class="form-control input-sm mask" ng-model="fBusquedaCD.desde" style="width: 50%;" input-mask mask-options="{alias: 'dd-mm-yyyy'}" />
+                        <input tabindex="115" type="text" class="form-control input-sm" ng-model="fBusquedaCD.desdeHora" style="width: 22%; margin-left: 4px;" />
+                        <input tabindex="116" type="text" class="form-control input-sm" ng-model="fBusquedaCD.desdeMinuto" style="width: 22%; margin-left: 4px;" />
+                      </div>
+                    </div>
+                    <div class="inline w-md mr-xs"> 
+                      <label class="control-label text-ellipsis"> Hasta </label> 
+                      <div class="input-group block clearfix"> 
+                        <input tabindex="120" type="text" class="form-control input-sm mask" ng-model="fBusquedaCD.hasta" style="width: 50%;" input-mask mask-options="{alias: 'dd-mm-yyyy'}" />
+                        <input tabindex="122" type="text" class="form-control input-sm" ng-model="fBusquedaCD.hastaHora" style="width: 22%; margin-left: 4px;" />
+                        <input tabindex="123" type="text" class="form-control input-sm" ng-model="fBusquedaCD.hastaMinuto" style="width: 22%; margin-left: 4px;" />
+                      </div> 
+                    </div>
+                    <div class="inline w-sm mr" > 
+                      <label class="control-label text-ellipsis"> Plan </label> 
+                      <div class="input-group block clearfix"> 
+                        <select class="form-control input-sm" ng-model="fBusquedaCD.plan" ng-options="item as item.descripcion for item in fArr.listaPlanes" 
+                          ng-change="metodos.getPaginationServerSideCD(true);" > </select> 
+                      </div>
+                    </div>
+                    <div class="inline w-xs mr" > 
+                      <label class="control-label text-ellipsis">  </label> 
+                      <div class="input-group block clearfix"> 
+                        <button type="button" class="btn btn-info btn-sm" style="position:absolute;" ng-click="metodos.getPaginationServerSideCD(true);"> PROCESAR </button> 
+                      </div>
+                    </div>
+                  </div>
+                  <div class="line line-dashed b-b line-sm"></div>
+                  <div class="form-group mb-n text-right"> 
+                    <button type="button" class="btn m-b-xs btn-info pull-left btn-xs" ng-click="btnBuscarCD();"> 
+                      <i class="fa fa-search"> </i> Buscar </button> 
+                    <button type="button" ng-click="btnActivacionManual('certdet');" class="btn m-b-xs btn-warning btn-xs" 
+                      ng-if="mySelectionGridCD.length == 1 && mySelectionGridCD[0].estado.valor == 1 && !(mySelectionGridCD[0].estado_atencion.valor == 4)"> 
+                        <i class="fa fa-check-square-o"></i> ACTIVACION MANUAL </button> 
+                    <button type="button" class="btn m-b-xs btn-warning btn-xs" ng-click="btnDeshacerActivacionManual('certdet');" 
+                      ng-if="mySelectionGridCD.length == 1 && mySelectionGridCD[0].estado.valor == 1 && mySelectionGridCD[0].estado_atencion.valor == 4"> 
+                        <i class="fa fa-undo"></i> DESHACER ACTIVACION </button> 
+                  </div>
+                </div>
+                <div class="col-xs-12">
+                  <div ui-grid="gridOptionsCD" ui-grid-pagination ui-grid-selection ui-grid-resize-columns ui-grid-auto-resize class="grid table-responsive fs-mini-grid"></div>
+                </div>
+              </div>
+            </div>
+          </div> 
+          <div class="tab-pane active" id="busqueda">
+            <div class="wrapper-md" style="min-height: 400px;overflow: hidden;">
+              <div class="row mb"> 
+                <div class="col-xs-12"> 
+                  <div style="width: 60%;margin: auto;text-align: center;text-transform: uppercase;"> 
+                    <label> Busque por DNI de asegurado o contratante</label> 
+                    <div class="input-group">
+                      <input ng-enter="buscarFichas();" style="font-size: 15px;" type="text" class="form-control input-lg block rounded" 
+                        ng-model="fBusquedaUNIT.cuadro_busqueda" placeholder="Busque por N° Doc. de Asegurado o Contratante." /> 
+                      <span class="input-group-btn">
+                        <button ng-click="buscarFichas();" class="btn btn-default btn-rounded btn-lg" uib-tooltip="Buscar..." type="button"> 
+                          <i class="fa fa-search"></i> </button> 
+                      </span> 
+                    </div>
+                  </div>
+                </div> 
+              </div>
+              <div class="row" ng-show="mostrarResultados == 1"> 
+                <div class="col-xs-12"> 
+                  <uib-accordion close-others="oneAtATime">
+                    <div uib-accordion-group class="panel-default" heading="Certificado N° {{ row.num_certificado }}" is-open="row.open_certificado"    is-disabled="false" ng-repeat="row in fArr.listaCertificados"> 
+                      <div class="row">
+                        <div class="col-xs-6"> 
+                          <fieldset >
+                            <legend class="lead lead-sm"> Certificado N° {{ row.num_certificado }} 
+                              <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-success dropdown-toggle btn-xs" data-toggle="dropdown">
+                                  <i class="fa fa-tasks"> </i>  ACCIONES <span class="caret"></span> 
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                  <li> <a ng-if="row.estado.valor == 1 && !(row.estado_atencion.valor == 4)" href="" 
+                                    ng-click="btnActivacionManual('busqunit',row.idcertificado);">
+                                    <i class="fa fa-check-square-o"></i> ACTIVACIÓN MANUAL </a> </li> 
+                                  <li> <a ng-if="row.estado.valor == 1 && row.estado_atencion.valor == 4" href="" 
+                                    ng-click="btnDeshacerActivacionManual('busqunit',row.idcertificado);" >
+                                    <i class="fa fa-undo"></i> DESHACER ACTIVACIÓN </a> </li> 
+                                </ul>
+                              </div>
+                            </legend> 
+                            <div class="row">
+                              <div class="inline-block col-sm-4"> 
+                                <label class="control-label mt-xs mb-n"> N° Doc. Contratante </label> 
+                                <input ng-class="{'text-success' : row.classSelected}" type="text" class="form-control input-xs" 
+                                  ng-model="row.numero_doc_cont" readonly="readonly" tabindex="100" /> 
+                              </div> 
+                              <div class="inline-block col-sm-8"> 
+                                <label class="control-label mt-xs mb-n"> Contratante </label> 
+                                <input type="text" class="form-control input-xs" ng-model="row.contratante" readonly="readonly" tabindex="110" /> 
+                              </div> 
+                            </div>
+                            <div class="row">
+                              <!-- <div class="inline-block col-sm-4"> 
+                                <label class="control-label mt-xs mb-n"> Estado de Cert. </label> 
+                                <input type="text" class="form-control input-xs" ng-model="row.estado.labelText" 
+                                  readonly="readonly" tabindex="120" /> 
+                              </div>  -->
+                              <div class="inline-block col-sm-4"> 
+                                <label class="control-label mt-xs mb-n"> Estado de Atención </label> 
+                                <input type="text" class="form-control input-xs" ng-model="row.estado_atencion.descripcion" 
+                                  readonly="readonly" tabindex="120" /> 
+                              </div> 
+                              <div class="inline-block col-sm-4"> 
+                                <label class="control-label mt-xs mb-n"> Inicio de Vig. </label> 
+                                <input type="text" class="form-control input-xs" ng-model="row.fecha_inicio_vig" readonly="readonly" tabindex="130" /> 
+                              </div> 
+                              <div class="inline-block col-sm-4"> 
+                                <label class="control-label mt-xs mb-n"> Fin de Vig. </label> 
+                                <input type="text" class="form-control input-xs" ng-model="row.fecha_fin_vig" readonly="readonly" tabindex="140" /> 
+                              </div> 
+                            </div>
+                            <div class="row">
+                              <div class="inline-block col-sm-4"> 
+                                <label class="control-label mt-xs mb-n"> Canal/Cliente </label> 
+                                <input type="text" class="form-control input-xs" ng-model="row.canal_cliente" readonly="readonly" tabindex="150" /> 
+                              </div> 
+                              <div class="inline-block col-sm-8"> 
+                                <label class="control-label mt-xs mb-n"> Plan </label> 
+                                <input type="text" class="form-control input-xs" ng-model="row.plan" readonly="readonly" tabindex="160" /> 
+                              </div> 
+                            </div>
+                          </fieldset>
+                        </div>
+                        <div class="col-xs-6"> 
+                          <fieldset >
+                            <legend class="lead lead-sm"> Asegurados </legend> 
+                            <div class="row">
+                              <div class="inline-block col-sm-12"> 
+                                <table class="table table-striped table-condensed table-hover m-b-none"> 
+                                  <thead>
+                                    <tr>
+                                      <th>N° </th>
+                                      <th>DNI Aseg.</th>
+                                      <th>Asegurado</th> 
+                                      <th></th> 
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr ng-repeat="aseg in row.asegurados">
+                                      <td> {{ aseg.consecutivo }} </td>
+                                      <td> 
+                                        <span ng-class="{'text-success' : aseg.classSelected}">  {{ aseg.numero_doc_aseg }}</span> 
+                                      </td>
+                                      <td class="text-ellipsis" style="width: 220px;"> {{ aseg.asegurado }} </td> 
+                                      <td>
+                                        <button ng-disabled="row.estado_atencion.valor = 2 || row.estado_atencion.valor = 3" ng-click="reservarCita(aseg);" class="btn btn-primary btn-xs"> RESERVAR </button> 
+                                        <button ng-disabled="row.estado_atencion.valor = 2 || row.estado_atencion.valor = 3" ng-click="editarInfoAsegurado(aseg);" class="btn btn-warning btn-xs"> EDITAR </button>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                <div class="inline-block col-sm-12" ng-if="row.asegurados.length == 0"> 
+                                  <div class="waterMarkEmptyData" style="top: 10px;font-size: 22px;position: relative;opacity: 0.6;"> No se encontraron asegurados </div> 
+                                </div>
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-xs-6 mt"> 
+                          <fieldset >
+                            <legend class="lead lead-sm"> Cobros </legend> 
+                            <div class="row">
+                              <div class="inline-block col-sm-12"> 
+                                <table class="table table-striped table-condensed table-hover m-b-none"> 
+                                  <thead>
+                                    <tr>
+                                      <th>N°</th>
+                                      <th>Fecha</th>
+                                      <th>Ini. Cobertura</th> 
+                                      <th>Fin Cobertura</th> 
+                                      <th>Importe</th> 
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr ng-repeat="cob in row.cobros" ng-if="row.cobros">
+                                      <td> {{ cob.vez_cobro }} </td>
+                                      <td> {{ cob.fecha_cobro }} </td>
+                                      <td> {{ cob.fecha_inicio_cobert }} </td>
+                                      <td> {{ cob.fecha_fin_cobert }} </td>
+                                      <!-- <td> {{ cob.medio_pago }} </td> -->
+                                      <td> {{ cob.importe }} </td>
+                                    </tr>
+                                    
+                                  </tbody>
+                                </table>
+                                <div class="inline-block col-sm-12" ng-if="row.cobros.length == 0"> 
+                                  <div class="waterMarkEmptyData" style="top: 10px;font-size: 22px;position: relative;opacity: 0.6;"> No se encontraron cobros </div> 
+                                </div>
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>
+                        <div class="col-xs-6 mt"> 
+                          <fieldset >
+                            <legend class="lead lead-sm"> Atenciones de {{ fBusquedaUNIT.cuadro_busqueda }} </legend> 
+                            <div class="row">
+                              <div class="inline-block col-sm-12"> 
+                                <table class="table table-striped table-condensed table-hover m-b-none"> 
+                                  <thead>
+                                    <tr>
+                                      <th>Fecha</th>
+                                      <th>Lugar</th> 
+                                      <th>Especialidad</th> 
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr ng-repeat="ate in row.atenciones">
+                                      <td> {{ ate.fecha_atencion }} </td>
+                                      <td> {{ ate.lugar_atencion }} </td>
+                                      <td> {{ ate.especialidad }} </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                <div class="inline-block col-sm-12" ng-if="row.atenciones.length == 0" > 
+                                  <div class="waterMarkEmptyData" style="top: 10px;font-size: 22px;position: relative;opacity: 0.6;"> No se encontraron atenciones </div> 
+                                </div>
+                              </div>
+                            </div>
+                          </fieldset>
+                        </div>
+                      </div>
+                      <div class="clearfix"></div>
+                    </div>
+                  </uib-accordion>
+                </div>
+              </div>
+              <div class="row" ng-show="!mostrarResultados"> 
+                <div class="col-xs-12"> 
+                  <div class="waterMarkEmptyData"> Buscar... </div> 
+                </div>
+              </div>
+              <div class="row" ng-show="mostrarResultados == 2"> 
+                <div class="col-xs-12"> 
+                  <div class="waterMarkEmptyData"> No se encontraron resultados para esta búsqueda... </div> 
+                </div>
+              </div>
+            </div>
+          </div> 
+        </div>
+      </div>
+    </div>
+  </div> 
+</div> 

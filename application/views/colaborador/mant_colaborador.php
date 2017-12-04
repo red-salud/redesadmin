@@ -30,7 +30,7 @@
 			<input type="text" class="form-control input-sm" ng-model="fData.celular" placeholder="Ingrese celular"  tabindex="140" />
 		</div>	
 		<div class="form-group col-md-6 mb-md">
-			<label class="control-label mb-n"> E-mail: </label>
+			<label class="control-label mb-n"> Correo laboral: </label>
 			<input type="email" class="form-control input-sm" ng-model="fData.email" placeholder="Ingrese correo electrónico" tabindex="150"  />
 		</div>
 		<div class="form-group col-md-6">

@@ -31,7 +31,7 @@ app.controller('ColaboradorCtrl', ['$scope', '$filter', '$uibModal', '$bootbox',
       sortName: null,
       search: null
     };
-    $scope.gridOptions = {
+    $scope.gridOptions = { 
       rowHeight: 30,
       paginationPageSizes: [100, 500, 1000],
       paginationPageSize: 100,
@@ -166,6 +166,7 @@ app.service("ColaboradorServices",function($http, $q, handleBehavior) {
     return({
         sListar: sListar,
         sListarCbo: sListarCbo,
+        sListarColaboradoresSinUsuario: sListarColaboradoresSinUsuario,
         sRegistrar: sRegistrar,
         sEditar: sEditar,
         sAnular: sAnular
@@ -182,6 +183,14 @@ app.service("ColaboradorServices",function($http, $q, handleBehavior) {
       var request = $http({
             method : "post",
             url : angular.patchURLCI+"Colaborador/listar_colaboradores_cbo",
+            data : datos
+      });
+      return (request.then(handleBehavior.success,handleBehavior.error));
+    }
+    function sListarColaboradoresSinUsuario(datos) {
+      var request = $http({
+            method : "post",
+            url : angular.patchURLCI+"Colaborador/listar_colaboradores_sin_usuario",
             data : datos
       });
       return (request.then(handleBehavior.success,handleBehavior.error));
