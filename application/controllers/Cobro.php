@@ -19,6 +19,13 @@ class Cobro extends CI_Controller {
 		$fCount = $this->model_cobro->m_count_cobros($paramPaginate,$paramDatos);
 		$arrListado = array();
 		foreach ($lista as $row) { 
+			$objFacturado = array();
+			if( $row['facturado'] == 1 ){ // SIN CANCELAR  
+				$objFacturado['claseIcon'] = 'fa-check';
+				$objFacturado['claseLabel'] = 'label-info';
+				$objFacturado['labelText'] = 'FACTURADO';
+				$objFacturado['valor'] = $row['facturado'];
+			}
 			/* LOGICA DE IMPORTE SEGÚN CANAL */
 			$rowImporte = $row['cob_importe']; 
 			$countImporte = strlen($row['cob_importe']); 
@@ -33,7 +40,6 @@ class Cobro extends CI_Controller {
 				$part2 = substr($rowImporte, -2, 2); 
 				$rowImporte = (float)$part1.'.'.$part2; 
 			} 
-			
 			array_push($arrListado,
 				array(
 					'idcobro' => trim($row['cob_id']),
@@ -47,7 +53,8 @@ class Cobro extends CI_Controller {
 					'moneda'=> $row['cob_moneda'],
 					'importe' => $rowImporte,
 					'plan' => $row['nombre_plan'],
-					'num_certificado' => $row['cert_num'] 
+					'num_certificado' => $row['cert_num'],
+					'facturado' => $objFacturado  
 				)
 			);
 		}
@@ -62,4 +69,5 @@ class Cobro extends CI_Controller {
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($arrData));
 	} 
+	
 }

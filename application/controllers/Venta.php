@@ -135,8 +135,9 @@ class Venta extends CI_Controller {
 		// NOMENCLATURA: 
 		// NUMERO DE SERIE + CORRELATIVO 
 		// Ejm: 002-000005 
-		// $numCaracteres = 6; 
+		// $numCaracteres = 7; 
 		$numCaracteres = $fConfig['cant_caracteres_correlativo_venta']; 
+		
 		// OBTENER POSICIÓN ACTUAL DEL CORRELATIVO . 
 		// $allInputs['config'] = $fConfig; 
 		$fSerie = $this->model_serie->m_cargar_posicion_correlativo($allInputs);
@@ -257,7 +258,7 @@ class Venta extends CI_Controller {
     	$numeroDeSerieValido = FALSE; 
     	// $fNumeroSerie = $this->model_caja->m_cargar_caja_por_este_numero_serie($allInputs['idcajamaster'],$allInputs['idtipodocumento']);
     	$fActual = $this->model_serie->m_cargar_posicion_correlativo($allInputs); 
-    	$numeroSeriePad = str_pad(($fActual['correlativo_actual'] + 1), $numCaracteres, '0', STR_PAD_LEFT);
+    	$numeroSeriePad = str_pad(($fActual['correlativo_actual'] + 1), $numCaracteres, '0', STR_PAD_LEFT); 
     	$serieCorrelativoNuevo = $fActual['numero_serie'].'-'.$numeroSeriePad; 
     	//var_dump($serieCorrelativoNuevo,$allInputs['serie_correlativo'],$allInputs['num_solo_correlativo'],$fActual['correlativo_actual'] + 1); exit();
     	if( $serieCorrelativoNuevo === $allInputs['serie_correlativo'] && (int)$allInputs['num_solo_correlativo'] === (int)($fActual['correlativo_actual'] + 1) ){ 
@@ -288,7 +289,6 @@ class Venta extends CI_Controller {
 				} 
 			} 
 			// actualizar correlativo actual 
-			
 			$allInputs['nuevo_correlativo'] = $fActual['correlativo_actual'] + 1;
 			if( $this->model_serie->m_actualizar_correlativo($allInputs) ){ 
 				$arrData['message'] .= '<br/> Se actualizó el correlativo.'; 

@@ -63,12 +63,6 @@ class Model_venta extends CI_Model {
 				}
 			}
 		}
-		if( $paramPaginate['sortName'] ){
-			$this->db->order_by($paramPaginate['sortName'], $paramPaginate['sort']);
-		}
-		if( $paramPaginate['firstRow'] || $paramPaginate['pageSize'] ){
-			$this->db->limit($paramPaginate['pageSize'],$paramPaginate['firstRow'] );
-		}
 		$fData = $this->db->get()->row_array();
 		return $fData;
 	}

@@ -63,7 +63,7 @@ angular.module('app')
             resolve: load([
               'angular/controllers/NuevaVentaCtrl.js',
               'angular/controllers/ClienteEmpresaCtrl.js',
-              'angular/controllers/ClientePersonaCtrl.js',
+              'angular/controllers/ClientePersonaCtrl.js', 
               'angular/controllers/ClienteCtrl.js',
               'angular/controllers/ColaboradorCtrl.js',
               'angular/controllers/CategoriaClienteCtrl.js',
@@ -77,7 +77,7 @@ angular.module('app')
               'angular/controllers/TipoDocumentoMovCtrl.js' 
             ])
           })
-          .state('app.historial-venta', {
+          .state('app.historial-venta', { 
             url: '/historial-venta',
             templateUrl: 'tpl/historial-venta.html',
             resolve: load([
@@ -86,13 +86,24 @@ angular.module('app')
               'angular/controllers/ConceptoCtrl.js',
             ])
           })
+          .state('app.comprobante-serie', { 
+            url: '/comprobante-serie',
+            templateUrl: 'tpl/comprobante-serie.html',
+            resolve: load([ 
+              'angular/controllers/TipoDocumentoMovCtrl.js',
+              'angular/controllers/SerieCtrl.js'
+            ])
+          })
           .state('app.boletaje-masivo', {
             url: '/boletaje-masivo',
             templateUrl: 'tpl/boletaje-masivo.html',
             resolve: load([
               'angular/controllers/BoletajeMasivoCtrl.js',
               'angular/controllers/PlanCtrl.js',
-              'angular/controllers/HistorialCobroCtrl.js' 
+              'angular/controllers/HistorialCobroCtrl.js',
+              'angular/controllers/SerieCtrl.js',
+              'angular/controllers/ConceptoCtrl.js',
+              'angular/controllers/TipoDocumentoMovCtrl.js' 
             ])
           })
           .state('app.historial-cobro', {

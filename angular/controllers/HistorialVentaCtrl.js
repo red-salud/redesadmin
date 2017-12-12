@@ -108,12 +108,14 @@ app.controller('HistorialVentaCtrl', ['$scope', '$filter', '$uibModal', '$bootbo
           paginationOptions.sort = sortColumns[0].sort.direction;
           paginationOptions.sortName = sortColumns[0].name;
         }
+        console.log('ordenar changed');
         $scope.metodos.getPaginationServerSide(true);
       });
       gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
         paginationOptions.pageNumber = newPage;
         paginationOptions.pageSize = pageSize;
         paginationOptions.firstRow = (paginationOptions.pageNumber - 1) * paginationOptions.pageSize;
+        console.log('paginate changed');
         $scope.metodos.getPaginationServerSide(true);
       });
       $scope.gridApi.core.on.filterChanged( $scope, function(grid, searchColumns) {
@@ -132,6 +134,7 @@ app.controller('HistorialVentaCtrl', ['$scope', '$filter', '$uibModal', '$bootbo
           'mov.igv' : grid.columns[12].filters[0].term,
           'mov.total' : grid.columns[13].filters[0].term 
         }
+        console.log('filter changed');
         $scope.metodos.getPaginationServerSide();
       });
     }

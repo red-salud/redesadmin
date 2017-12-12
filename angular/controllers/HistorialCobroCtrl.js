@@ -81,7 +81,14 @@ app.controller('HistorialCobroCtrl', ['$scope', '$filter', '$uibModal', '$bootbo
       { field: 'fecha_inicio_vig', name: 'cert_iniVig', displayName: 'F. Ini. Vig.', minWidth: 90, enableFiltering: false },
       { field: 'fecha_cobro', name: 'cob_fechCob', displayName: 'F. Cobro', minWidth: 90, enableFiltering: false },
       { field: 'vez_cobro', name: 'cob_vezCob', displayName: 'Vez Cobro', minWidth: 80 },
-      { field: 'importe', name: 'cob_importe', displayName: 'Importe', minWidth: 80 } 
+      { field: 'importe', name: 'cob_importe', displayName: 'Importe', minWidth: 80 },
+      { field: 'facturado', type: 'object', name: 'facturado', displayName: 'ESTADO', width: '95', enableFiltering: false, enableSorting: false, 
+        enableColumnMenus: false, enableColumnMenu: false, 
+        cellTemplate:'<div class="">' + 
+          '<label tooltip-placement="left" tooltip="{{ COL_FIELD.labelText }}" class="label {{ COL_FIELD.claseLabel }} ml-xs">'+ 
+          '<i class="fa {{ COL_FIELD.claseIcon }}"></i> {{COL_FIELD.labelText}} </label>'+ 
+          '</div>' 
+      } 
     ],
     onRegisterApi: function(gridApi) { 
       $scope.gridApi = gridApi;
@@ -118,7 +125,6 @@ app.controller('HistorialCobroCtrl', ['$scope', '$filter', '$uibModal', '$bootbo
           'cert.cert_num' : grid.columns[4].filters[0].term, 
           'nombre_comercial_cli' : grid.columns[5].filters[0].term, 
           'pl.nombre_plan' : grid.columns[6].filters[0].term, 
-          //'pl.cob_fechCob' : grid.columns[7].filters[0].term, 
           'cob_vezCob' : grid.columns[9].filters[0].term, 
           'cob_importe' : grid.columns[10].filters[0].term
         }
@@ -151,12 +157,21 @@ app.controller('HistorialCobroCtrl', ['$scope', '$filter', '$uibModal', '$bootbo
 }]); 
 app.service("CobroServices",function($http, $q, handleBehavior) {
     return({
-        sListarHistorialCobros: sListarHistorialCobros
+        sListarHistorialCobros: sListarHistorialCobros,
+        sProcesarCobrosBoletajeMasivo: sProcesarCobrosBoletajeMasivo 
     });
     function sListarHistorialCobros(datos) {
       var request = $http({
             method : "post",
             url : angular.patchURLCI+"Cobro/listar_historial_cobros", 
+            data : datos
+      });
+      return (request.then(handleBehavior.success,handleBehavior.error));
+    }
+    function sProcesarCobrosBoletajeMasivo(datos) {
+      var request = $http({
+            method : "post",
+            url : angular.patchURLCI+"BoletajeMasivo/procesar_cobros_boleta_masivo", 
             data : datos
       });
       return (request.then(handleBehavior.success,handleBehavior.error));

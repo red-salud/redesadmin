@@ -6,7 +6,7 @@ class Configuracion extends CI_Controller {
     {
         parent::__construct();
         // Se le asigna a la informacion a la variable $sessionVP.
-        $this->sessionFactur = @$this->session->userdata('sess_fact_'.substr(base_url(),-20,7));
+        $this->sessionRS = @$this->session->userdata('sess_fact_'.substr(base_url(),-20,7));
         $this->load->helper(array('config')); 
         $this->load->model(array('model_configuracion')); 
     }
