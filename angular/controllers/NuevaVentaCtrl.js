@@ -138,8 +138,11 @@ app.controller('NuevaVentaCtrl', ['$scope', '$filter', '$uibModal', '$bootbox', 
   
   // CONCEPTOS 
   $scope.metodos.listaConceptos = function(myCallbackConceptos) { 
-    var myCallbackConceptos = myCallbackConceptos || function() { };
-    ConceptoServices.sListarCbo().then(function(rpta) { 
+    var myCallbackConceptos = myCallbackConceptos || function() { }; 
+    var arrParams = { 
+      'tipo_concepto': 'C' 
+    }; 
+    ConceptoServices.sListarCbo(arrParams).then(function(rpta) { 
       if( rpta.flag == 1){
         $scope.fArr.listaConceptos = rpta.datos; 
         $scope.fArr.listaConceptos.splice(0,0,{ id : '0', descripcion:'--Seleccione concepto--'}); 
@@ -527,6 +530,7 @@ app.controller('NuevaVentaCtrl', ['$scope', '$filter', '$uibModal', '$bootbox', 
     var params = {
       searchText: value, 
       searchColumn: "descripcion_ele",
+      categoria_key: 'key_plan_salud',
       sensor: false
     }
     return ElementoServices.sListarElementosAutoComplete(params).then(function(rpta) {
@@ -680,7 +684,10 @@ app.controller('NuevaVentaCtrl', ['$scope', '$filter', '$uibModal', '$bootbox', 
             blockUI.start('Procesando información...'); 
           }
           var arrParams = {
-            paginate : paginationOptionsBELE 
+            paginate : paginationOptionsBELE,
+            datos : {
+              'categoria_key': 'key_plan_salud' 
+            } 
           };
           ElementoServices.sListarElementosBusqueda(arrParams).then(function (rpta) {
             $scope.gridOptionsBELE.totalItems = rpta.paginate.totalRows;
@@ -953,21 +960,6 @@ app.controller('NuevaVentaCtrl', ['$scope', '$filter', '$uibModal', '$bootbox', 
         height: (4 * rowHeight + headerHeight + 20) + "px"
      };
   };
-  // $scope.btnClonarFila = function(row) { 
-  //   // console.log(row,'row');
-  //   var arrFClon = { 
-  //     'id' : row.entity.id,
-  //     'descripcion' : row.entity.descripcion,
-  //     'periodo': row.entity.periodo,
-  //     'cantidad' : row.entity.cantidad,
-  //     'precio_unitario' : row.entity.precio_unitario,
-  //     'importe_sin_igv' : row.entity.importe_sin_igv,
-  //     'igv' : row.entity.igv,
-  //     'importe_con_igv' : row.entity.importe_con_igv,
-  //     'excluye_igv' : row.entity.excluye_igv
-  //   }; 
-  //   $scope.gridOptions.data.push(arrFClon); 
-  // }
   $scope.agregarItem = function () {
     $('#temporalElemento').focus();
     if( !angular.isObject($scope.fData.temporal.elemento) ){ 

@@ -116,14 +116,14 @@ class Model_proveedor extends CI_Model {
 		$this->db->where_in('pr.estado_pr', array(1,2)); // activo y observado 
 		return $this->db->get()->result_array();
 	}
-	public function m_buscar_proveedor($datos)
+	public function m_buscar_este_proveedor($datos)
 	{
 		$this->db->select('pr.idproveedor, pr.nombre_comercial_pr, pr.razon_social_pr, pr.numero_documento_pr, pr.direccion_pr, 
 			tpr.idtipoproveedor, tpr.descripcion_tpr'); 
 		$this->db->from('proveedor pr');
 		$this->db->join('tipo_proveedor tpr', 'pr.idtipoproveedor = tpr.idtipoproveedor'); 
 		$this->db->where_in('pr.estado_pr', array(1,2,3)); // activo  
-		$this->db->where('pr.numero_documento_pr', $datos['num_documento']);
+		$this->db->where('pr.numero_documento_pr', $datos['num_documento']); 
 		$this->db->limit(1);
 		return $this->db->get()->row_array();
 	}

@@ -50,7 +50,10 @@ app.controller('BoletajeMasivoCtrl', ['$scope', '$filter', '$uibModal', '$bootbo
     // CONCEPTOS 
     $scope.metodos.listaConceptos = function(myCallbackConceptos) { 
       var myCallbackConceptos = myCallbackConceptos || function() { };
-      ConceptoServices.sListarCbo().then(function(rpta) { 
+      var arrParams = { 
+        'tipo_concepto': 'C' 
+      }; 
+      ConceptoServices.sListarCbo(arrParams).then(function(rpta) { 
         if( rpta.flag == 1){
           $scope.fArr.listaConceptos = rpta.datos; 
           $scope.fArr.listaConceptos.splice(0,0,{ id : '0', descripcion:'--Seleccione concepto--'}); 

@@ -131,8 +131,8 @@ app.controller('ContactoClienteCtrl', ['$scope', '$filter', '$uibModal', '$bootb
       var pMensaje = '¿Realmente desea anular el registro?';
       $bootbox.confirm(pMensaje, function(result) {
         if(result){
-          var arrParams = {
-            id: $scope.mySelectionGrid[0].id 
+          var arrParams = { 
+            idcontactocliente: $scope.mySelectionGrid[0].id 
           };
           blockUI.start('Procesando información...');
           ContactoClienteServices.sAnular(arrParams).then(function (rpta) {

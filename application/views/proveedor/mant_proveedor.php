@@ -179,7 +179,7 @@
 										    </div>
 											</div>
 											<div class="form-group">
-												<label class="control-label"> E-mail: </label>
+												<label class="control-label"> E-mail: </label> 
 									      <input type="email" class="form-control input-sm" ng-model="fContacto.email" placeholder="Ingrese correo electrónico" tabindex="80" /> 
 											</div> 
 											<div class="form-group" ng-if="contBotonesReg">

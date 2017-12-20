@@ -37,11 +37,18 @@ class Model_concepto extends CI_Model {
 		$fData = $this->db->get()->row_array();
 		return $fData;
 	}
-	public function m_cargar_concepto_cbo() 
+	public function m_cargar_concepto_cbo($datos) 
 	{
-		$this->db->select('con.idconcepto, con.descripcion_con, con.key_concepto');
-		$this->db->from('concepto con');
-		$this->db->where('con.estado_con', 1);
+		$this->db->select('con.idconcepto, con.descripcion_con, con.key_concepto'); 
+		$this->db->from('concepto con'); 
+		$this->db->where('con.estado_con', 1); 
+		//var_dump($datos['tipo_concepto']); exit(); 
+		if( @$datos['tipo_concepto'] == 'C' ){ // CLIENTE 
+			$this->db->where('con.destino_concepto', 1); 
+		}
+		if( @$datos['tipo_concepto'] == 'P' ){ // PROVEEDOR 
+			$this->db->where('con.destino_concepto', 2); 
+		}
 		$this->db->order_by('con.descripcion_con','ASC');
 		return $this->db->get()->result_array();
 	}

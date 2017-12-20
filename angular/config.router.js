@@ -106,6 +106,32 @@ angular.module('app')
               'angular/controllers/TipoDocumentoMovCtrl.js' 
             ])
           })
+          .state('app.nueva-facturacion-proveedor', { 
+            url: '/nueva-facturacion-proveedor',
+            templateUrl: 'tpl/nueva-facturacion-proveedor.html',
+            resolve: load([
+              'angular/controllers/NuevaFacturacionProvCtrl.js',
+              'angular/controllers/TipoProveedorCtrl.js',
+              'angular/controllers/ProveedorCtrl.js',
+              'angular/controllers/ColaboradorCtrl.js',
+              'angular/controllers/ConceptoCtrl.js',
+              'angular/controllers/ElementoCtrl.js',
+              'angular/controllers/TipoDocumentoIdentidadCtrl.js',
+              'angular/controllers/TipoDocumentoMovCtrl.js',
+              'angular/controllers/CategoriaElementoCtrl.js',
+              'angular/controllers/UbigeoCtrl.js',
+              'angular/controllers/UsuarioCtrl.js',
+              'https://maps.googleapis.com/maps/api/js?key=AIzaSyB2FjjCqepP3ZXx6xFbxEKjijPtcNTCcXM'  
+            ])
+          })
+          .state('app.historial-facturacion-proveedor', {
+            url: '/historial-facturacion-proveedor',
+            templateUrl: 'tpl/historial-facturacion-proveedor.html',
+            resolve: load([
+              'angular/controllers/HistorialFacturacionProvCtrl.js',
+              'angular/controllers/ProveedorCtrl.js',
+            ])
+          })
           .state('app.historial-cobro', {
             url: '/historial-cobro',
             templateUrl: 'tpl/historial-cobro.html',
@@ -187,7 +213,8 @@ angular.module('app')
             templateUrl: 'tpl/colaborador.html',
             resolve: load([
               'angular/controllers/ColaboradorCtrl.js',
-              'angular/controllers/UsuarioCtrl.js'         
+              'angular/controllers/UsuarioCtrl.js', 
+              'angular/controllers/ProveedorCtrl.js'  
             ]) 
           })    
           .state('app.proveedor', {

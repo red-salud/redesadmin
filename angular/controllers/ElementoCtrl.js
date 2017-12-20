@@ -162,6 +162,8 @@ app.controller('ElementoCtrl', ['$scope', '$filter', '$uibModal', '$bootbox', '$
 app.service("ElementoServices",function($http, $q, handleBehavior) {
     return({
         sListar: sListar,
+        sListarCbo: sListarCbo,
+        sListarCboProveedores: sListarCboProveedores,
         sRegistrar: sRegistrar,
         sListarElementosAutoComplete: sListarElementosAutoComplete,
         sListarElementosBusqueda: sListarElementosBusqueda,
@@ -175,6 +177,22 @@ app.service("ElementoServices",function($http, $q, handleBehavior) {
             data : datos
       });
       return (request.then(handleBehavior.success,handleBehavior.error));
+    }
+    function sListarCbo(datos) {
+      var request = $http({ 
+            method : "post", 
+            url : angular.patchURLCI+"Elemento/listar_elemento_cbo", 
+            data : datos 
+      }); 
+      return (request.then(handleBehavior.success,handleBehavior.error)); 
+    }
+    function sListarCboProveedores(datos) {
+      var request = $http({ 
+            method : "post", 
+            url : angular.patchURLCI+"Elemento/listar_elemento_cbo_proveedores", 
+            data : datos 
+      }); 
+      return (request.then(handleBehavior.success,handleBehavior.error)); 
     }
     function sListarElementosAutoComplete(datos) {
       var request = $http({

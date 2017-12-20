@@ -179,17 +179,21 @@
                                 <input type="text" class="form-control input-xs" ng-model="row.contratante" readonly="readonly" tabindex="110" /> 
                               </div> 
                             </div>
-                            <div class="row">
-                              <!-- <div class="inline-block col-sm-4"> 
-                                <label class="control-label mt-xs mb-n"> Estado de Cert. </label> 
-                                <input type="text" class="form-control input-xs" ng-model="row.estado.labelText" 
-                                  readonly="readonly" tabindex="120" /> 
-                              </div>  -->
+                            <div class="row"> 
                               <div class="inline-block col-sm-4"> 
                                 <label class="control-label mt-xs mb-n"> Estado de Atención </label> 
-                                <input type="text" class="form-control input-xs" ng-model="row.estado_atencion.descripcion" 
-                                  readonly="readonly" tabindex="120" /> 
+                                <input type="text" class="form-control input-xs" ng-model="row.estado_atencion.descripcion" readonly="readonly" tabindex="128" /> 
                               </div> 
+                              <div class="inline-block col-sm-4"> 
+                                <label class="control-label mt-xs mb-n"> Estado de Cert. </label> 
+                                <input type="text" class="form-control input-xs" ng-model="row.estado.labelText" readonly="readonly" tabindex="120" /> 
+                              </div> 
+                              <div class="inline-block col-sm-4"> 
+                                <label class="control-label mt-xs mb-n"> Fecha de Cancelación </label> 
+                                <input type="text" class="form-control input-xs" ng-model="row.fecha_cancelacion" readonly="readonly" tabindex="125" /> 
+                              </div> 
+                            </div>
+                            <div class="row"> 
                               <div class="inline-block col-sm-4"> 
                                 <label class="control-label mt-xs mb-n"> Inicio de Vig. </label> 
                                 <input type="text" class="form-control input-xs" ng-model="row.fecha_inicio_vig" readonly="readonly" tabindex="130" /> 
@@ -197,6 +201,10 @@
                               <div class="inline-block col-sm-4"> 
                                 <label class="control-label mt-xs mb-n"> Fin de Vig. </label> 
                                 <input type="text" class="form-control input-xs" ng-model="row.fecha_fin_vig" readonly="readonly" tabindex="140" /> 
+                              </div> 
+                              <div class="inline-block col-sm-4"> 
+                                <label class="control-label mt-xs mb-n"> Precio del Plan </label> <!-- PRECIO DEL PLAN --> 
+                                <input type="text" class="form-control input-xs" ng-model="row.precio_plan" readonly="readonly" tabindex="145" /> 
                               </div> 
                             </div>
                             <div class="row">

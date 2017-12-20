@@ -37,7 +37,6 @@ app.controller('HistorialCobroCtrl', ['$scope', '$filter', '$uibModal', '$bootbo
   }
   $scope.metodos.listaPlanes(myCallback); 
 
-
   $scope.tabs = [true, false];
   $scope.tab = function(index){ 
     angular.forEach($scope.tabs, function(i, v) {
@@ -154,6 +153,9 @@ app.controller('HistorialCobroCtrl', ['$scope', '$filter', '$uibModal', '$bootbo
     $scope.mySelectionGrid = [];
   };
   $scope.metodos.getPaginationServerSide(true); 
+  $scope.exportarCobroExcel = function() {
+    
+  }
 }]); 
 app.service("CobroServices",function($http, $q, handleBehavior) {
     return({

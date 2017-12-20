@@ -31,6 +31,7 @@ app.controller('ReservaCitasCtrl', ['$scope', '$filter', '$state', '$stateParams
       {'id':'M', 'descripcion':'MASCULINO'},
       {'id':'F', 'descripcion':'FEMENINO'}
     ]; 
+    $scope.fArr.listaCertificadosSeleccion = [];
     if( $stateParams.identifyNumDoc ){ 
       $scope.fPrimerDato.numero_documento = $stateParams.identifyNumDoc; 
       // GET NUMERO DOCUMENTO 
@@ -75,10 +76,32 @@ app.controller('ReservaCitasCtrl', ['$scope', '$filter', '$state', '$stateParams
           $scope.fPrimerDato.asegurado_cert.flag = 1; 
         } 
         if( rpta.flag == 2 ){ // mas de un registro 
-          alert('El asegurado tiene mas de un certificado'); 
+          alert('El asegurado tiene mas de un certificado. Se mostrará una ventana en el cual elegirá el certificado.'); 
           $scope.fPrimerDato.asegurado_cert.flag = 2; 
-        } 
-        if( rpta.flag == 0 ){
+          // elegir un item 
+          blockUI.start('Abriendo formulario...');
+          $uibModal.open({ 
+            templateUrl: angular.patchURLCI+'Certificado/ver_popup_eleccion_certificado',
+            size: 'md',
+            backdrop: 'static',
+            keyboard:false,
+            scope: $scope,
+            controller: function ($scope, $uibModalInstance) { 
+              blockUI.stop(); 
+              $scope.titleForm = 'Selección de Certificado'; 
+              $scope.fArr.listaCertificadosSeleccion = rpta.datos; 
+              $scope.seleccionarCertificado = function(cert) { 
+                $scope.fPrimerDato.asegurado_cert = cert; 
+                $scope.fPrimerDato.asegurado_cert.flag = 1; 
+                $uibModalInstance.dismiss('cancel'); 
+              }
+              $scope.cancel = function () { 
+                $uibModalInstance.dismiss('cancel'); 
+              } 
+            }
+          });
+        }
+        if( rpta.flag == 0 ){ 
           $scope.fPrimerDato.asegurado_cert.flag = 'none'; 
           pinesNotifications.notify({ title: 'Error!', text: rpta.message, type: 'warning', delay: 3000 }); 
         } 

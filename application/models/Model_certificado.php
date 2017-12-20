@@ -228,7 +228,8 @@ class Model_certificado extends CI_Model {
 			cont.cont_id, cont_nom1, cont_nom2, cont_ape1, cont_ape2, cont_numDoc, ce.idclienteempresa, ce.nombre_comercial_cli, 
 			cob.cob_id, cob.cob_fechCob, cob.cob_vezCob, cob.cob_importe, cob.cob_moneda, 
 			cob.cob_iniCobertura, cob.cob_finCobertura, dcob.cobDet_medioPago, dcob.cobDet_frec, mp.descripcion_mp, 
-			sin.idsiniestro, sin.fecha_atencion, esp.idespecialidad, esp.nombre_esp, prov.idproveedor, prov.nombre_comercial_pr'); 
+			sin.idsiniestro, sin.fecha_atencion, esp.idespecialidad, esp.nombre_esp, prov.idproveedor, prov.nombre_comercial_pr, 
+			can.can_id, can.can_finVig'); 
 		$this->db->from('certificado cert'); 
 		$this->db->join('cobro cob','cert.cert_id = cob.cert_id','left'); 
 		$this->db->join('cobro_deta dcob','cob.cob_id = dcob.cob_id','left'); 
@@ -242,6 +243,8 @@ class Model_certificado extends CI_Model {
 		$this->db->join('siniestro sin','as.aseg_id = sin.idasegurado AND as.aseg_numDoc = "'.$datos['cuadro_busqueda'].'"','left'); 
 		$this->db->join('especialidad esp','sin.idespecialidad = esp.idespecialidad','left'); 
 		$this->db->join('proveedor prov','sin.idproveedor = prov.idproveedor','left'); 
+		// cancelacion 
+		$this->db->join('cancelado can','cert.cert_id = can.cert_id','left'); 
 		if( !empty($datos['cuadro_busqueda']) ){ 
 			$this->db->where('cont.cont_numDoc',$datos['cuadro_busqueda']);
 		}

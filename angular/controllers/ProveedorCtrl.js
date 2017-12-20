@@ -143,7 +143,7 @@ app.controller('ProveedorCtrl', ['$scope', '$filter', '$uibModal', '$bootbox', '
 		  $scope.mySelectionGrid = [];
 		};
 		$scope.metodos.getPaginationServerSide(true); 
-		// MAS ACCIONES
+		// MAS ACCIONES 
 		$scope.btnNuevo = function() { 
 			var arrParams = {
 				'metodos': $scope.metodos,
@@ -426,6 +426,7 @@ app.service("ProveedorServices",function($http, $q, handleBehavior) {
         sListar: sListar,
         sListarProveedoresSinUsuario: sListarProveedoresSinUsuario,
         sListarCbo: sListarCbo,
+        sBuscarEsteProveedor: sBuscarEsteProveedor,
         sRegistrar: sRegistrar,
         sEditar: sEditar,
         sCambiarEstado: sCambiarEstado,
@@ -451,6 +452,14 @@ app.service("ProveedorServices",function($http, $q, handleBehavior) {
     	var request = $http({
             method : "post",
             url : angular.patchURLCI+"Proveedor/listar_proveedores_cbo", 
+            data : datos
+      });
+      return (request.then(handleBehavior.success,handleBehavior.error));
+    }
+    function sBuscarEsteProveedor(datos) {
+    	var request = $http({
+            method : "post",
+            url : angular.patchURLCI+"Proveedor/buscar_proveedor_para_formulario", 
             data : datos
       });
       return (request.then(handleBehavior.success,handleBehavior.error));

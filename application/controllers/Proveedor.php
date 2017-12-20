@@ -179,6 +179,46 @@ class Proveedor extends CI_Controller {
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($arrData));
 	}
+	public function buscar_proveedor_para_formulario()
+	{
+		$allInputs = json_decode(trim($this->input->raw_input_stream),true);
+		if(empty($allInputs['tipo_documento']['destino']) || empty($allInputs['num_documento']) ){ 
+			$arrData['message'] = 'No hay datos.';
+    		$arrData['flag'] = 0;
+			$this->output
+			    ->set_content_type('application/json')
+			    ->set_output(json_encode($arrData));
+			return; 
+		}
+		$arrListado = array();
+		$fProveedor = $this->model_proveedor->m_buscar_este_proveedor($allInputs); 
+		$fProveedor['razon_social'] = @$fProveedor['razon_social_pr']; 
+		if( empty($fProveedor['razon_social_pr']) ){ 
+			$arrData['message'] = 'Falta configurar los datos de los proveedores desde el mantenimiento de proveedores.';
+    		$arrData['flag'] = 0;
+			$this->output
+			    ->set_content_type('application/json')
+			    ->set_output(json_encode($arrData));
+			return; 
+		}
+		$fProveedor['nombre_comercial'] = @$fProveedor['nombre_comercial_pr']; 
+		$fProveedor['direccion'] = @$fProveedor['direccion_pr']; 
+		// var_dump($fProveedor); exit();
+		if( !empty($fProveedor['idproveedor']) ){ 
+	    	$arrData['datos'] = array(
+	    		'proveedor'=> $fProveedor 
+	    	);
+	    	$arrData['message'] = 'Proveedor seleccionado correctamente.';
+	    	$arrData['flag'] = 1;
+		}else{
+			$arrData['message'] = 'No se encontró al proveedor.';
+			$arrData['flag'] = 0;
+		}
+		
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($arrData));
+	}
 	public function ver_popup_formulario()
 	{
 		$this->load->view('proveedor/mant_proveedor');
@@ -186,6 +226,10 @@ class Proveedor extends CI_Controller {
 	public function ver_popup_contactos()
 	{
 		$this->load->view('proveedor/mant_contactoProveedor');
+	}
+	public function ver_popup_busqueda_proveedores()
+	{
+		$this->load->view('proveedor/busq_proveedor_popup');
 	}
 	public function registrar()
 	{
@@ -315,7 +359,6 @@ class Proveedor extends CI_Controller {
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($arrData));
 	}
-
 	public function listar_proveedor_cbo(){
 		$allInputs = json_decode(trim($this->input->raw_input_stream),true);
 		$lista = $this->model_proveedor->m_cargar_proveedor_cbo();
@@ -339,7 +382,6 @@ class Proveedor extends CI_Controller {
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($arrData));
 	}
-
 	public function listar_proveedor_autocomplete()
 	{
 		$allInputs = json_decode(trim($this->input->raw_input_stream),true);
@@ -367,5 +409,4 @@ class Proveedor extends CI_Controller {
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($arrData)); 
 	}
-
 }

@@ -229,6 +229,21 @@ class Certificado extends CI_Controller {
 		$arrListado = array(); 
 		$i = 0;
 		foreach ($lista as $row) { 
+			// ESTADO DE CERTIFICADO 
+			$objEstado = array();
+			if( $row['cert_estado'] == 1 ){ // ACTIVO 
+				$objEstado['claseIcon'] = 'fa-check';
+				$objEstado['claseLabel'] = 'success';
+				$objEstado['labelText'] = 'SIN CANCELAR'; 
+				$objEstado['valor'] = $row['cert_estado']; 
+			} 
+			if( $row['cert_estado'] == 3 ){ // CANCELADO    
+				$objEstado['claseIcon'] = 'fa-ban';
+				$objEstado['claseLabel'] = 'danger';
+				$objEstado['labelText'] = 'CANCELADO';
+				$objEstado['valor'] = $row['cert_estado']; 
+			} 
+			// ESTADO DE ATENCIÓN 
 			/* 
 				1: ACTIVO 
 				2: INACTIVO - 				
@@ -245,7 +260,7 @@ class Certificado extends CI_Controller {
 					$objEstadoAtencion['valor'] = 1;
 				}else{
 					$objEstadoAtencion['descripcion'] = 'INACTIVO'; 
-					$objEstadoAtencion['valor'] = 2;
+					$objEstadoAtencion['valor'] = 2; 
 				}
 			}else{ // no hay cobros 
 				$fechaAuxIniVigencia = date_create($row['cert_iniVig']);
@@ -319,7 +334,8 @@ class Certificado extends CI_Controller {
 					'sexo' => strtoupper($row['aseg_sexo']),
 					'ultima_atencion'=> formatoFechaReporte3($row['ultima_atencion']), 
 					'lugar_ultima_atencion'=> $row['lugar_ultima_atencion'], 
-					'estado_atencion' => $objEstadoAtencion 
+					'estado_atencion' => $objEstadoAtencion, 
+					'estado_certificado' => $objEstado 
 				)
 			);
 			$i++;
@@ -345,6 +361,10 @@ class Certificado extends CI_Controller {
 	{
 		$this->load->view('certificado/popup_cobros_de_certificado');
 	}
+	public function ver_popup_eleccion_certificado()
+	{
+		$this->load->view('certificado/popup_eleccion_certificado');
+	}
 	public function listar_asegurados_de_certificado()
 	{
 		$allInputs = json_decode(trim($this->input->raw_input_stream),true);
@@ -363,7 +383,7 @@ class Certificado extends CI_Controller {
 				$objEstado['labelText'] = 'CANCELADO';
 			}
 			array_push($arrListado,
-				array(
+				array( 
 					'idcertificadoasegurado' => trim($row['certase_id']),
 					'canal_cliente'=> strtoupper($row['nombre_comercial_cli']),
 					'consecutivo'=> (int)$row['certase_conse'],
@@ -464,7 +484,7 @@ class Certificado extends CI_Controller {
 		$allInputs['cuadro_busqueda'] = trim($allInputs['cuadro_busqueda']);
 		// VALIDAR SI ES ASEGURADO O CONTRATANTE O AMBOS 
 		$lista = $this->model_certificado->m_buscar_certificados_y_cobros_por_asegurado_contratante($allInputs); 
-		if( empty($lista) ){
+		if( empty($lista) ){ 
 			// BUSCAR SI ES ASEGURADO 
 			$arrParams = array(
 				'doc_asegurado'=> $allInputs['cuadro_busqueda'] 
@@ -558,13 +578,14 @@ class Certificado extends CI_Controller {
 			if( trim($row['cont_numDoc']) == $allInputs['cuadro_busqueda'] ){ 
 				$boolClassSelected = TRUE;
 			}
-			$arrAux = array(
+			$arrAux = array( 
 				'idcertificado'=> $row['cert_id'],
 				'num_certificado'=> $row['cert_num'],
 				'numero_doc_cont'=> trim($row['cont_numDoc']),
 				'contratante'=> strtoupper($row['contratante']),
 				'fecha_inicio_vig' => formatoFechaReporte3(darFormatoYMD($row['cert_iniVig'])),
 				'fecha_fin_vig' => formatoFechaReporte3(darFormatoYMD($row['cert_finVig'])),
+				'fecha_cancelacion'=> formatoFechaReporte3(darFormatoYMD($row['can_finVig'])),
 				'numero_propuesta' => $row['cert_numpropuesta'],
 				'idplan' => $row['idplan'],
 				'plan' => $row['nombre_plan'], 

@@ -6,12 +6,15 @@ class Model_elemento extends CI_Model {
 	}
 	public function m_cargar_elemento($paramPaginate,$paramDatos=FALSE){ 
 		$this->db->select('el.idelemento, el.descripcion_ele, el.precio_referencial, el.tipo_elemento, 
-			 cael.idcategoriaelemento, cael.descripcion_cael, cael.color_cael');
+			 cael.idcategoriaelemento, cael.descripcion_cael, cael.color_cael, cael.key_cael');
 		$this->db->from('elemento el');
 		$this->db->join('categoria_elemento cael', 'el.idcategoriaelemento = cael.idcategoriaelemento'); 
 		$this->db->where('el.estado_ele', 1);
-		if( !empty($paramDatos) ){
+		if( !empty($paramDatos['tipo_elemento']) ){
 			$this->db->where('el.tipo_elemento', $paramDatos['tipo_elemento']);
+		}
+		if( !empty($paramDatos['categoria_key']) ){
+			$this->db->where('cael.key_cael', $paramDatos['categoria_key']); 
 		}
 		if( isset($paramPaginate['search'] ) && $paramPaginate['search'] ){
 			foreach ($paramPaginate['searchColumn'] as $key => $value) {
@@ -33,8 +36,11 @@ class Model_elemento extends CI_Model {
 		$this->db->from('elemento el');
 		$this->db->join('categoria_elemento cael', 'el.idcategoriaelemento = cael.idcategoriaelemento');
 		$this->db->where('el.estado_ele', 1);
-		if( !empty($paramDatos) ){
+		if( !empty($paramDatos['tipo_elemento']) ){
 			$this->db->where('el.tipo_elemento', $paramDatos['tipo_elemento']);
+		}
+		if( !empty($paramDatos['categoria_key']) ){
+			$this->db->where('cael.key_cael', $paramDatos['categoria_key']); 
 		}
 		if( isset($paramPaginate['search'] ) && $paramPaginate['search'] ){
 			foreach ($paramPaginate['searchColumn'] as $key => $value) {
@@ -46,14 +52,36 @@ class Model_elemento extends CI_Model {
 		$fData = $this->db->get()->row_array();
 		return $fData;
 	}
+	public function m_cargar_elemento_cbo($datos)
+	{
+		$this->db->select('el.idelemento, el.descripcion_ele, el.precio_referencial');
+		$this->db->from('elemento el');
+		$this->db->join('categoria_elemento cael','el.idcategoriaelemento = cael.idcategoriaelemento');
+		$this->db->where('el.estado_ele', 1); 
+		$this->db->where('cael.key_cael', 'key_plan_salud'); 
+		$this->db->order_by('el.descripcion_ele','ASC');
+		return $this->db->get()->result_array();
+	}
+	public function m_cargar_elemento_proveedor_cbo($datos)
+	{
+		$this->db->select('el.idelemento, el.descripcion_ele, el.precio_referencial');
+		$this->db->from('elemento el');
+		$this->db->join('categoria_elemento cael','el.idcategoriaelemento = cael.idcategoriaelemento');
+		$this->db->where('el.estado_ele', 1); 
+		$this->db->where('cael.key_cael', 'key_proveedor'); 
+		$this->db->order_by('el.descripcion_ele','ASC');
+		return $this->db->get()->result_array();
+	}
 	public function m_cargar_elementos_limite($datos)
 	{
 		$this->db->select('el.idelemento, el.descripcion_ele, el.precio_referencial, el.tipo_elemento, 
 			cael.idcategoriaelemento, cael.descripcion_cael, cael.color_cael');
 		$this->db->from('elemento el');
 		$this->db->join('categoria_elemento cael', 'el.idcategoriaelemento = cael.idcategoriaelemento');
-		
-		$this->db->where('el.estado_ele', 1);
+		$this->db->where('el.estado_ele', 1); 
+		if( !empty($datos['categoria_key']) ){ 
+			$this->db->where('cael.key_cael', $datos['categoria_key']); 
+		} 
 		$this->db->like($datos['searchColumn'], $datos['searchText']);
 		$this->db->order_by('el.descripcion_ele');
 		$this->db->limit($datos['limite']);

@@ -31,7 +31,6 @@ class Elemento extends CI_Controller {
 			if( $row['tipo_elemento'] == 'S' ){
 				$strTipoElemento = 'SERVICIO';
 			}
-			// $medicamento_stock = strtoupper($row['medicamento']) . ' | <span class="text-info">STOCK: ' . @$row['stock'] . ' UND.</span>';
 			array_push($arrListado,
 				array(
 					'id' => $row['idelemento'],
@@ -41,10 +40,6 @@ class Elemento extends CI_Controller {
 						'descripcion'=> strtoupper($row['descripcion_cael']),
 						'color'=> $row['color_cael']
 					),
-					// 'unidad_medida' => array(
-					// 	'id'=> $row['idunidadmedida'],
-					// 	'descripcion'=> strtoupper($row['descripcion_um'])
-					// ),
 					'tipo_elemento' => array(
 						'id'=> $row['tipo_elemento'],
 						'descripcion'=> $strTipoElemento 
@@ -90,10 +85,6 @@ class Elemento extends CI_Controller {
 						'descripcion'=> strtoupper($row['descripcion_cael']),
 						'color'=> $row['color_cael']
 					),
-					// 'unidad_medida' => array(
-					// 	'id'=> $row['idunidadmedida'],
-					// 	'descripcion'=> strtoupper($row['descripcion_um'])
-					// ),
 					'tipo_elemento' => array(
 						'id'=> $row['tipo_elemento'],
 						'descripcion'=> $strTipoElemento 
@@ -160,6 +151,53 @@ class Elemento extends CI_Controller {
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($arrData));
 	}
+	public function listar_elemento_cbo()
+	{
+		$allInputs = json_decode(trim($this->input->raw_input_stream),true); 
+		$lista = $this->model_elemento->m_cargar_elemento_cbo($allInputs); 
+		$arrListado = array();
+		foreach ($lista as $row) { 
+			array_push($arrListado, 
+				array(
+					'id' => $row['idelemento'], 
+					'descripcion' => strtoupper($row['descripcion_ele']) 
+				)
+			);
+		} 
+    	$arrData['datos'] = $arrListado;
+    	$arrData['message'] = '';
+    	$arrData['flag'] = 1;
+		if(empty($lista)){ 
+			$arrData['flag'] = 0;
+		} 
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($arrData));
+	} // 
+	public function listar_elemento_cbo_proveedores() 
+	{
+		$allInputs = json_decode(trim($this->input->raw_input_stream),true); 
+		$lista = $this->model_elemento->m_cargar_elemento_proveedor_cbo($allInputs); 
+		$arrListado = array();
+		foreach ($lista as $row) { 
+			array_push($arrListado, 
+				array(
+					'id' => $row['idelemento'], 
+					'descripcion' => strtoupper($row['descripcion_ele']) 
+				) 
+			);
+		} 
+    	$arrData['datos'] = $arrListado;
+    	$arrData['message'] = '';
+    	$arrData['flag'] = 1;
+		if(empty($lista)){ 
+			$arrData['flag'] = 0; 
+		} 
+		$this->output
+		    ->set_content_type('application/json')
+		    ->set_output(json_encode($arrData));
+	}
+
 	public function ver_popup_formulario()
 	{
 		$this->load->view('elemento/mant_elemento'); 

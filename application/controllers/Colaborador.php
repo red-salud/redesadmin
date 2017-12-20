@@ -157,7 +157,7 @@ class Colaborador extends CI_Controller {
 		    ->set_output(json_encode($arrData));
 	} 
 
-	 public function listar_colaboradores_cbo(){ 
+	public function listar_colaboradores_cbo(){ 
 		$allInputs = json_decode(trim($this->input->raw_input_stream),true);
 		$lista = $this->model_colaborador->m_cargar_colaborador_cbo();
 		$arrListado = array();

@@ -41,7 +41,7 @@ class Concepto extends CI_Controller {
 	public function listar_concepto_cbo()
 	{
 		$allInputs = json_decode(trim($this->input->raw_input_stream),true); 
-		$lista = $this->model_concepto->m_cargar_concepto_cbo(); 
+		$lista = $this->model_concepto->m_cargar_concepto_cbo($allInputs); 
 		$arrListado = array();
 		foreach ($lista as $row) { 
 			array_push($arrListado, 

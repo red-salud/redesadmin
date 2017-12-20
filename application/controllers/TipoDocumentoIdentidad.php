@@ -14,7 +14,7 @@ class TipoDocumentoIdentidad extends CI_Controller {
     }
 	public function listar_tipo_documento_identidad_cbo(){
 		$allInputs = json_decode(trim($this->input->raw_input_stream),true);
-		$lista = $this->model_tipo_documento_identidad->m_cargar_tipo_documento_identidad_cbo();
+		$lista = $this->model_tipo_documento_identidad->m_cargar_tipo_documento_identidad_cbo($allInputs);
 		$arrListado = array();
 		foreach ($lista as $row) {
 			array_push($arrListado,
