@@ -153,13 +153,20 @@ app.controller('HistorialCobroCtrl', ['$scope', '$filter', '$uibModal', '$bootbo
     $scope.mySelectionGrid = [];
   };
   $scope.metodos.getPaginationServerSide(true); 
-  $scope.exportarCobroExcel = function() {
-    
+  $scope.exportarCobroExcel = function() { 
+    var arrParams = { 
+      titulo: 'LISTA DE COBROS',
+      datos: $scope.fBusqueda,
+      salida: 'excel',
+      tituloAbv: 'CO-LISTA'
+    }; 
+    arrParams.url = angular.patchURLCI+'CentralReportes/exportar_lista_cobros',
+    ModalReporteFactory.getPopupReporte(arrParams);
   }
 }]); 
 app.service("CobroServices",function($http, $q, handleBehavior) {
     return({
-        sListarHistorialCobros: sListarHistorialCobros,
+        sListarHistorialCobros: sListarHistorialCobros, 
         sProcesarCobrosBoletajeMasivo: sProcesarCobrosBoletajeMasivo 
     });
     function sListarHistorialCobros(datos) {

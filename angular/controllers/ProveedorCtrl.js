@@ -5,117 +5,128 @@ app.controller('ProveedorCtrl', ['$scope', '$filter', '$uibModal', '$bootbox', '
 	'ContactoProveedorServices', 
 	'UbigeoServices',
 	'UsuarioServices',
+	'CargoContactoServices',
 	function($scope, $filter, $uibModal, $bootbox, $log, $timeout, pinesNotifications, uiGridConstants, blockUI, 
 	ProveedorFactory,
 	ProveedorServices,
 	TipoProveedorServices,
 	ContactoProveedorServices,
 	UbigeoServices,
-	UsuarioServices
+	UsuarioServices,
+	CargoContactoServices
 	) { 
 		$scope.metodos = {}; // contiene todas las funciones 
 		$scope.fArr = {}; // contiene todos los arrays generados por las funciones 
   	$scope.mySelectionGrid = [];
-  	var paginationOptions = {
+	  var paginationOptions = {
       pageNumber: 1,
       firstRow: 0,
       pageSize: 10,
       sort: uiGridConstants.DESC,
       sortName: null,
       search: null
-  	};
-  	$scope.gridOptions = {
-	    rowHeight: 30,
-	    paginationPageSizes: [10, 50, 100, 500, 1000],
-	    paginationPageSize: 10,
-	    useExternalPagination: true,
-	    useExternalSorting: true,
-	    useExternalFiltering : true,
-	    enableGridMenu: true,
-	    enableRowSelection: true,
-	    enableSelectAll: true,
-	    enableFiltering: false,
-	    enableFullRowSelection: true,
-	    multiSelect: false,
-	    columnDefs: [ 
-	      { field: 'idproveedor', name: 'pr.idproveedor', displayName: 'ID', width: '60',  sort: { direction: uiGridConstants.DESC} },
-	      { field: 'tipo_proveedor', name: 'tpr.descripcion_tpr', type: 'object', displayName: 'Tipo de Proveedor', minWidth: 140,
-	      	cellTemplate:'<div class="ui-grid-cell-contents text-center ">{{ COL_FIELD.descripcion }}</div>' 
-	      },
-	      { field: 'tipo_documento_identidad', name: 'tdi.descripcion_tdi', type: 'object', displayName: 'Tipo de Doc.', minWidth: 120, visible: false, 
-	      	cellTemplate:'<div class="ui-grid-cell-contents text-center ">{{ COL_FIELD.descripcion }}</div>' 
-	      },
-	      { field: 'numero_documento', name: 'pr.numero_documento_pr', displayName: 'N°. Documento', minWidth: 114 },
-	      { field: 'razon_social', name: 'pr.razon_social_pr', displayName: 'Razón Social', minWidth: 170 },
-	      { field: 'nombre_comercial', name: 'pr.nombre_comercial_pr', displayName: 'Nombre Comercial', minWidth: 180 },
-	      { field: 'direccion', name: 'pr.direccion_pr', displayName: 'Dirección', minWidth: 180 },
-	      { field: 'departamento', name: 'dpto.descripcion_ubig', displayName: 'Departamento', minWidth: 100, visible: false },
-	      { field: 'provincia', name: 'prov.descripcion_ubig', displayName: 'Provincia', minWidth: 100, visible: false },
-	      { field: 'distrito', name: 'dist.descripcion_ubig', displayName: 'Distrito', minWidth: 100 },
-	      { field: 'estado_obj', name: 'pr.estado_pr', type: 'object', displayName: ' ', minWidth: 90, enableFiltering: false, 
-          cellTemplate:'<div class="ui-grid-cell-contents">' + 
-            '<label style="box-shadow: 1px 1px 0 black; display: block;font-size: 12px;" class="label {{ COL_FIELD.claseLabel }} "> <i class="{{ COL_FIELD.claseIcon }}"></i> {{ COL_FIELD.labelText }}' + 
-            '</label></div>' 
-        }
-	    ],
-	    onRegisterApi: function(gridApi) { 
-	      $scope.gridApi = gridApi;
-	      gridApi.selection.on.rowSelectionChanged($scope,function(row){
-	        $scope.mySelectionGrid = gridApi.selection.getSelectedRows();
-	      });
-	      gridApi.selection.on.rowSelectionChangedBatch($scope,function(rows){
-	        $scope.mySelectionGrid = gridApi.selection.getSelectedRows();
-	      });
+	  };
+	  $scope.gridOptions = {
+		    rowHeight: 30,
+		    paginationPageSizes: [10, 50, 100, 500, 1000],
+		    paginationPageSize: 10,
+		    useExternalPagination: true,
+		    useExternalSorting: true,
+		    useExternalFiltering : true,
+		    enableGridMenu: true,
+		    enableRowSelection: true,
+		    enableSelectAll: true,
+		    enableFiltering: false,
+		    enableFullRowSelection: true,
+		    multiSelect: false,
+		    columnDefs: [ 
+		      { field: 'idproveedor', name: 'pr.idproveedor', displayName: 'ID', width: '60',  sort: { direction: uiGridConstants.DESC} },
+		      { field: 'tipo_proveedor', name: 'tpr.descripcion_tpr', type: 'object', displayName: 'Tipo de Proveedor', minWidth: 140,
+		      	cellTemplate:'<div class="ui-grid-cell-contents text-center ">{{ COL_FIELD.descripcion }}</div>' 
+		      },
+		      { field: 'tipo_documento_identidad', name: 'tdi.descripcion_tdi', type: 'object', displayName: 'Tipo de Doc.', minWidth: 120, visible: false, 
+		      	cellTemplate:'<div class="ui-grid-cell-contents text-center ">{{ COL_FIELD.descripcion }}</div>' 
+		      },
+		      { field: 'numero_documento', name: 'pr.numero_documento_pr', displayName: 'N°. Documento', minWidth: 114 },
+		      { field: 'razon_social', name: 'pr.razon_social_pr', displayName: 'Razón Social', minWidth: 170 },
+		      { field: 'nombre_comercial', name: 'pr.nombre_comercial_pr', displayName: 'Nombre Comercial', minWidth: 180 },
+		      { field: 'direccion', name: 'pr.direccion_pr', displayName: 'Dirección', minWidth: 180 },
+		      { field: 'departamento', name: 'dpto.descripcion_ubig', displayName: 'Departamento', minWidth: 100, visible: false },
+		      { field: 'provincia', name: 'prov.descripcion_ubig', displayName: 'Provincia', minWidth: 100, visible: false },
+		      { field: 'distrito', name: 'dist.descripcion_ubig', displayName: 'Distrito', minWidth: 100 },
+		      { field: 'estado_obj', name: 'pr.estado_pr', type: 'object', displayName: ' ', minWidth: 90, enableFiltering: false, 
+	          cellTemplate:'<div class="ui-grid-cell-contents">' + 
+	            '<label style="box-shadow: 1px 1px 0 black; display: block;font-size: 12px;" class="label {{ COL_FIELD.claseLabel }} "> <i class="{{ COL_FIELD.claseIcon }}"></i> {{ COL_FIELD.labelText }}' + 
+	            '</label></div>' 
+	        }
+		    ],
+		    onRegisterApi: function(gridApi) { 
+		      $scope.gridApi = gridApi;
+		      gridApi.selection.on.rowSelectionChanged($scope,function(row){
+		        $scope.mySelectionGrid = gridApi.selection.getSelectedRows();
+		      });
+		      gridApi.selection.on.rowSelectionChangedBatch($scope,function(rows){
+		        $scope.mySelectionGrid = gridApi.selection.getSelectedRows();
+		      });
 
-	      $scope.gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
-	        //console.log(sortColumns);
-	        if (sortColumns.length == 0) {
-	          paginationOptions.sort = null;
-	          paginationOptions.sortName = null;
-	        } else {
-	          paginationOptions.sort = sortColumns[0].sort.direction;
-	          paginationOptions.sortName = sortColumns[0].name;
-	        }
-	        $scope.metodos.getPaginationServerSide(true);
+		      $scope.gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
+		        //console.log(sortColumns);
+		        if (sortColumns.length == 0) {
+		          paginationOptions.sort = null;
+		          paginationOptions.sortName = null;
+		        } else {
+		          paginationOptions.sort = sortColumns[0].sort.direction;
+		          paginationOptions.sortName = sortColumns[0].name;
+		        }
+		        $scope.metodos.getPaginationServerSide(true);
+		      });
+		      gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
+		        paginationOptions.pageNumber = newPage;
+		        paginationOptions.pageSize = pageSize;
+		        paginationOptions.firstRow = (paginationOptions.pageNumber - 1) * paginationOptions.pageSize;
+		        $scope.metodos.getPaginationServerSide(true);
+		      });
+		      $scope.gridApi.core.on.filterChanged( $scope, function(grid, searchColumns) {
+		        var grid = this.grid;
+		        paginationOptions.search = true; 
+		        paginationOptions.searchColumn = { 
+		          'pr.idproveedor' : grid.columns[1].filters[0].term, 
+		          'tpr.descripcion_tpr' : grid.columns[2].filters[0].term, 
+		          'tdi.descripcion_tdi' : grid.columns[3].filters[0].term, 
+		          'pr.numero_documento_pr' : grid.columns[4].filters[0].term, 
+		          'pr.razon_social_pr' : grid.columns[5].filters[0].term, 
+		          'pr.nombre_comercial_pr' : grid.columns[6].filters[0].term, 
+		          'pr.direccion_pr' : grid.columns[7].filters[0].term, 
+		          'dpto.descripcion_ubig' : grid.columns[8].filters[0].term, 
+		          'prov.descripcion_ubig' : grid.columns[9].filters[0].term, 
+		          'dist.descripcion_ubig' : grid.columns[10].filters[0].term, 
+		          'pr.estado_pr' : grid.columns[11].filters[0].term 
+		        }
+		        $scope.metodos.getPaginationServerSide();
+		      });
+		    }
+			};
+			paginationOptions.sortName = $scope.gridOptions.columnDefs[0].name; 
+		  $scope.btnBuscar = function(){ 
+			  $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
+			  $scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.COLUMN );
+			};
+			// cargo contacto 
+			$scope.metodos.listaCargosContacto = function(myCallback) { 
+	      var myCallback = myCallback || function() { };
+	      CargoContactoServices.sListarCbo().then(function(rpta) {
+	        $scope.fArr.listaCargosContacto = rpta.datos; 
+	        myCallback();
 	      });
-	      gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
-	        paginationOptions.pageNumber = newPage;
-	        paginationOptions.pageSize = pageSize;
-	        paginationOptions.firstRow = (paginationOptions.pageNumber - 1) * paginationOptions.pageSize;
-	        $scope.metodos.getPaginationServerSide(true);
-	      });
-	      $scope.gridApi.core.on.filterChanged( $scope, function(grid, searchColumns) {
-	        var grid = this.grid;
-	        paginationOptions.search = true; 
-	        paginationOptions.searchColumn = { 
-	          'pr.idproveedor' : grid.columns[1].filters[0].term, 
-	          'tpr.descripcion_tpr' : grid.columns[2].filters[0].term, 
-	          'tdi.descripcion_tdi' : grid.columns[3].filters[0].term, 
-	          'pr.numero_documento_pr' : grid.columns[4].filters[0].term, 
-	          'pr.razon_social_pr' : grid.columns[5].filters[0].term, 
-	          'pr.nombre_comercial_pr' : grid.columns[6].filters[0].term, 
-	          'pr.direccion_pr' : grid.columns[7].filters[0].term, 
-	          'dpto.descripcion_ubig' : grid.columns[8].filters[0].term, 
-	          'prov.descripcion_ubig' : grid.columns[9].filters[0].term, 
-	          'dist.descripcion_ubig' : grid.columns[10].filters[0].term, 
-	          'pr.estado_pr' : grid.columns[11].filters[0].term 
-	        }
-	        $scope.metodos.getPaginationServerSide();
-	      });
-	    }
-		};
-		paginationOptions.sortName = $scope.gridOptions.columnDefs[0].name; 
-	  $scope.btnBuscar = function(){ 
-		  $scope.gridOptions.enableFiltering = !$scope.gridOptions.enableFiltering;
-		  $scope.gridApi.core.notifyDataChange( uiGridConstants.dataChange.COLUMN );
-		};
+	  };
+		// tipo de usuario 
 		$scope.metodos.listaTipoUsuario = function(myCallback) { 
-      var myCallback = myCallback || function() { };
-      UsuarioServices.sListarTipoUsuarioCbo().then(function(rpta) {
-        $scope.fArr.listaTipoUsuario = rpta.datos; 
-        myCallback();
-      });
-    };
+	    var myCallback = myCallback || function() { };
+	    UsuarioServices.sListarTipoUsuarioCbo().then(function(rpta) {
+	      $scope.fArr.listaTipoUsuario = rpta.datos; 
+	      myCallback();
+	    });
+	  };
 		$scope.metodos.listaTipoProveedor = function(myCallback) { 
 			var myCallback = myCallback || function() { };
 			TipoProveedorServices.sListarCbo().then(function(rpta) {
@@ -159,6 +170,118 @@ app.controller('ProveedorCtrl', ['$scope', '$filter', '$uibModal', '$bootbox', '
 				'fSessionCI': $scope.fSessionCI 
 			}
 			ProveedorFactory.editProveedorModal(arrParams); 
+		} 
+		$scope.verFichaProveedor = function() {
+			blockUI.start('Abriendo formulario...');
+			$uibModal.open({ 
+	      templateUrl: angular.patchURLCI+'Proveedor/ver_popup_ficha_proveedor', 
+	      size: 'lg',
+	      backdrop: 'static',
+	      keyboard:false,
+	      scope: $scope,
+	      controller: function ($scope, $uibModalInstance) { 
+	      	blockUI.stop(); 
+	      	$scope.titleForm = 'Ficha del Proveedor'; 
+	      	$scope.fData = {};
+	      	$scope.fContacto = {};
+	      	$scope.fData = $scope.mySelectionGrid[0]; 
+	      	var paginationOptionsCTVista = { 
+			      pageNumber: 1,
+			      firstRow: 0,
+			      pageSize: 10,
+			      sort: uiGridConstants.DESC,
+			      sortName: null,
+			      search: null
+				  };
+					$scope.gridOptionsContactos = { 
+				    rowHeight: 30,
+				    paginationPageSizes: [10, 50, 100, 500, 1000],
+				    paginationPageSize: 10,
+				    useExternalPagination: true,
+				    useExternalSorting: true,
+				    useExternalFiltering : true,
+				    enableGridMenu: true,
+				    enableRowSelection: true,
+				    enableSelectAll: true,
+				    enableFiltering: false,
+				    enableFullRowSelection: true,
+				    multiSelect: false,
+				    columnDefs: [ 
+				      { field: 'idcontacto', name: 'cpr.idcontactoproveedor', displayName: 'ID', visible: false, width: '50',  sort: { direction: uiGridConstants.DESC} },
+				      { field: 'contacto', name: 'cpr.nombres', displayName: 'Contacto', width: 180 },
+				      { field: 'cargo_contacto', name: 'cco.descripcion_ctc', type: 'object', displayName: 'Cargo', width: 140, 
+				      	cellTemplate:'<div class="ui-grid-cell-contents"> {{ COL_FIELD.descripcion }} </div>' },
+				      { field: 'telefono_fijo', name: 'cpr.telefono_fijo_cp', displayName: 'Tel. Fijo', width: 90 },
+				      { field: 'anexo', name: 'cpr.anexo_cp', displayName: 'Anexo', width: 75 },
+				      { field: 'telefono_movil', name: 'cpr.telefono_movil_cp', displayName: 'Tel. Movil', width: 90 },
+				      { field: 'email', name: 'cpr.email_cp', displayName: 'E-mail', width: 166 },
+				      { field: 'chk_envio_correo_str', name: 'cpr.chk_envio_correo', displayName: '¿Envío correo?', width: 80 } 
+				    ],
+				    onRegisterApi: function(gridApiContacto) { 
+				      $scope.gridApiContacto = gridApiContacto;
+				      gridApiContacto.selection.on.rowSelectionChanged($scope,function(row){
+				        $scope.mySelectionGridContacto = gridApiContacto.selection.getSelectedRows(); 
+				      });
+				      gridApiContacto.selection.on.rowSelectionChangedBatch($scope,function(rows){
+				        $scope.mySelectionGridContacto = gridApiContacto.selection.getSelectedRows();
+				      });
+				      $scope.gridApiContacto.core.on.sortChanged($scope, function(grid, sortColumns) { 
+				        if (sortColumns.length == 0) {
+				          paginationOptionsCTVista.sort = null;
+				          paginationOptionsCTVista.sortName = null;
+				        } else {
+				          paginationOptionsCTVista.sort = sortColumns[0].sort.direction;
+				          paginationOptionsCTVista.sortName = sortColumns[0].name;
+				        }
+				        $scope.metodos.getPaginationServerSideCTVista(true);
+				      });
+				      gridApiContacto.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
+				        paginationOptionsCTVista.pageNumber = newPage;
+				        paginationOptionsCTVista.pageSize = pageSize;
+				        paginationOptionsCTVista.firstRow = (paginationOptionsCTVista.pageNumber - 1) * paginationOptionsCTVista.pageSize;
+				        $scope.metodos.getPaginationServerSideCTVista(true);
+				      });
+				      $scope.gridApiContacto.core.on.filterChanged( $scope, function(grid, searchColumns) {
+				        var grid = this.grid;
+				        paginationOptionsCTVista.search = true; 
+				        paginationOptionsCTVista.searchColumn = {
+				          'cpr.idcontactoproveedor' : grid.columns[1].filters[0].term,
+				          'cpr.nombres' : grid.columns[2].filters[0].term,
+				          'cco.descripcion_ctc' : grid.columns[3].filters[0].term,
+				          'cpr.telefono_fijo_cp' : grid.columns[4].filters[0].term,
+				          'cpr.anexo_cp' : grid.columns[5].filters[0].term,
+				          'cpr.telefono_movil_cp' : grid.columns[6].filters[0].term,
+				          'cpr.email_cp' : grid.columns[7].filters[0].term 
+				        }
+				        $scope.metodos.getPaginationServerSideCTVista();
+				      }); 
+				    }
+					};
+					paginationOptionsCTVista.sortName = $scope.gridOptionsContactos.columnDefs[0].name;
+					$scope.metodos.getPaginationServerSideCTVista = function(loader) {
+					  if( loader ){
+					  	blockUI.start('Procesando información...');
+					  }
+					  var arrParams = { 
+					    paginate : paginationOptionsCTVista,
+					    datos: $scope.fData 
+					  };
+					  ContactoProveedorServices.sListarContactosDeEsteProveedor(arrParams).then(function (rpta) { 
+					    $scope.gridOptionsContactos.totalItems = rpta.paginate.totalRows;
+					    $scope.gridOptionsContactos.data = rpta.datos; 
+					    if( loader ){
+					    	blockUI.stop(); 
+					    }
+					  });
+					  $scope.mySelectionGridContacto = [];
+					};
+					$scope.metodos.getPaginationServerSideCTVista(true);
+
+	      	$scope.cancel = function () { 
+	      	  $uibModalInstance.dismiss('cancel'); 
+	      	} 
+	      }
+	    });
 		}
 		$scope.btnContactos = function() { 
 			blockUI.start('Abriendo formulario...');
@@ -185,6 +308,13 @@ app.controller('ProveedorCtrl', ['$scope', '$filter', '$uibModal', '$bootbox', '
 	      	$scope.cancel = function () {
 	      	  $uibModalInstance.dismiss('cancel');
 	      	} 
+	      	// cargo contacto 
+	      	var myCallBackCCT = function() { 
+	      		$scope.fArr.listaCargosContacto.splice(0,0,{ id : '0', descripcion:'--Seleccione cargo--'}); 
+	      		$scope.fContacto.cargo_contacto = $scope.fArr.listaCargosContacto[0]; 
+	      	}
+	      	$scope.metodos.listaCargosContacto(myCallBackCCT); 
+
 	      	$scope.btnBuscarContactos = function(){
 					  $scope.gridOptionsContactos.enableFiltering = !$scope.gridOptionsContactos.enableFiltering;
 					  $scope.gridApiContacto.core.notifyDataChange( uiGridConstants.dataChange.COLUMN );
@@ -213,7 +343,8 @@ app.controller('ProveedorCtrl', ['$scope', '$filter', '$uibModal', '$bootbox', '
 				    columnDefs: [ 
 				      { field: 'idcontacto', name: 'cpr.idcontactoproveedor', displayName: 'ID', visible: false, width: '50',  sort: { direction: uiGridConstants.DESC} },
 				      { field: 'contacto', name: 'cpr.nombres', displayName: 'Contacto', width: 140 },
-				      { field: 'cargo', name: 'cpr.cargo_cp', displayName: 'Cargo', width: 140 },
+				      { field: 'cargo_contacto', name: 'cco.descripcion_ctc', type: 'object', displayName: 'Cargo', width: 140, 
+				    		cellTemplate:'<div class="ui-grid-cell-contents"> {{ COL_FIELD.descripcion }} </div>' },
 				      { field: 'telefono_fijo', name: 'cpr.telefono_fijo_cp', displayName: 'Tel. Fijo', width: 100 },
 				      { field: 'anexo', name: 'cpr.anexo_cp', displayName: 'Anexo', width: 75 },
 				      { field: 'telefono_movil', name: 'cpr.telefono_movil_cp', displayName: 'Tel. Movil', width: 100 },
@@ -230,12 +361,20 @@ app.controller('ProveedorCtrl', ['$scope', '$filter', '$uibModal', '$bootbox', '
 					      	$scope.contBotonesReg = false;
 					      	$scope.contBotonesEdit = true;
 					      	$scope.fContacto = $scope.mySelectionGridContacto[0];
+					      	var objIndex = $scope.fArr.listaCargosContacto.filter(function(obj) { 
+					      		if( !($scope.mySelectionGridContacto[0].cargo_contacto) ){ 
+					      			return;
+					      		}
+				            return obj.id == $scope.mySelectionGridContacto[0].cargo_contacto.id; 
+				          }).shift(); 
+					      	$scope.fContacto.cargo_contacto = objIndex;
 					      }else{
 					      	$scope.editClassForm = null; 
 					      	$scope.tituloBloque = 'Agregar Contacto';
 					      	$scope.contBotonesReg = true;
 					      	$scope.contBotonesEdit = false;
 					      	$scope.fContacto = {};
+					      	$scope.fContacto.cargo_contacto = $scope.fArr.listaCargosContacto[0]; 
 					      }
 					      /* END */
 				      });
@@ -312,6 +451,7 @@ app.controller('ProveedorCtrl', ['$scope', '$filter', '$uibModal', '$bootbox', '
 	              var pTitle = 'OK!';
 	              var pType = 'success';
 	              $scope.fContacto = {};
+	              $scope.fContacto.cargo_contacto = $scope.fArr.listaCargosContacto[0]; 
 	              $scope.metodos.getPaginationServerSideContactos(true); 
 	              $scope.editClassForm = null; 
 				      	$scope.tituloBloque = 'Agregar Contacto';
@@ -354,6 +494,7 @@ app.controller('ProveedorCtrl', ['$scope', '$filter', '$uibModal', '$bootbox', '
 	              var pTitle = 'OK!';
 	              var pType = 'success';
 	              $scope.fContacto = {};
+	              $scope.fContacto.cargo_contacto = $scope.fArr.listaCargosContacto[0]; 
 	              $scope.metodos.getPaginationServerSideContactos(true); 
 	            }else if(rpta.flag == 0){
 	              var pTitle = 'Error!';
@@ -520,6 +661,13 @@ app.factory("ProveedorFactory", function($uibModal, $timeout, $bootbox, pinesNot
 	      	$scope.contBotonesReg = true;
 	      	$scope.contBotonesEdit = false;
 
+	      	// cargo contacto 
+	      	var myCallBackCCT = function() { 
+	      		$scope.fArr.listaCargosContacto.splice(0,0,{ id : '0', descripcion:'--Seleccione cargo--'}); 
+	      		$scope.fContacto.cargo_contacto = $scope.fArr.listaCargosContacto[0]; 
+	      	}
+	      	$scope.metodos.listaCargosContacto(myCallBackCCT); 
+
 	      	$scope.gridOptionsContactos = { 
 				    rowHeight: 30,
 				    paginationPageSizes: [100, 500, 1000],
@@ -533,7 +681,8 @@ app.factory("ProveedorFactory", function($uibModal, $timeout, $bootbox, pinesNot
 				    columnDefs: [ 
 				      { field: 'idcontacto', displayName: 'ID', visible: false, width: '50' },
 				      { field: 'contacto', displayName: 'Contacto', width: 140 },
-				      { field: 'cargo', displayName: 'Cargo', width: 140 },
+				      { field: 'cargo_contacto', type: 'object', displayName: 'Cargo', width: 140, 
+				      	cellTemplate:'<div class="ui-grid-cell-contents"> {{ COL_FIELD.descripcion }} </div>' }, 
 				      { field: 'telefono_fijo', displayName: 'Tel. Fijo', width: 100 },
 				      { field: 'anexo', displayName: 'Anexo', width: 75 },
 				      { field: 'telefono_movil', displayName: 'Tel. Movil', width: 100 },
@@ -550,12 +699,18 @@ app.factory("ProveedorFactory", function($uibModal, $timeout, $bootbox, pinesNot
 					      	$scope.contBotonesReg = false;
 					      	$scope.contBotonesEdit = true;
 					      	$scope.fContacto = $scope.mySelectionGridContacto[0];
+					      	var objIndex = $scope.fArr.listaCargosContacto.filter(function(obj) { 
+				            return obj.id == $scope.mySelectionGridContacto[0].cargo_contacto.id; 
+				          }).shift(); 
+					      	$scope.fContacto.cargo_contacto = objIndex;
 					      }else{
 					      	$scope.editClassForm = null; 
 					      	$scope.tituloBloque = 'Agregar Contacto';
 					      	$scope.contBotonesReg = true;
 					      	$scope.contBotonesEdit = false;
 					      	$scope.fContacto = {};
+					      	$scope.fContacto.cargo_contacto = $scope.fArr.listaCargosContacto[0]; 
+					      	// $scope.fContacto = $scope.mySelectionGridContacto[0];
 					      }
 					      /* END */
 				      });
@@ -568,6 +723,7 @@ app.factory("ProveedorFactory", function($uibModal, $timeout, $bootbox, pinesNot
 						var index = $scope.gridOptionsContactos.data.indexOf($scope.mySelectionGridContacto[0]); 
 				    $scope.gridOptionsContactos.data.splice(index,1);
 				    $scope.fContacto = {};
+				    $scope.fContacto.cargo_contacto = $scope.fArr.listaCargosContacto[0]; 
 				    $scope.editClassForm = null; 
 				    $scope.contBotonesReg = true;
 					  $scope.contBotonesEdit = false;
@@ -578,7 +734,7 @@ app.factory("ProveedorFactory", function($uibModal, $timeout, $bootbox, pinesNot
 				    $scope.arrTemporal = { 
 	      			'nombres': $scope.fContacto.nombres,
 	      			'apellidos': $scope.fContacto.apellidos,
-	      			'cargo': $scope.fContacto.cargo,
+	      			'cargo_contacto': $scope.fContacto.cargo_contacto,
 	      			'telefono_movil': $scope.fContacto.telefono_movil,
 	      			'telefono_fijo': $scope.fContacto.telefono_fijo,
 	      			'anexo': $scope.fContacto.anexo,
@@ -590,6 +746,7 @@ app.factory("ProveedorFactory", function($uibModal, $timeout, $bootbox, pinesNot
 				    }
 				    $scope.gridOptionsContactos.data.push($scope.arrTemporal);
 				    $scope.fContacto = {}; 
+				    $scope.fContacto.cargo_contacto = $scope.fArr.listaCargosContacto[0]; 
 				    $scope.editClassForm = null;
 				    $scope.contBotonesReg = true;
 					  $scope.contBotonesEdit = false;
@@ -600,11 +757,11 @@ app.factory("ProveedorFactory", function($uibModal, $timeout, $bootbox, pinesNot
 				      //$('#temporalPrecioUnit').focus();
 				      pinesNotifications.notify({ title: 'Advertencia.', text: 'No hay datos para ingresar', type: 'warning', delay: 2000 });
 				      return false;
-				    }
+				    } 
 	      		$scope.arrTemporal = { 
 	      			'nombres': $scope.fContacto.nombres,
 	      			'apellidos': $scope.fContacto.apellidos,
-	      			'cargo': $scope.fContacto.cargo,
+	      			'cargo_contacto': $scope.fContacto.cargo_contacto,
 	      			'telefono_movil': $scope.fContacto.telefono_movil,
 	      			'telefono_fijo': $scope.fContacto.telefono_fijo,
 	      			'anexo': $scope.fContacto.anexo,
@@ -619,6 +776,7 @@ app.factory("ProveedorFactory", function($uibModal, $timeout, $bootbox, pinesNot
 				    $scope.gridOptionsContactos.data.push($scope.arrTemporal); 
 				    $scope.editClassForm = null; 
 				    $scope.fContacto = {};
+				    $scope.fContacto.cargo_contacto = $scope.fArr.listaCargosContacto[0]; 
 	        } 
 	      	$scope.cancel = function () { 
 	      		var pMensaje = '¿Realmente desea salir sin guardar la información?'; 
@@ -865,7 +1023,7 @@ app.factory("ProveedorFactory", function($uibModal, $timeout, $bootbox, pinesNot
 	      	$scope.fArr = arrParams.fArr;
 	      	$scope.disabledVendedor = false;
 	      	if( arrParams.mySelectionGrid.length == 1 ){ 
-	          $scope.fData = arrParams.mySelectionGrid[0];
+	          $scope.fData = arrParams.mySelectionGrid[0]; 
 	        }else{
 	          alert('Seleccione una sola fila');
 	        }

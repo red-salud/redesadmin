@@ -7,30 +7,65 @@ class Model_cita extends CI_Model {
 	public function m_cargar_citas($datos)
 	{
 		$this->db->select("CONCAT(COALESCE(as.aseg_nom1,''), ' ', COALESCE(as.aseg_nom2,''), ' ', COALESCE(as.aseg_ape1,''), ' ', COALESCE(as.aseg_ape2,'')) AS asegurado",FALSE);
-		$this->db->select('ci.idcita, ci.fecha_cita, ci.hora_cita_inicio, ci.hora_cita_fin, ci.observaciones_cita, ci.estado_cita, ci.es_atencion, 
-			cas.certAse_id, as.aseg_id, prov.idproveedor, prov.nombre_comercial_pr, prov.razon_social_pr, prov.numero_documento_pr, 
+		$this->db->select('ci.idcita, ci.fecha_cita, ci.hora_cita_inicio, ci.hora_cita_fin, ci.observaciones_cita, ci.estado_cita, 
+			cas.certAse_id, as.aseg_id, as.aseg_numDoc, prov.idproveedor, prov.nombre_comercial_pr, prov.razon_social_pr, prov.numero_documento_pr, 
 			prod.idproducto, prod.descripcion_prod, tpr.idtipoproducto, tpr.descripcion_tp, tpr.key_tp, esp.idespecialidad, esp.nombre_esp, 
-			pl.idplan, pl.nombre_plan'); 
+			pl.idplan, pl.nombre_plan, hi.idhistoria, cert.cert_id, sin.idsiniestro, sin.fecha_atencion'); 
 		$this->db->from('cita ci'); 
 		$this->db->join('certificado_asegurado cas','ci.idcertificadoasegurado = cas.certAse_id'); 
 		$this->db->join('certificado cert','cas.cert_id = cert.cert_id'); 
 		$this->db->join('plan pl','cert.plan_id = pl.idplan'); 
 		$this->db->join('asegurado as','ci.idasegurado = as.aseg_id'); 
+		$this->db->join('historia hi','as.aseg_id = hi.idasegurado','left'); 
 		$this->db->join('proveedor prov','ci.idproveedor = prov.idproveedor'); 
 		$this->db->join('producto prod','ci.idproducto = prod.idproducto'); 
 		$this->db->join('tipo_producto tpr','prod.idtipoproducto = tpr.idtipoproducto'); 
 		$this->db->join('especialidad esp','ci.idespecialidad = esp.idespecialidad'); 
+		// atencion
+		$this->db->join('siniestro sin','ci.idcita = sin.idcita','left'); 
 		$this->db->where('ci.fecha_cita BETWEEN '. $this->db->escape(darFormatoYMD($datos['desde']).' 00:00').' AND '. $this->db->escape( darFormatoYMD($datos['hasta']).' 23:59')); 
 		if(!empty($datos['proveedor']['id'])){
 			$this->db->where('ci.idproveedor', $datos['proveedor']['id']);
 		}
-		$this->db->where_in('ci.estado_cita',array(1,2)); // reservado y atendido 
+		$this->db->where_in('ci.estado_cita',array(1,2,3)); // sin confirmar, confirmado, atendido
 		return $this->db->get()->result_array();
+	}
+	public function m_cargar_esta_cita($datos)
+	{
+		$this->db->select("CONCAT(COALESCE(as.aseg_nom1,''), ' ', COALESCE(as.aseg_nom2,''), ' ', COALESCE(as.aseg_ape1,''), ' ', COALESCE(as.aseg_ape2,'')) AS asegurado",FALSE);
+		$this->db->select('ci.idcita, ci.fecha_cita, ci.hora_cita_inicio, ci.hora_cita_fin, ci.observaciones_cita, ci.estado_cita, 
+			cas.certAse_id, as.aseg_id, as.aseg_numDoc, prov.idproveedor, prov.nombre_comercial_pr, prov.razon_social_pr, prov.numero_documento_pr, 
+			prod.idproducto, prod.descripcion_prod, tpr.idtipoproducto, tpr.descripcion_tp, tpr.key_tp, esp.idespecialidad, esp.nombre_esp, 
+			pl.idplan, pl.nombre_plan, hi.idhistoria, cert.cert_id, sin.idsiniestro, sin.fecha_atencion'); 
+		$this->db->from('cita ci'); 
+		$this->db->join('certificado_asegurado cas','ci.idcertificadoasegurado = cas.certAse_id'); 
+		$this->db->join('certificado cert','cas.cert_id = cert.cert_id'); 
+		$this->db->join('plan pl','cert.plan_id = pl.idplan'); 
+		$this->db->join('asegurado as','ci.idasegurado = as.aseg_id'); 
+		$this->db->join('historia hi','as.aseg_id = hi.idasegurado','left'); 
+		$this->db->join('proveedor prov','ci.idproveedor = prov.idproveedor'); 
+		$this->db->join('producto prod','ci.idproducto = prod.idproducto'); 
+		$this->db->join('tipo_producto tpr','prod.idtipoproducto = tpr.idtipoproducto'); 
+		$this->db->join('especialidad esp','ci.idespecialidad = esp.idespecialidad'); 
+		// atencion
+		$this->db->join('siniestro sin','ci.idcita = sin.idcita','left'); 
+		$this->db->where('ci.idcita', $datos['idcita']); 
+		$this->db->limit(1);
+		return $this->db->get()->row_array();
 	}
 	public function m_obtener_esta_cita($idcita)
 	{
-		$this->db->select('ci.idcita, ci.fecha_cita, ci.hora_cita_inicio, ci.hora_cita_fin, ci.observaciones_cita, ci.estado_cita, ci.es_atencion'); 
+		$this->db->select('ci.idcita, ci.fecha_cita, ci.hora_cita_inicio, ci.hora_cita_fin, ci.observaciones_cita, ci.estado_cita'); 
 		$this->db->from('cita ci'); 
+		$this->db->where('ci.idcita', $idcita); 
+		$this->db->limit(1);
+		return $this->db->get()->row_array();
+	}
+	public function m_validar_cita_en_atencion($idcita)
+	{
+		$this->db->select('sin.idsiniestro, ci.idcita, ci.fecha_cita, ci.estado_cita'); 
+		$this->db->from('cita ci'); 
+		$this->db->join('siniestro sin','ci.idcita = sin.idcita'); 
 		$this->db->where('ci.idcita', $idcita); 
 		$this->db->limit(1);
 		return $this->db->get()->row_array();
@@ -47,6 +82,7 @@ class Model_cita extends CI_Model {
 			'fecha_cita'=>$datos['fecha'], 
 			'hora_cita_inicio'=> $datos['hora_desde_str'],
 			'hora_cita_fin'=> $datos['hora_hasta_str'],
+			'estado_cita'=> empty($datos['estado_cita']['id']) ? 1 : $datos['estado_cita']['id'],
 			'observaciones_cita'=> empty($datos['observaciones']) ? NULL : $datos['observaciones'],
 			'idempresaadmin'=> $this->sessionRS['idempresaadmin'],
 			'createdat' => date('Y-m-d H:i:s'),
@@ -62,6 +98,7 @@ class Model_cita extends CI_Model {
 			'fecha_cita'=>$datos['fecha'], 
 			'hora_cita_inicio'=> $datos['hora_desde_str'],
 			'hora_cita_fin'=> $datos['hora_hasta_str'],
+			'estado_cita'=> empty($datos['estado_cita']['id']) ? 1 : $datos['estado_cita']['id'],
 			'observaciones_cita'=> empty($datos['observaciones']) ? NULL : $datos['observaciones'],
 			'updatedat' => date('Y-m-d H:i:s')
 		);
@@ -88,7 +125,6 @@ class Model_cita extends CI_Model {
 		);
 		$this->db->where('idcita',$datos['id']);
 		return $this->db->update('cita', $data);
-	}	
-
+	}
 }
 ?>

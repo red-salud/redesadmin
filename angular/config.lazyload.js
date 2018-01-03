@@ -40,9 +40,9 @@ angular.module('app')
       footable:       [   'assets/libs/jquery/footable/v3/js/footable.min.js',
                           'assets/libs/jquery/footable/v3/css/footable.bootstrap.min.css'],
       fullcalendar:   [   /*'assets/libs/jquery/moment/moment.js',*/
-                          'assets/libs/jquery/fullcalendar/dist/2.3.7/fullcalendar.min.js',
-                          'assets/libs/jquery/fullcalendar/dist/2.3.7/fullcalendar.css',
-                          'assets/libs/jquery/fullcalendar/dist/2.3.1/fullcalendar.theme.css'],
+                          'assets/libs/jquery/fullcalendar/dist/2.3.7/fullcalendar.min.js'
+                          /*'assets/libs/jquery/fullcalendar/dist/2.3.7/fullcalendar.css',
+                          'assets/libs/jquery/fullcalendar/dist/2.3.1/fullcalendar.theme.css'*/],
       daterangepicker:[   /*'assets/libs/jquery/moment/moment.js',*/
                           'assets/libs/jquery/bootstrap-daterangepicker/daterangepicker.js',
                           'assets/libs/jquery/bootstrap-daterangepicker/daterangepicker-bs3.css'],

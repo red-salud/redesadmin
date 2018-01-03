@@ -5,15 +5,17 @@
 	<div class="row">
 		<div class="col-xs-12 text-right">
 			<button class="btn btn-info pull-left btn-xs mb-xs" ng-click="btnBuscar();"> 
-				<i class="fa fa-search"> </i> Buscar </button>
+				<i class="fa fa-search"> </i> BUSCAR </button>
 	        <button class="btn btn-success btn-xs" ng-click="btnNuevo();">
-	        	<i class="fa fa-file-text"></i> Nuevo </button>
+	        	<i class="fa fa-file-text"></i> NUEVO </button>
 	        <button ng-if="mySelectionGrid.length == 1" ng-click="btnEditar();" class="btn btn-warning btn-xs"> 
-	        	<i class="fa fa-edit"></i> Editar </button>
+	        	<i class="fa fa-edit"></i> EDITAR </button>
 	        <button ng-if="mySelectionGrid.length == 1" ng-click="btnContactos();" class="btn btn-dark btn-xs"> 
-	        	<i class="fa fa-plus"></i> Contactos... </button>
+	        	<i class="fa fa-plus"></i> CONTACTOS... </button>
 	        <button ng-click="goToUrl('/app/usuario'); $event.preventDefault();" class="btn btn-dark btn-xs"> 
-	        	<i class="fa fa-plus"></i> Usuario... </button>
+	        	<i class="fa fa-plus"></i> USUARIO... </button> 
+	        <button ng-click="verFichaProveedor(); $event.preventDefault();" class="btn btn-info btn-xs"> 
+	        	<i class="fa fa-eye"></i> VER FICHA </button> 
 	        <button ng-click="btnExportarExcel();" class="btn btn-info btn-xs" uib-tooltip="Exportar a Excel"> 
 	        	<i class="fa fa-file-excel-o"></i></button> 
 	        <div class="btn-group dropdown btn-xs p-n" ng-if="mySelectionGrid.length == 1"> 

@@ -149,11 +149,13 @@
               <div class="row" ng-show="mostrarResultados == 1"> 
                 <div class="col-xs-12"> 
                   <uib-accordion close-others="oneAtATime">
-                    <div uib-accordion-group class="panel-default" heading="Certificado N° {{ row.num_certificado }}" is-open="row.open_certificado"    is-disabled="false" ng-repeat="row in fArr.listaCertificados"> 
+                    <div uib-accordion-group class="panel-default" heading="Certificado N° {{ row.num_certificado }}" is-open="row.open_certificado" 
+                      is-disabled="false" ng-repeat="row in fArr.listaCertificados"> 
                       <div class="row">
                         <div class="col-xs-6"> 
                           <fieldset >
-                            <legend class="lead lead-sm"> Certificado N° {{ row.num_certificado }} 
+                            <legend class="lead lead-sm "> Certificado N° {{ row.num_certificado }} 
+                              <!-- - <span class="text-{{row.estado.claseLabel}}">{{ row.estado.labelText }}</span>  -->
                               <div class="btn-group pull-right">
                                 <button type="button" class="btn btn-success dropdown-toggle btn-xs" data-toggle="dropdown">
                                   <i class="fa fa-tasks"> </i>  ACCIONES <span class="caret"></span> 
@@ -182,11 +184,11 @@
                             <div class="row"> 
                               <div class="inline-block col-sm-4"> 
                                 <label class="control-label mt-xs mb-n"> Estado de Atención </label> 
-                                <input type="text" class="form-control input-xs" ng-model="row.estado_atencion.descripcion" readonly="readonly" tabindex="128" /> 
+                                <input type="text" class="form-control input-xs" ng-model="row.estado_atencion.descripcion" readonly="readonly" tabindex="118" /> 
                               </div> 
                               <div class="inline-block col-sm-4"> 
                                 <label class="control-label mt-xs mb-n"> Estado de Cert. </label> 
-                                <input type="text" class="form-control input-xs" ng-model="row.estado.labelText" readonly="readonly" tabindex="120" /> 
+                                <input type="text" class="form-control input-xs text-{{row.estado.claseLabel}} " ng-model="row.estado.labelText" readonly="readonly" tabindex="120" /> 
                               </div> 
                               <div class="inline-block col-sm-4"> 
                                 <label class="control-label mt-xs mb-n"> Fecha de Cancelación </label> 
@@ -203,18 +205,22 @@
                                 <input type="text" class="form-control input-xs" ng-model="row.fecha_fin_vig" readonly="readonly" tabindex="140" /> 
                               </div> 
                               <div class="inline-block col-sm-4"> 
-                                <label class="control-label mt-xs mb-n"> Precio del Plan </label> <!-- PRECIO DEL PLAN --> 
-                                <input type="text" class="form-control input-xs" ng-model="row.precio_plan" readonly="readonly" tabindex="145" /> 
-                              </div> 
+                                <label class="control-label mt-xs mb-n"> Fecha Ult. Cobro </label> 
+                                <input type="text" class="form-control input-xs" ng-model="row.fecha_ultimo_cobro" readonly="readonly" tabindex="145" /> 
+                              </div>
                             </div>
-                            <div class="row">
+                            <div class="row"> 
                               <div class="inline-block col-sm-4"> 
                                 <label class="control-label mt-xs mb-n"> Canal/Cliente </label> 
                                 <input type="text" class="form-control input-xs" ng-model="row.canal_cliente" readonly="readonly" tabindex="150" /> 
                               </div> 
-                              <div class="inline-block col-sm-8"> 
+                              <div class="inline-block col-sm-4"> 
                                 <label class="control-label mt-xs mb-n"> Plan </label> 
                                 <input type="text" class="form-control input-xs" ng-model="row.plan" readonly="readonly" tabindex="160" /> 
+                              </div> 
+                              <div class="inline-block col-sm-4"> 
+                                <label class="control-label mt-xs mb-n"> Precio del Plan </label> <!-- PRECIO DEL PLAN --> 
+                                <input type="text" class="form-control input-xs" ng-model="row.precio_plan" readonly="readonly" tabindex="165" /> 
                               </div> 
                             </div>
                           </fieldset>

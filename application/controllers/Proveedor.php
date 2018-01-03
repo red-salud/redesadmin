@@ -7,7 +7,7 @@ class Proveedor extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->helper(array('security','imagen_helper','otros_helper','fechas_helper'));
-		$this->load->model(array('model_proveedor','model_tipo_proveedor','model_usuario','model_contacto_proveedor'));
+		$this->load->model(array('model_proveedor','model_tipo_proveedor','model_usuario','model_contacto_proveedor','model_cargo_contacto'));
 		//cache
 		$this->output->set_header("Cache-Control: no-store, no-cache, must-revalidate, no-transform, max-age=0, post-check=0, pre-check=0");
 		$this->output->set_header("Pragma: no-cache");
@@ -65,6 +65,8 @@ class Proveedor extends CI_Controller {
 					'referencia'=> $row['referencia_pr'],
 					'idusuario'=> $row['idusuario'],
 					'username'=> $row['username'], 
+					'password_view'=> $row['password_view'], 
+					'ultimo_inicio_sesion'=> $row['ultimo_inicio_sesion'],
 					'lat' => $row['latitud'],
 					'lng' => $row['longitud'],
 					'estado_obj' => $objEstado
@@ -231,6 +233,10 @@ class Proveedor extends CI_Controller {
 	{
 		$this->load->view('proveedor/busq_proveedor_popup');
 	}
+	public function ver_popup_ficha_proveedor()
+	{
+		$this->load->view('proveedor/popup_ficha_proveedor');
+	}
 	public function registrar()
 	{
 		$allInputs = json_decode(trim($this->input->raw_input_stream),true);
@@ -252,21 +258,37 @@ class Proveedor extends CI_Controller {
    		if( empty($allInputs['contactos']) ){ 
    			$contactosValidos = FALSE;
    		}
+   		if( !($contactosValidos) ){
+    		$arrData['message'] = 'Falta ingresar los contactos asociados al sistema.'; 
+			$arrData['flag'] = 0;
+			$this->output
+			    ->set_content_type('application/json')
+			    ->set_output(json_encode($arrData));
+			return;
+    	} 
     	/* validar datos del usuario */
     	$usuarioValido = TRUE; 
-    	if( empty($allInputs['username']) || empty($allInputs['password_view']) || empty($allInputs['password']) ){
+    	if( empty($allInputs['username']) || empty($allInputs['password']) ){ 
     		$usuarioValido = FALSE; 
     	}
-    	if($usuarioValido){
+    	if( !($usuarioValido) ){
+    		$arrData['message'] = 'Falta ingresar las credenciales de acceso al sistema.'; 
+			$arrData['flag'] = 0;
+			$this->output
+			    ->set_content_type('application/json')
+			    ->set_output(json_encode($arrData));
+			return;
+    	} 
+    	if($usuarioValido){ 
     		/* VALIDAR QUE LAS CLAVES COINCIDAN */
-			if($allInputs['password'] != $allInputs['password_view']){
-				$arrData['message'] = 'Las contraseñas no coinciden, inténtelo nuevamente';
-		    	$arrData['flag'] = 0;
-					$this->output
-					    ->set_content_type('application/json')
-					    ->set_output(json_encode($arrData));
-					return;
-			}
+			// if($allInputs['password'] != $allInputs['password_view']){
+			// 	$arrData['message'] = 'Las contraseñas no coinciden, inténtelo nuevamente';
+		 //    	$arrData['flag'] = 0;
+			// 		$this->output
+			// 		    ->set_content_type('application/json')
+			// 		    ->set_output(json_encode($arrData));
+			// 		return;
+			// }
 			/* VALIDAR SI EL USUARIO YA EXISTE */	
 	    	$fUsuario = $this->model_usuario->m_validar_usuario_username($allInputs['username']);
 	    	if( !empty($fUsuario) ) {

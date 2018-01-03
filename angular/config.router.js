@@ -226,6 +226,7 @@ angular.module('app')
               'angular/controllers/ContactoProveedorCtrl.js', 
               'angular/controllers/UbigeoCtrl.js',
               'angular/controllers/UsuarioCtrl.js',
+              'angular/controllers/CargoContactoCtrl.js',
               'https://maps.googleapis.com/maps/api/js?key=AIzaSyB2FjjCqepP3ZXx6xFbxEKjijPtcNTCcXM' 
               // 'https://maps.googleapis.com/maps/api/js?key=AIzaSyCEQA0xoHHCFZYeA3lW9vBceD5OxOQOsAo' 
             ]) 
@@ -272,6 +273,7 @@ angular.module('app')
               'fullcalendar',
               'ui.calendar',
               'ui.select',
+              'tagsinput',
               'angular/controllers/ReservaCitasCtrl.js', 
               'angular/controllers/ProveedorCtrl.js',
               'angular/controllers/ProductoCtrl.js',

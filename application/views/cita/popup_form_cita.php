@@ -5,10 +5,16 @@
 	<form class="row" name="agregarCita">
 		<div class="col-md-6">
 			<div class="row">
-				<div class="form-group col-md-12 mb-md"> 
+				<div class="form-group col-md-12 mb-md" ng-if="fData.accion == 'reg'"> 
 					<label class="control-label mb-n"> Asegurado/Cert.: </label> <!--  -->
 					<h4 class="col-md-12 m-n p-n text-primary text-bold" > 
-	      			{{fPrimerDato.asegurado_cert.asegurado}}
+	      			{{ fPrimerDato.asegurado_cert.asegurado }}
+	      	</h4>
+				</div>
+				<div class="form-group col-md-12 mb-md" ng-if="fData.accion == 'edit'"> 
+					<label class="control-label mb-n"> Asegurado/Cert.: </label> <!--  -->
+					<h4 class="col-md-12 m-n p-n text-primary text-bold" > 
+	      			{{ fData.asegurado.asegurado }} 
 	      	</h4>
 				</div>
 				<div class="form-group col-md-12 mb-md"> 
@@ -31,8 +37,11 @@
 					<label class="control-label mb-n"> Producto/Servicio: <small class="text-danger">(*)</small> </label>
 					<select class="form-control input-sm" ng-model="fData.producto" required tabindex="150" 
 						ng-options="item as item.descripcion for item in fArr.listaProductos" ></select> 
-				</div>
-				
+				</div> 
+				<div class="form-group col-md-12">
+		    	<label for="name" class="control-label mb-n">Observaciones : </label> 
+		    	<textarea placeholder="Digite sus anotaciones y/o cualquier dato adicional..." rows="5" ng-model="fData.observaciones" class="form-control input-sm"></textarea> 
+			  </div>
 			</div>
 		</div>
 		<div class="col-md-6">
@@ -59,12 +68,17 @@
 		    		minute-step="configTP.tpHoraFin.mstep" show-meridian="configTP.tpHoraFin.ismeridian" tabindex="170">
 		    	</div>
 			  </div> 
+			  <div class="form-group col-md-12 mb-md"> 
+					<label class="control-label mb-n"> Estado: <small class="text-danger">(*)</small> </label>
+					<select ng-disabled="fData.idestadocitafijo == 3" class="form-control input-sm" ng-model="fData.estado_cita" required tabindex="150" 
+						ng-options="item as item.descripcion for item in fArr.listaEstadosCita" ></select> 
+					<div ng-if="fData.estado_cita.id == 1" class="bg-warning" style="height: 20px;"></div>
+					<div ng-if="fData.estado_cita.id == 2" class="bg-primary" style="height: 20px;"></div>
+					<div ng-if="fData.estado_cita.id == 3" class="bg-success" style="height: 20px;"></div>
+				</div>
 			</div>
 		</div> 
-		<div class="form-group col-md-12">
-    	<label for="name" class="control-label mb-n">Observaciones : </label> 
-    	<textarea placeholder="Digite sus anotaciones y/o cualquier dato adicional..." rows="5" ng-model="fData.observaciones" class="form-control input-sm"></textarea> 
-	  </div>
+		
 	</form>
 </div>
 <div class="modal-footer">

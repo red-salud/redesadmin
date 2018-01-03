@@ -257,13 +257,17 @@ form.edit-form input, form.edit-form select, .edit-form input, .edit-form select
 
 /* CUSTOM TOOLTIP */
 .tooltip-event {
-    width: auto;
-    height: auto;
-    background: #000;
-    color: #fff;
-    position: absolute;
-    z-index: 999;
-    padding: 4px;
-    border-radius: 8px;
-    font-size: 11px;
+  width: auto;
+  height: auto;
+  background: #000;
+  color: #fff;
+  position: absolute;
+  z-index: 999;
+  padding: 4px;
+  border-radius: 8px;
+  font-size: 11px;
+}
+.bootstrap-tagsinput .tag.label {
+  font-size: 13px; 
+  font-weight: 500; 
 }

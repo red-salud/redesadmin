@@ -90,10 +90,13 @@
 		  <div class="clearfix mb-sm">
 		    <div class="pull-left">
 		    	<!-- <div class="text-gray inline"> LEYENDA </div>  -->
-		    	<div class="text-gray inline" style="font-size: 10px; box-shadow: 0 1px 0px rgba(0,0,0,0.05);"> RESERVA DE CITA 
+		    	<div class="text-gray inline" style="font-size: 10px; box-shadow: 0 1px 0px rgba(0,0,0,0.05);"> CITA POR CONFIRMAR 
+		    		<div class="bg-warning" style="height: 20px;width: 100px;"></div>
+		    	</div>
+		    	<div class="text-gray inline" style="font-size: 10px; box-shadow: 0 1px 0px rgba(0,0,0,0.05);"> CITA CONFIRMADA 
 		    		<div class="bg-primary" style="height: 20px;width: 100px;"></div>
 		    	</div>
-		    	<div class="text-gray inline" style="font-size: 10px; box-shadow: 0 1px 0px rgba(0,0,0,0.05);"> ATENCIÓN 
+		    	<div class="text-gray inline" style="font-size: 10px; box-shadow: 0 1px 0px rgba(0,0,0,0.05);"> CITA ATENDIDA 
 		    		<div class="bg-success" style="height: 20px;width: 100px;"></div>
 		    	</div>
 		    </div>
@@ -114,19 +117,22 @@
 		  		ng-mouseleave="closeMenu();">
           <div class="my-dropdown">
             <ul class="dropdown-menu dropdown-menu-custom" uib-dropdown-menu role="menu"> 
-              <li role="menuitem" ng-if="!event.atencion.idatencion" ng-click="btnGenerarAtencion(event);">
+              <!-- <li role="menuitem" ng-if="!event.atencion.idatencion" ng-click="btnGenerarAtencion(event);">
                 <a ><i class="fa fa-check-square-o"></i>Generar Atención</a>
-              </li>
-              <li role="menuitem" ng-if="!event.atencion.idatencion" ng-click="btnEditarCita(event);">
+              </li> -->
+              <li role="menuitem" ng-click="btnEditarCita(event);">
                 <a ><i class="fa fa-calendar"></i>Modificar Cita</a>
               </li>
-              <li role="menuitem" ng-if="!event.atencion.idatencion" ng-click="btnAnular(event);">
+              <li role="menuitem" ng-if="event.estado_cita.id == 1 || event.estado_cita.id == 2" ng-click="btnAnularCita(event);">
                 <a ><i class="fa fa-remove"></i>Anular Cita</a>
               </li>
-              <li role="menuitem" ng-if="event.atencion.idatencion" ng-click="">
+              <li role="menuitem" ng-if="event.estado_cita.id == 1 || event.estado_cita.id == 2" ng-click="metodos.btnEnviarCorreoCita(event);">
+                <a ><i class="icon-envelope"></i>Enviar Correo</a>
+              </li>
+              <li role="menuitem" ng-if="event.estado_cita.id == 3" ng-click="btnIrAtencion(event);">
                 <a ><i class="fa fa-pencil-square-o"></i>Ir a Atención</a>
               </li>
-              <li role="menuitem" ng-if="event.atencion.idatencion" ng-click="btnAnularAtencion(event)">
+              <li role="menuitem" ng-if="event.estado_cita.id == 3" ng-click="btnAnularAtencion(event);">
                 <a ><i class="fa fa-remove"></i>Anular Atención</a>
               </li>
             </ul>

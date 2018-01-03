@@ -10,12 +10,12 @@
 		        	<span class="text-left">1.-</span> REGISTRO DE PROVEEDOR </a>
 		      </li>
 		      <li ng-hide="accion == 'edit'">
-		        <a data-target="#usuario" role="tab" data-toggle="tab" class="mb-sm p-n bg-celeste-tab" > 
-		        	<span class="text-left">2.-</span> GENERAR USUARIO </a>
+		        <a data-target="#contacto" role="tab" data-toggle="tab" class="mb-sm p-n bg-celeste-tab"> 
+		        	<span class="text-left">2.-</span> AGREGAR CONTACTOS </a>
 		      </li>
 		      <li ng-hide="accion == 'edit'">
-		        <a data-target="#contacto" role="tab" data-toggle="tab" class="mb-sm p-n bg-celeste-tab"> 
-		        	<span class="text-left">3.-</span> AGREGAR CONTACTOS </a>
+		        <a data-target="#usuario" role="tab" data-toggle="tab" class="mb-sm p-n bg-celeste-tab" > 
+		        	<span class="text-left">3.-</span> GENERAR USUARIO </a>
 		      </li>
 		    </ul>
 		</div>
@@ -52,19 +52,19 @@
 									<div class="form-group col-md-6 mb-md">
 										<label class="control-label mb-n"> Dirección: <small class="text-danger">(*)</small> </label>
 										<input type="text" class="form-control input-sm" required ng-model="fData.direccion" placeholder="Ingrese direción legal" tabindex="80" />
-									</div>
-									
-									<div class="col-sm-6"> <!-- -->
-										<div class="row">
-											<div class="form-group col-md-12 mb-md">
-												<label class="control-label mb-n"> Referencia de ubicación: </label>
+									</div> 
+									<div class="col-sm-6"> 
+										<div class="row"> 
+											<div class="form-group col-md-12 mb-md"> 
+												<label class="control-label mb-n"> Referencia de ubicación: </label> 
 												<input type="text" class="form-control input-sm" ng-model="fData.referencia" placeholder="Ingrese alguna referencia" tabindex="90" />
 											</div>
 											<div class="form-group mb-md col-md-12 mb-md" >
 												<label class="control-label mb-xs"> Departamento <small class="text-danger">(*)</small> </label>
 												<div class="input-group">
 													<span class="input-group-btn">
-														<input type="text" class="form-control input-sm" style="width:40px;margin-right:4px;" ng-model="fData.iddepartamento" placeholder="ID" tabindex="100" ng-change="obtenerDepartamentoPorCodigo(); $event.preventDefault();limpiaDpto();" min-length="2" required/>
+														<input type="text" class="form-control input-sm" style="width:40px;margin-right:4px;" ng-model="fData.iddepartamento" 
+														placeholder="ID" tabindex="100" ng-change="obtenerDepartamentoPorCodigo(); $event.preventDefault();limpiaDpto();" min-length="2" required/>
 													</span>
 													<input id="fDatadepartamento" type="text" class="form-control input-sm" ng-model="fData.departamento" 
 														placeholder="Ingrese el Departamento" typeahead-loading="loadingLocationsDpto" 
@@ -73,9 +73,9 @@
 														typeahead-min-length="2" ng-change="limpiaIdDpto();" tabindex="110" autocomplete="off" required /> 
 												</div>
 												<i ng-show="loadingLocationsDpto" class="fa fa-refresh"></i>
-									            <div ng-show="noResultsLD">
-									              <i class="fa fa-remove"></i> No se encontró resultados 
-									            </div>
+									      <div ng-show="noResultsLD">
+									        <i class="fa fa-remove"></i> No se encontró resultados 
+									      </div>
 											</div>
 											<div class="form-group mb-md col-md-12 mb-md" >
 												<label class="control-label mb-xs"> Provincia <small class="text-danger">(*)</small> </label>
@@ -85,14 +85,14 @@
 													</span>
 													<input id="fDataprovincia" type="text" class="form-control input-sm" ng-model="fData.provincia" 
 														placeholder="Ingrese la Provincia" typeahead-loading="loadingLocationsProv" 
-									              		uib-typeahead="item as item.descripcion for item in getProvinciaAutocomplete($viewValue)" 
-									              		typeahead-on-select="getSelectedProvincia($item, $model, $label)" typeahead-min-length="2" 
-									              		ng-change="limpiaIdProv();" tabindex="130" autocomplete="off" required/>
+									          uib-typeahead="item as item.descripcion for item in getProvinciaAutocomplete($viewValue)" 
+									          typeahead-on-select="getSelectedProvincia($item, $model, $label)" typeahead-min-length="2" 
+									          ng-change="limpiaIdProv();" tabindex="130" autocomplete="off" required />
 												</div>
 												<i ng-show="loadingLocationsProv" class="fa fa-refresh"></i>
-									            <div ng-show="noResultsLP">
-									              <i class="fa fa-remove"></i> No se encontró resultados 
-									            </div>
+						            <div ng-show="noResultsLP">
+						              <i class="fa fa-remove"></i> No se encontró resultados 
+						            </div>
 											</div>
 											<div class="form-group mb-md col-md-12 mb-md" >
 												<label class="control-label mb-xs"> Distrito <small class="text-danger">(*)</small> </label>
@@ -124,32 +124,11 @@
 								</div> 
 	          	</div>
 	          </div>
-	          <div class="tab-pane" id="usuario" ng-hide="accion == 'edit'">
-	            <div class="wrapper-nn">
-	          		<div class="form-group col-md-6 mb-md">
-									<label class="control-label mb-n"> Usuario: </label> 
-									<input type="text" class="form-control input-sm" autocomplete="off" ng-model="fData.username" placeholder="Ingrese usuario" tabindex="100" />
-								</div>
-						    <div class="form-group col-md-6 mb-md">
-									<label class="control-label mb-n"> Tipo Usuario: </label>
-						 			<select class="form-control input-sm" ng-model="fData.tipo_usuario" disabled ng-options="item as item.descripcion for item in fArr.listaTipoUsuario" tabindex="110" ></select> 
-								</div>
-						    <div class="form-group col-md-6 mb-md">
-									<label class="control-label mb-n"> Ingrese Contraseña: </label>
-									<input type="password" class="form-control input-sm" ng-model="fData.password_view" placeholder="Registre contraseña" tabindex="120" />
-								</div>
-						    <div class="form-group col-md-6 mb-md">
-									<label class="control-label mb-n"> Repita la Contraseña: </label>
-									<input type="password" class="form-control input-sm" ng-model="fData.password" placeholder="Repita contraseña" tabindex="130" />
-								</div>
-	            </div>
-	          </div>
 	          <div class="tab-pane" id="contacto" ng-hide="accion == 'edit'">
 	            <div class="wrapper-nn">
 		            <div class="row">
 		            	<div class="col-sm-4 col-xs-12" class=""> 
 										<fieldset class="fieldset-sm {{ editClassForm }}">
-											
 											<div class="form-group">
 												<label class="control-label"> Nombres: </label>
 									      <input type="text" class="form-control input-sm" ng-model="fContacto.nombres" placeholder="Ingrese nombres" tabindex="20" /> 
@@ -159,9 +138,10 @@
 									      <input type="text" class="form-control input-sm" ng-model="fContacto.apellidos" placeholder="Ingrese apellidos" tabindex="30" /> 
 											</div>
 											<div class="form-group"> 
-												<div class="inline">
-									        <label class="control-label"> Cargo/Area: </label>
-									        <input type="text" class="form-control input-sm" ng-model="fContacto.cargo" placeholder="Ingrese cargo o área" tabindex="40" /> 
+												<div class="inline mr-sm">
+									        <label class="control-label"> Cargo/Area: </label> 
+									        <select class="form-control input-sm" ng-model="fContacto.cargo_contacto" tabindex="40" style="width: 128px;"
+									        	ng-options="item as item.descripcion for item in fArr.listaCargosContacto"> </select> 
 									      </div>
 												<div class="inline"> 
 													<label class="control-label text-ellipsis"> Teléfono Movil: </label>
@@ -181,6 +161,10 @@
 											<div class="form-group">
 												<label class="control-label"> E-mail: </label> 
 									      <input type="email" class="form-control input-sm" ng-model="fContacto.email" placeholder="Ingrese correo electrónico" tabindex="80" /> 
+											</div> 
+											<div class="form-group">
+												<label class="control-label"> ¿Enviar correos para separa cita?: </label> 
+									      <input type="checkbox" class="" ng-model="fContacto.chk_envio_correo" tabindex="85" /> 
 											</div> 
 											<div class="form-group" ng-if="contBotonesReg">
 												<button type="button" ng-click="agregarContacto(); $event.preventDefault();" ng-disabled="formContactoProveedor.$invalid" tabindex="100" class="block btn btn-primary btn-sm btn-full"> <i class="fa fa-plus"></i> AGREGAR CONTACTO </button>
@@ -202,6 +186,27 @@
 		            </div>
 	            </div>
 	          </div>
+	          <div class="tab-pane" id="usuario" ng-hide="accion == 'edit'">
+	            <div class="wrapper-nn">
+	          		<div class="form-group col-md-6 mb-md">
+									<label class="control-label mb-n"> Usuario: </label> 
+									<input type="text" class="form-control input-sm" autocomplete="off" ng-model="fData.username" placeholder="Ingrese usuario" tabindex="100" />
+								</div>
+						    <!-- <div class="form-group col-md-6 mb-md">
+									<label class="control-label mb-n"> Tipo Usuario: </label>
+						 			<select class="form-control input-sm" ng-model="fData.tipo_usuario" disabled ng-options="item as item.descripcion for item in fArr.listaTipoUsuario" tabindex="110" ></select> 
+								</div> --> 
+						    <div class="form-group col-md-6 mb-md">
+									<label class="control-label mb-n"> Ingrese Contraseña: </label>
+									<input type="text" class="form-control input-sm" ng-model="fData.password" placeholder="Registre contraseña" tabindex="120" />
+								</div>
+						    <!-- <div class="form-group col-md-6 mb-md">
+									<label class="control-label mb-n"> Repita la Contraseña: </label>
+									<input type="password" class="form-control input-sm" ng-model="fData.password" placeholder="Repita contraseña" tabindex="130" />
+								</div> --> 
+	            </div>
+	          </div>
+	          
 	        </div>
 	    	</div>
 			</div>

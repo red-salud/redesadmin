@@ -26,9 +26,9 @@ class ContactoProveedor extends CI_Controller {
 			array_push($arrListado,
 				array(
 					'idcontactoproveedor' => trim($row['idcontactoproveedor']),
-					'nombres' => strtoupper($row['nombres_cp']),
-					'apellidos' => strtoupper($row['apellidos_cp']),	
-					'cargo' => $row['cargo_cp'],	
+					'nombres' => strtoupper($row['nombres_cp']), 
+					'apellidos' => strtoupper($row['apellidos_cp']), 
+					'chk_envio_correo'=> ($row['envio_correo_cita'] == 1) ? TRUE : FALSE, 
 					'telefono_fijo' => $row['telefono_fijo_cp'],
 					'anexo' => $row['anexo_cp'],
 					'telefono_movil' => $row['telefono_movil_cp'],
@@ -37,6 +37,10 @@ class ContactoProveedor extends CI_Controller {
 					'proveedor' => array(
 						'id'=> $row['idproveedor'],
 						'descripcion'=> strtoupper($row['nombre_comercial_pr'])	
+					),
+					'cargo_contacto' => array(
+						'id'=> $row['idcargocontacto'],
+						'descripcion'=> strtoupper($row['descripcion_ctc'])	
 					)
 				)
 			);
@@ -67,7 +71,7 @@ class ContactoProveedor extends CI_Controller {
 					'idcontactoproveedor' => trim($row['idcontactoproveedor']),
 					'nombres' => strtoupper($row['nombres_cp']),
 					'apellidos' => strtoupper($row['apellidos_cp']),	
-					'cargo' => $row['cargo_cp'],	
+					'chk_envio_correo'=> ($row['envio_correo_cita'] == 1) ? TRUE : FALSE, 
 					'telefono_fijo' => $row['telefono_fijo_cp'],
 					'anexo' => $row['anexo_cp'],
 					'telefono_movil' => $row['telefono_movil_cp'],
@@ -78,7 +82,11 @@ class ContactoProveedor extends CI_Controller {
 					'proveedor' => array(
 						'id' => trim($row['idproveedor']),
 						'descripcion'=> strtoupper($row['nombre_comercial_pr']) 
-					),	
+					), 
+					'cargo_contacto' => array(
+						'id'=> $row['idcargocontacto'],
+						'descripcion'=> strtoupper($row['descripcion_ctc'])	
+					),
 					'contacto' => strtoupper($row['nombres_cp'].' '.$row['apellidos_cp']) 
 				)
 			);
@@ -111,7 +119,11 @@ class ContactoProveedor extends CI_Controller {
 					'telefono_fijo' => $row['telefono_fijo_cp'],
 					'telefono_movil' => $row['telefono_movil_cp'],
 					'anexo' => $row['anexo_cp'],
-					'cargo' => $row['cargo_cp'],
+					//'cargo' => $row['cargo_cp'],
+					'cargo_contacto' => array(
+						'id'=> $row['idcargocontacto'],
+						'descripcion'=> strtoupper($row['descripcion_ctc'])	
+					),
 					'idproveedor' => $row['idproveedor']
 				)
 			);
@@ -142,7 +154,12 @@ class ContactoProveedor extends CI_Controller {
 					'idproveedor' => $row['idproveedor'],
 					'nombres' => strtoupper($row['nombres_cp']),
 					'apellidos' => strtoupper($row['apellidos_cp']),	
-					'cargo' => $row['cargo_cp'],	
+					'chk_envio_correo'=> ($row['envio_correo_cita'] == 1) ? TRUE : FALSE, 
+					'chk_envio_correo_str'=> ($row['envio_correo_cita'] == 1) ? 'SI' : 'NO', 
+					'cargo_contacto' => array( 
+						'id'=> $row['idcargocontacto'],
+						'descripcion'=> strtoupper($row['descripcion_ctc'])	
+					),
 					'telefono_fijo' => $row['telefono_fijo_cp'],
 					'anexo' => $row['anexo_cp'],
 					'telefono_movil' => $row['telefono_movil_cp'],
@@ -162,10 +179,6 @@ class ContactoProveedor extends CI_Controller {
 		    ->set_content_type('application/json')
 		    ->set_output(json_encode($arrData));
 	}
-	public function ver_popup_formulario() 
-	{
-		$this->load->view('contacto/mant_contacto');
-	}	
 	public function ver_popup_busqueda_contacto()
 	{
 		$this->load->view('contacto/busq_contacto_popup');

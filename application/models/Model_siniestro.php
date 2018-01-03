@@ -63,5 +63,32 @@ class Model_siniestro extends CI_Model {
 		$fData = $this->db->get()->row_array();
 		return $fData;
 	}
+	public function m_cargar_ultimo_siniestro() 
+	{
+		$this->db->select('sin.idsiniestro, sin.num_orden_atencion'); 
+		$this->db->from('siniestro sin'); 
+		$this->db->order_by('sin.idsiniestro','DESC'); 
+		$this->db->limit(1); 
+		$fData = $this->db->get()->row_array(); 
+		return $fData; 
+	}
+	public function m_aperturar_atencion($datos)
+	{
+		$data = array(
+			'idasegurado' => $datos['asegurado_cert']['idasegurado'],
+			'idcertificado' => $datos['asegurado_cert']['idcertificado'],
+			'idareahospitalaria' => 1, // consulta externa 
+			'idhistoria' => $datos['asegurado_cert']['idhistoria'],
+			'idproveedor'=> $datos['proveedor']['id'], 
+			'idespecialidad'=> $datos['producto']['idespecialidad'], 
+			//'idproducto'=> $datos['producto']['id'],
+			'fecha_atencion'=> $datos['fecha'], 
+			'createdat' => date('Y-m-d H:i:s'),
+			'updatedat' => date('Y-m-d H:i:s'),
+			'num_orden_atencion' => $datos['num_orden_atencion'],
+			'idcita'=> $datos['idcita'] 
+		);
+		return $this->db->insert('siniestro', $data); 
+	}
 }
 ?>

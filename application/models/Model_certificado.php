@@ -142,7 +142,7 @@ class Model_certificado extends CI_Model {
 	{
 		$this->db->select("DATE_FORMAT(FROM_DAYS(TO_DAYS(NOW())-TO_DAYS(aseg_fechNac)), '%Y')+0 AS edad",FALSE);
 		$this->db->select('(
-			SELECT prov.nombre_comercial_pr  
+			SELECT prov.nombre_comercial_pr 
 			FROM siniestro sin 
 			INNER JOIN proveedor prov ON sin.idproveedor = prov.idproveedor 
 			WHERE sin.idcertificado = cert.cert_id 
@@ -154,10 +154,12 @@ class Model_certificado extends CI_Model {
 		$this->db->select("CONCAT(COALESCE(aseg_nom1,''), ' ', COALESCE(aseg_nom2,''), ' ', COALESCE(aseg_ape1,''), ' ', COALESCE(aseg_ape2,'')) AS asegurado",FALSE); 
 		$this->db->select('cert.cert_id, cert.cert_num, cert.cert_numpropuesta, cert.cert_estado, cas.certase_id, cert.cert_iniVig, cert.cert_finVig, cert.cert_upProv, 
 			as.aseg_id, as.aseg_fechNac, as.aseg_nom1, as.aseg_nom2, as.aseg_ape1, as.aseg_ape2, as.aseg_numDoc, as.aseg_direcc, as.aseg_telf, 
-			as.aseg_sexo, as.aseg_email, pl.idplan, pl.nombre_plan, pl.dias_carencia, pl.dias_mora, pl.dias_atencion, pl.codigo_plan, pl.prima_monto'); 
+			as.aseg_sexo, as.aseg_email, pl.idplan, pl.nombre_plan, pl.dias_carencia, pl.dias_mora, pl.dias_atencion, pl.codigo_plan, pl.prima_monto, 
+			hi.idhistoria'); 
 		$this->db->from('certificado cert'); 
 		$this->db->join('certificado_asegurado cas','cert.cert_id = cas.cert_id'); 
 		$this->db->join('asegurado as','cas.aseg_id = as.aseg_id'); 
+		$this->db->join('historia hi','as.aseg_id = hi.idasegurado','left'); 
 		$this->db->join('plan pl','cert.plan_id = pl.idplan'); 
 		if( !empty($datos['search']) ){
 			$this->db->like("CONCAT(COALESCE(aseg_nom1,''), ' ', COALESCE(aseg_nom2,''), ' ', COALESCE(aseg_ape1,''), ' ', COALESCE(aseg_ape2,'')) ",$datos['search']); 
@@ -219,6 +221,7 @@ class Model_certificado extends CI_Model {
 	{
 		$this->db->select('(SELECT MAX(fecha_atencion) AS ultima_atencion FROM siniestro sin_sc WHERE sin_sc.idcertificado = cert.cert_id LIMIT 1) AS ultima_atencion',FALSE); 
 		$this->db->select('(SELECT MAX(cob_finCobertura) AS ultima_cobertura FROM cobro co WHERE co.cert_id = cert.cert_id LIMIT 1) AS ultima_cobertura',FALSE); 
+		$this->db->select('(SELECT MAX(cob_fechCob) AS fecha_ultimo_cobro FROM cobro co WHERE co.cert_id = cert.cert_id LIMIT 1) AS fecha_ultimo_cobro',FALSE); 
 		$this->db->select('(SELECT COUNT(*) AS contador FROM cobro co WHERE co.cert_id = cert.cert_id LIMIT 1) AS cant_cobros',FALSE); 
 		$this->db->select("CONCAT(COALESCE(cont_nom1,''), ' ', COALESCE(cont_nom2,''), ' ', COALESCE(cont_ape1,''), ' ', COALESCE(cont_ape2,'')) AS contratante",FALSE);
 		$this->db->select("CONCAT(COALESCE(aseg_nom1,''), ' ', COALESCE(aseg_nom2,''), ' ', COALESCE(aseg_ape1,''), ' ', COALESCE(aseg_ape2,'')) AS asegurado",FALSE);

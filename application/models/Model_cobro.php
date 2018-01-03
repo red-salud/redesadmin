@@ -25,19 +25,22 @@ class Model_cobro extends CI_Model {
 		if( !empty($paramDatos['facturado']) ){ 
 			$this->db->where('cob.facturado', $paramDatos['facturado']); 
 		}
-		if( isset($paramPaginate['search'] ) && $paramPaginate['search'] ){ 
-			foreach ($paramPaginate['searchColumn'] as $key => $value) {
-				if(! empty($value)){
-					$this->db->like($key, $value, FALSE);
+		if(!empty($paramPaginate)){ 
+			if( isset($paramPaginate['search'] ) && $paramPaginate['search'] ){ 
+				foreach ($paramPaginate['searchColumn'] as $key => $value) {
+					if(! empty($value)){
+						$this->db->like($key, $value, FALSE);
+					}
 				}
 			}
+			if( $paramPaginate['sortName'] ){
+				$this->db->order_by($paramPaginate['sortName'], $paramPaginate['sort']);
+			}
+			if( $paramPaginate['firstRow'] || $paramPaginate['pageSize'] ){
+				$this->db->limit($paramPaginate['pageSize'],$paramPaginate['firstRow'] );
+			}
 		}
-		if( $paramPaginate['sortName'] ){
-			$this->db->order_by($paramPaginate['sortName'], $paramPaginate['sort']);
-		}
-		if( $paramPaginate['firstRow'] || $paramPaginate['pageSize'] ){
-			$this->db->limit($paramPaginate['pageSize'],$paramPaginate['firstRow'] );
-		}
+		
 		return $this->db->get()->result_array();
 	} 
 	public function m_count_cobros($paramPaginate, $paramDatos)

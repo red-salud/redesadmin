@@ -6,7 +6,7 @@ class Certificado extends CI_Controller {
     {
         parent::__construct();
         // Se le asigna a la informacion a la variable $sessionRS.
-        $this->sessionRS = @$this->session->userdata('sess_reds_'.substr(base_url(),-20,7));
+        $this->sessionRS = @$this->session->userdata('sess_reds_'.substr(base_url(),-20,7)); 
         $this->load->helper(array('fechas','otros')); 
         $this->load->model(array('model_certificado','model_cobro','model_asegurado')); 
 
@@ -22,10 +22,10 @@ class Certificado extends CI_Controller {
 		$arrListado = array(); 
 		foreach ($lista as $row) { 
 			$objEstado = array();
-			if( $row['cert_estado'] == 1 ){ // SIN CANCELAR  
+			if( $row['cert_estado'] == 1 ){ // VIGENTE 
 				$objEstado['claseIcon'] = 'fa-check';
 				$objEstado['claseLabel'] = 'label-info';
-				$objEstado['labelText'] = 'SIN CANCELAR';
+				$objEstado['labelText'] = 'VIGENTE';
 				$objEstado['valor'] = $row['cert_estado'];
 			}
 			if( $row['cert_estado'] == 3 ){ // CANCELADO 
@@ -34,9 +34,10 @@ class Certificado extends CI_Controller {
 				$objEstado['labelText'] = 'CANCELADO';
 				$objEstado['valor'] = $row['cert_estado'];
 			}
+			// ESTADO DE LA ATENCIÓN 
 			/* 
 				1: ACTIVO 
-				2: INACTIVO				
+				2: INACTIVO - 				
 				3: PERIODO DE CARENCIA
 				4: ACTIVO MANUAL
 			*/ 
@@ -49,7 +50,7 @@ class Certificado extends CI_Controller {
 					$objEstadoAtencion['descripcion'] = 'ACTIVO'; 
 					$objEstadoAtencion['valor'] = 1;
 				}else{
-					$objEstadoAtencion['descripcion'] = 'INACTIVO'; 
+					$objEstadoAtencion['descripcion'] = 'INACTIVO POR COBRO'; 
 					$objEstadoAtencion['valor'] = 2;
 				}
 			}else{ // no hay cobros 
@@ -58,18 +59,20 @@ class Certificado extends CI_Controller {
 				$fechaFinCobertura = date_format($fechaAuxFinCobertura, 'Y-m-d'); 
 				if( strtotime($fechaFinCobertura) > strtotime(date('Y-m-d')) ){ 
 					$objEstadoAtencion['descripcion'] = 'ACTIVO'; 
-					$objEstadoAtencion['valor'] = 1;
+					$objEstadoAtencion['valor'] = 1; 
 				}else{
-					$objEstadoAtencion['descripcion'] = 'INACTIVO'; 
-					$objEstadoAtencion['valor'] = 2;
+					$objEstadoAtencion['descripcion'] = 'INACTIVO POR COBRO'; 
+					$objEstadoAtencion['valor'] = 2; 
 				}
 			}
 			// si hay una atención dentro de los 7 días pasará a INACTIVO 
 			if( !empty($row['ultima_atencion']) ){ 
 				$fechaUltimaAtencion = date_create($row['ultima_atencion']);
+				// var_dump($row['dias_atencion']); exit();
 				$fechaUltimaAtencionMasXDias = date_add($fechaUltimaAtencion, date_interval_create_from_date_string($row['dias_atencion'].' days'));
-				if( strtotime($fechaUltimaAtencionMasXDias) > strtotime(date('Y-m-d')) ){ // solo mayor 
-					$objEstadoAtencion['descripcion'] = 'INACTIVO'; 
+				$fechaUltimaAtencionMasXDiasDate = date_format($fechaUltimaAtencionMasXDias, 'Y-m-d'); 
+				if( strtotime($fechaUltimaAtencionMasXDiasDate) > strtotime(date('Y-m-d')) ){ // solo mayor 
+					$objEstadoAtencion['descripcion'] = 'INACTIVO POR ATENCIÓN'; 
 					$objEstadoAtencion['valor'] = 2;
 				}
 			}
@@ -78,13 +81,12 @@ class Certificado extends CI_Controller {
 			$fechaFinPeriodoCarencia = date_format($fechaAuxFinPeriodoCarencia, 'Y-m-d'); 
 			if( strtotime($fechaFinPeriodoCarencia) > strtotime(date('Y-m-d')) ){ 
 				$objEstadoAtencion['descripcion'] = 'PER. DE CARENCIA'; 
-				$objEstadoAtencion['valor'] = 3;
+				$objEstadoAtencion['valor'] = 3; 
 			}
 			if( $row['cert_upProv'] == 1 ){ 
 				$objEstadoAtencion['descripcion'] = 'ACTIVO MANUAL'; 
-				$objEstadoAtencion['valor'] = 4;
-			}
-			
+				$objEstadoAtencion['valor'] = 4; 
+			} 
 			array_push($arrListado, 
 				array( 
 					'idcertificado' => trim($row['cert_id']),
@@ -130,7 +132,7 @@ class Certificado extends CI_Controller {
 			if( $row['cert_estado'] == 1 ){ // ACTIVO 
 				$objEstado['claseIcon'] = 'fa-check';
 				$objEstado['claseLabel'] = 'label-info';
-				$objEstado['labelText'] = 'SIN CANCELAR';
+				$objEstado['labelText'] = 'VIGENTE';
 				$objEstado['valor'] = $row['cert_estado'];
 			}
 			if( $row['cert_estado'] == 3 ){ // CANCELADO    
@@ -139,11 +141,12 @@ class Certificado extends CI_Controller {
 				$objEstado['labelText'] = 'CANCELADO';
 				$objEstado['valor'] = $row['cert_estado'];
 			} 
+			// ESTADO DE LA ATENCIÓN 
 			/* 
 				1: ACTIVO 
-				2: INACTIVO 
-				3: PERIODO DE CARENCIA 
-				4: ACTIVO MANUAL 
+				2: INACTIVO - 				
+				3: PERIODO DE CARENCIA
+				4: ACTIVO MANUAL
 			*/ 
 			$objEstadoAtencion = array(); 
 			if( $row['cant_cobros'] >= 1 ){ // hay cobros 
@@ -154,7 +157,7 @@ class Certificado extends CI_Controller {
 					$objEstadoAtencion['descripcion'] = 'ACTIVO'; 
 					$objEstadoAtencion['valor'] = 1;
 				}else{
-					$objEstadoAtencion['descripcion'] = 'INACTIVO'; 
+					$objEstadoAtencion['descripcion'] = 'INACTIVO POR COBRO'; 
 					$objEstadoAtencion['valor'] = 2;
 				}
 			}else{ // no hay cobros 
@@ -163,9 +166,20 @@ class Certificado extends CI_Controller {
 				$fechaFinCobertura = date_format($fechaAuxFinCobertura, 'Y-m-d'); 
 				if( strtotime($fechaFinCobertura) > strtotime(date('Y-m-d')) ){ 
 					$objEstadoAtencion['descripcion'] = 'ACTIVO'; 
-					$objEstadoAtencion['valor'] = 1;
+					$objEstadoAtencion['valor'] = 1; 
 				}else{
-					$objEstadoAtencion['descripcion'] = 'INACTIVO'; 
+					$objEstadoAtencion['descripcion'] = 'INACTIVO POR COBRO'; 
+					$objEstadoAtencion['valor'] = 2; 
+				}
+			}
+			// si hay una atención dentro de los 7 días pasará a INACTIVO 
+			if( !empty($row['ultima_atencion']) ){ 
+				$fechaUltimaAtencion = date_create($row['ultima_atencion']);
+				// var_dump($row['dias_atencion']); exit();
+				$fechaUltimaAtencionMasXDias = date_add($fechaUltimaAtencion, date_interval_create_from_date_string($row['dias_atencion'].' days'));
+				$fechaUltimaAtencionMasXDiasDate = date_format($fechaUltimaAtencionMasXDias, 'Y-m-d'); 
+				if( strtotime($fechaUltimaAtencionMasXDiasDate) > strtotime(date('Y-m-d')) ){ // solo mayor 
+					$objEstadoAtencion['descripcion'] = 'INACTIVO POR ATENCIÓN'; 
 					$objEstadoAtencion['valor'] = 2;
 				}
 			}
@@ -174,12 +188,12 @@ class Certificado extends CI_Controller {
 			$fechaFinPeriodoCarencia = date_format($fechaAuxFinPeriodoCarencia, 'Y-m-d'); 
 			if( strtotime($fechaFinPeriodoCarencia) > strtotime(date('Y-m-d')) ){ 
 				$objEstadoAtencion['descripcion'] = 'PER. DE CARENCIA'; 
-				$objEstadoAtencion['valor'] = 3;
+				$objEstadoAtencion['valor'] = 3; 
 			}
 			if( $row['cert_upProv'] == 1 ){ 
 				$objEstadoAtencion['descripcion'] = 'ACTIVO MANUAL'; 
-				$objEstadoAtencion['valor'] = 4;
-			}
+				$objEstadoAtencion['valor'] = 4; 
+			} 
 			array_push($arrListado,
 				array( 
 					'idcertificadoasegurado' => trim($row['certase_id']), 
@@ -234,7 +248,7 @@ class Certificado extends CI_Controller {
 			if( $row['cert_estado'] == 1 ){ // ACTIVO 
 				$objEstado['claseIcon'] = 'fa-check';
 				$objEstado['claseLabel'] = 'success';
-				$objEstado['labelText'] = 'SIN CANCELAR'; 
+				$objEstado['labelText'] = 'VIGENTE'; 
 				$objEstado['valor'] = $row['cert_estado']; 
 			} 
 			if( $row['cert_estado'] == 3 ){ // CANCELADO    
@@ -243,7 +257,7 @@ class Certificado extends CI_Controller {
 				$objEstado['labelText'] = 'CANCELADO';
 				$objEstado['valor'] = $row['cert_estado']; 
 			} 
-			// ESTADO DE ATENCIÓN 
+			// ESTADO DE LA ATENCIÓN 
 			/* 
 				1: ACTIVO 
 				2: INACTIVO - 				
@@ -259,8 +273,8 @@ class Certificado extends CI_Controller {
 					$objEstadoAtencion['descripcion'] = 'ACTIVO'; 
 					$objEstadoAtencion['valor'] = 1;
 				}else{
-					$objEstadoAtencion['descripcion'] = 'INACTIVO'; 
-					$objEstadoAtencion['valor'] = 2; 
+					$objEstadoAtencion['descripcion'] = 'INACTIVO POR COBRO'; 
+					$objEstadoAtencion['valor'] = 2;
 				}
 			}else{ // no hay cobros 
 				$fechaAuxIniVigencia = date_create($row['cert_iniVig']);
@@ -270,7 +284,7 @@ class Certificado extends CI_Controller {
 					$objEstadoAtencion['descripcion'] = 'ACTIVO'; 
 					$objEstadoAtencion['valor'] = 1; 
 				}else{
-					$objEstadoAtencion['descripcion'] = 'INACTIVO'; 
+					$objEstadoAtencion['descripcion'] = 'INACTIVO POR COBRO'; 
 					$objEstadoAtencion['valor'] = 2; 
 				}
 			}
@@ -281,7 +295,7 @@ class Certificado extends CI_Controller {
 				$fechaUltimaAtencionMasXDias = date_add($fechaUltimaAtencion, date_interval_create_from_date_string($row['dias_atencion'].' days'));
 				$fechaUltimaAtencionMasXDiasDate = date_format($fechaUltimaAtencionMasXDias, 'Y-m-d'); 
 				if( strtotime($fechaUltimaAtencionMasXDiasDate) > strtotime(date('Y-m-d')) ){ // solo mayor 
-					$objEstadoAtencion['descripcion'] = 'INACTIVO'; 
+					$objEstadoAtencion['descripcion'] = 'INACTIVO POR ATENCIÓN'; 
 					$objEstadoAtencion['valor'] = 2;
 				}
 			}
@@ -315,6 +329,8 @@ class Certificado extends CI_Controller {
 			array_push($arrListado,
 				array(
 					'idcertificadoasegurado' => trim($row['certase_id']),
+					'idhistoria' => trim($row['idhistoria']),
+					'idcertificado' => trim($row['cert_id']),
 					'idasegurado' => trim($row['aseg_id']),
 					'descripcion' => strtoupper($row['asegurado']).' - '.$row['nombre_plan'],
 					'num_certificado'=> $row['cert_num'],
@@ -375,7 +391,7 @@ class Certificado extends CI_Controller {
 			if( $row['cert_estado'] == 1 ){ // ACTIVO 
 				$objEstado['claseIcon'] = 'fa-check';
 				$objEstado['claseLabel'] = 'label-info';
-				$objEstado['labelText'] = 'SIN CANCELAR';
+				$objEstado['labelText'] = 'VIGENTE';
 			}
 			if( $row['cert_estado'] == 3 ){ // CANCELADO    
 				$objEstado['claseIcon'] = 'fa-ban';
@@ -511,7 +527,7 @@ class Certificado extends CI_Controller {
 			if( $row['cert_estado'] == 1 ){ // ACTIVO 
 				$objEstado['claseIcon'] = 'fa-check';
 				$objEstado['claseLabel'] = 'success';
-				$objEstado['labelText'] = 'SIN CANCELAR'; 
+				$objEstado['labelText'] = 'VIGENTE'; 
 				$objEstado['valor'] = $row['cert_estado']; 
 			} 
 			if( $row['cert_estado'] == 3 ){ // CANCELADO    
@@ -536,7 +552,7 @@ class Certificado extends CI_Controller {
 					$objEstadoAtencion['descripcion'] = 'ACTIVO'; 
 					$objEstadoAtencion['valor'] = 1;
 				}else{
-					$objEstadoAtencion['descripcion'] = 'INACTIVO'; 
+					$objEstadoAtencion['descripcion'] = 'INACTIVO POR COBRO'; 
 					$objEstadoAtencion['valor'] = 2;
 				}
 			}else{ // no hay cobros 
@@ -547,7 +563,7 @@ class Certificado extends CI_Controller {
 					$objEstadoAtencion['descripcion'] = 'ACTIVO'; 
 					$objEstadoAtencion['valor'] = 1; 
 				}else{
-					$objEstadoAtencion['descripcion'] = 'INACTIVO'; 
+					$objEstadoAtencion['descripcion'] = 'INACTIVO POR COBRO'; 
 					$objEstadoAtencion['valor'] = 2; 
 				}
 			}
@@ -558,7 +574,7 @@ class Certificado extends CI_Controller {
 				$fechaUltimaAtencionMasXDias = date_add($fechaUltimaAtencion, date_interval_create_from_date_string($row['dias_atencion'].' days'));
 				$fechaUltimaAtencionMasXDiasDate = date_format($fechaUltimaAtencionMasXDias, 'Y-m-d'); 
 				if( strtotime($fechaUltimaAtencionMasXDiasDate) > strtotime(date('Y-m-d')) ){ // solo mayor 
-					$objEstadoAtencion['descripcion'] = 'INACTIVO'; 
+					$objEstadoAtencion['descripcion'] = 'INACTIVO POR ATENCIÓN'; 
 					$objEstadoAtencion['valor'] = 2;
 				}
 			}
@@ -586,6 +602,7 @@ class Certificado extends CI_Controller {
 				'fecha_inicio_vig' => formatoFechaReporte3(darFormatoYMD($row['cert_iniVig'])),
 				'fecha_fin_vig' => formatoFechaReporte3(darFormatoYMD($row['cert_finVig'])),
 				'fecha_cancelacion'=> formatoFechaReporte3(darFormatoYMD($row['can_finVig'])),
+				'fecha_ultimo_cobro'=> formatoFechaReporte3(darFormatoYMD($row['fecha_ultimo_cobro'])),
 				'numero_propuesta' => $row['cert_numpropuesta'],
 				'idplan' => $row['idplan'],
 				'plan' => $row['nombre_plan'], 

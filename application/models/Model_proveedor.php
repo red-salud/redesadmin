@@ -8,9 +8,9 @@ class Model_proveedor extends CI_Model {
 		// var_dump($paramDatosCo);
 		$this->db->select('pr.idproveedor, pr.nombre_comercial_pr, pr.razon_social_pr, pr.numero_documento_pr, pr.direccion_pr, pr.referencia_pr, pr.cod_sunasa_pr, pr.latitud, pr.longitud, pr.estado_pr, cod_departamento_pr, cod_provincia_pr, cod_distrito_pr, 
 			tpr.idtipoproveedor, tpr.descripcion_tpr, tdi.idtipodocumentoidentidad, tdi.descripcion_tdi, 
-			dpto.descripcion_ubig AS departamento, prov.descripcion_ubig AS provincia, dist.descripcion_ubig AS distrito, us.idusuario, us.username');
-		$this->db->from('proveedor pr');
-		$this->db->join('tipo_proveedor tpr', 'pr.idtipoproveedor = tpr.idtipoproveedor');
+			dpto.descripcion_ubig AS departamento, prov.descripcion_ubig AS provincia, dist.descripcion_ubig AS distrito, us.idusuario, us.username, us.password_view, us.ultimo_inicio_sesion'); 
+		$this->db->from('proveedor pr'); 
+		$this->db->join('tipo_proveedor tpr', 'pr.idtipoproveedor = tpr.idtipoproveedor'); 
 		$this->db->join('tipo_documento_identidad tdi', 'pr.idtipodocumentoidentidad = tdi.idtipodocumentoidentidad'); 
 		$this->db->join('usuario us', 'pr.idusuario = us.idusuario','left');
 		$this->db->join("ubigeo dpto","pr.cod_departamento_pr = dpto.iddepartamento  AND dpto.idprovincia = '00' AND dpto.iddistrito = '00'", 'left');
@@ -41,9 +41,12 @@ class Model_proveedor extends CI_Model {
 		$this->db->join('tipo_proveedor tpr', 'pr.idtipoproveedor = tpr.idtipoproveedor');
 		$this->db->join('tipo_documento_identidad tdi', 'pr.idtipodocumentoidentidad = tdi.idtipodocumentoidentidad'); 
 		$this->db->join('usuario us', 'pr.idusuario = us.idusuario','left');
+		$this->db->join("ubigeo dpto","pr.cod_departamento_pr = dpto.iddepartamento  AND dpto.idprovincia = '00' AND dpto.iddistrito = '00'", 'left');
+		$this->db->join("ubigeo prov","pr.cod_provincia_pr = prov.idprovincia AND prov.iddepartamento = pr.cod_departamento_pr AND prov.iddistrito = '00'", 'left');
+		$this->db->join('ubigeo dist',"pr.cod_distrito_pr = dist.iddistrito AND dist.iddepartamento = pr.cod_departamento_pr AND dist.idprovincia = pr.cod_provincia_pr", 'left');
 		if( !empty($paramDatos['tipo_proveedor']['id']) && !($paramDatos['tipo_proveedor']['id'] == 'all') ){ 
 			$this->db->where('tpr.idtipoproveedor',$paramDatos['tipo_proveedor']['id']); 
-		}
+		} 
 		$this->db->where_in('pr.estado_pr', array(1,2,3)); // 1:activo 2:observado 3:inactivo 
 		if( isset($paramPaginate['search'] ) && $paramPaginate['search'] ){
 			foreach ($paramPaginate['searchColumn'] as $key => $value) {

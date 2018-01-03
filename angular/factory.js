@@ -88,7 +88,7 @@ angular.module('app')
       return interfaz;
   })
   .factory("ModalReporteFactory", function($uibModal,$http,blockUI){ 
-    var interfazReporte = {
+    var interfazReporte = { 
       getPopupReporte: function(arrParams){ 
         if( arrParams.salida == 'pdf' || angular.isUndefined(arrParams.salida) ){
           $uibModal.open({
@@ -100,7 +100,7 @@ angular.module('app')
                 $uibModalInstance.dismiss('cancel');
               }
               blockUI.start('Preparando reporte');
-              $http.post(arrParams.url, arrParams.datos)
+              $http.post(arrParams.url, arrParams)
                 .success(function(data, status) {
                   blockUI.stop();
                   $('#frameReporte').attr("src", data.urlTempPDF); 
@@ -115,9 +115,9 @@ angular.module('app')
               }
             }
           });
-        }else if( arrParams.datos.salida == 'excel' ){
+        }else if( arrParams.salida == 'excel' ){ 
           blockUI.start('Preparando reporte');
-          $http.post(arrParams.url, arrParams.datos)
+          $http.post(arrParams.url, arrParams)
             .success(function(data, status) {
               blockUI.stop();
               if(data.flag == 1){ 

@@ -77,10 +77,10 @@ class Model_usuario extends CI_Model {
 		$data = array(
 			'idtipousuario' => $datos['tipo_usuario']['id'],
 			'username' => $datos['username'],
-			'password'=> md5($datos['password_view']),			
-			'password_view'=>strtoupper_total($datos['password_view']),		
-			//'ultimo_inicio_sesion' => date('Y-m-d H:i:s'),	
-			//'ip_address'=>  $_SERVER['REMOTE_ADDR'],						
+			'password'=> md5($datos['password']),
+			'password_view'=>$datos['password'],
+			//'ultimo_inicio_sesion' => date('Y-m-d H:i:s'),
+			//'ip_address'=>  $_SERVER['REMOTE_ADDR'],
 			'createdat' => date('Y-m-d H:i:s'),
 			'updatedat' => date('Y-m-d H:i:s')
 		);

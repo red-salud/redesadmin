@@ -31,6 +31,11 @@ app.controller('ReservaCitasCtrl', ['$scope', '$filter', '$state', '$stateParams
       {'id':'M', 'descripcion':'MASCULINO'},
       {'id':'F', 'descripcion':'FEMENINO'}
     ]; 
+    $scope.fArr.listaEstadosCita = [ 
+      {'id':1, 'descripcion':'CITA POR CONFIRMAR'},
+      {'id':2, 'descripcion':'CITA CONFIRMADA'},
+      {'id':3, 'descripcion':'ATENCIÓN'}
+    ];
     $scope.fArr.listaCertificadosSeleccion = [];
     if( $stateParams.identifyNumDoc ){ 
       $scope.fPrimerDato.numero_documento = $stateParams.identifyNumDoc; 
@@ -197,7 +202,7 @@ app.controller('ReservaCitasCtrl', ['$scope', '$filter', '$state', '$stateParams
       };
       ReservaCitasFactory.editarCitaModal(arrParams); 
     }
-    $scope.btnAnular = function(row) {
+    $scope.btnAnularCita = function(row) {
       var pMensaje = '¿Realmente desea anular el registro?';
       $bootbox.confirm(pMensaje, function(result) {
         if(result){
@@ -219,6 +224,70 @@ app.controller('ReservaCitasCtrl', ['$scope', '$filter', '$state', '$stateParams
             pinesNotifications.notify({ title: pTitle, text: rpta.message, type: pType, delay: 2500 }); 
             blockUI.stop(); 
           });
+        }
+      });
+    }
+    $scope.metodos.btnEnviarCorreoCita = function(row) {
+      blockUI.start('Abriendo formulario...');
+      $uibModal.open({ 
+        templateUrl: angular.patchURLCI+'Cita/ver_popup_envio_correo', 
+        size: 'md',
+        backdrop: 'static',
+        keyboard:false,
+        scope: $scope,
+        controller: function ($scope, $uibModalInstance) { 
+          blockUI.stop(); 
+          $scope.titleForm = 'Envío de Correo'; 
+          $scope.fData = row; 
+          $scope.fData.active = 0;
+          $scope.fCorreo = { 
+            'solicitud': {},
+            'confirmacion': {}
+          }; 
+          // cargar información por defecto 
+          $scope.getInfoCorreoCitas = function() { 
+            blockUI.start('Obteniendo información...');
+            ReservaCitasServices.sObtenerConfiguracioCorreoCita(row).then(function (rpta) {
+              if(rpta.flag == 1){ 
+                $scope.fCorreo.solicitud = { 
+                  'remitente': rpta.datos.correo_laboral,
+                  'remitente_copia': rpta.datos.correo_laboral, 
+                  'destinatario': rpta.datos.contactos_comma, 
+                  'titulo': rpta.datos.titulo_solicitud,
+                  'cuerpo': rpta.datos.cuerpo_solicitud 
+                }; 
+                $scope.fCorreo.confirmacion = { 
+                  'remitente': rpta.datos.correo_laboral,
+                  'remitente_copia': rpta.datos.correo_laboral,
+                  'destinatario': rpta.datos.contactos_comma,
+                  'titulo': rpta.datos.titulo_confirmacion,
+                  'cuerpo': rpta.datos.cuerpo_confirmacion 
+                }; 
+                $scope.changeDestinatario = function(argument) {
+                  $scope.fCorreo.solicitud.destinatario = rpta.datos.contactos_comma; 
+                  $scope.fCorreo.confirmacion.destinatario = rpta.datos.contactos_comma;
+                  $('.tg-destinatario').tagsinput('destroy');
+                  $('.tg-destinatario').tagsinput('refresh');
+                }
+              }
+              blockUI.stop();
+            }); 
+          }
+          $scope.getInfoCorreoCitas(); 
+          if($scope.fData.estado_cita.id == 1){ // por confirmar
+            $scope.fData.active = 0;
+          }
+          if($scope.fData.estado_cita.id == 2){ // confirmado
+            $scope.fData.active = 1;
+          }
+          $scope.cancel = function () { 
+            $scope.fCorreo = { 
+              'solicitud': {},
+              'confirmacion': {}
+            }; 
+            $('.tg-destinatario').tagsinput('destroy');
+            $uibModalInstance.dismiss('cancel'); 
+          } 
         }
       });
     }
@@ -318,14 +387,14 @@ app.controller('ReservaCitasCtrl', ['$scope', '$filter', '$state', '$stateParams
     $scope.eventsF = function (start, end, timezone, callback) {
       var events = []; 
       blockUI.start('Actualizando calendario...');
+      //console.log(start, end,'start, end');
       //console.log(start.toLocaleTimeString(), end.toLocaleTimeString(),'start.toLocaleTimeString(), end.toLocaleTimeString()'); 
-      console.log(start,end,'moment(start).tz("America/Lima").format(YYYY-MM-DD)'); 
+      //console.log(start,end,'moment(start).tz("America/Lima").format(YYYY-MM-DD)'); 
       $scope.fBusqueda.desde = moment(start).tz('America/Lima').format('YYYY-MM-DD');
       $scope.fBusqueda.hasta = moment(end).tz('America/Lima').format('YYYY-MM-DD');
-      ReservaCitasServices.sListarCitaCalendario($scope.fBusqueda).then(function (rpta) {
+      ReservaCitasServices.sListarCitaCalendario($scope.fBusqueda).then(function (rpta) { 
         if(rpta.flag == 1){ 
           angular.forEach(rpta.datos, function(row, key) { 
-              //row.start = new Date(row.start);
               row.start =  moment(row.start);
               row.end =  moment(row.end);
           });
@@ -413,6 +482,7 @@ app.service("ReservaCitasServices",function($http, $q, handleBehavior) {
         sListarCitaCalendario: sListarCitaCalendario,
         sListarElementosAutoComplete: sListarElementosAutoComplete,
         sListarElementosBusqueda: sListarElementosBusqueda,
+        sObtenerConfiguracioCorreoCita: sObtenerConfiguracioCorreoCita,
         sRegistrarCita: sRegistrarCita,
         sMoverCita: sMoverCita,
         sEditarCita: sEditarCita,
@@ -442,6 +512,14 @@ app.service("ReservaCitasServices",function($http, $q, handleBehavior) {
       });
       return (request.then(handleBehavior.success,handleBehavior.error));
     } 
+    function sObtenerConfiguracioCorreoCita(datos) {
+      var request = $http({
+            method : "post",
+            url : angular.patchURLCI+"Cita/obtener_configuracion_correo_cita",
+            data : datos
+      });
+      return (request.then(handleBehavior.success,handleBehavior.error));
+    }
     function sRegistrarCita (datos) {
       var request = $http({
             method : "post",
@@ -476,7 +554,7 @@ app.service("ReservaCitasServices",function($http, $q, handleBehavior) {
     }
 });
 
-app.factory("ReservaCitasFactory",function($uibModal, pinesNotifications, blockUI, ReservaCitasServices, CertificadoServices) { 
+app.factory("ReservaCitasFactory",function($uibModal, pinesNotifications, blockUI, $timeout, ReservaCitasServices, CertificadoServices) { 
   var interfaz = {
     agregarCitaModal: function (arrParams) {
       blockUI.start('Abriendo formulario...');
@@ -507,20 +585,8 @@ app.factory("ReservaCitasFactory",function($uibModal, pinesNotifications, blockU
           }; 
           $scope.metodos.listaProductos(myCallBackPROD); 
 
-          // AUTOCOMPLETADO ASEGURADO - CERT 
-          // $scope.getAseguradoCertAutocomplete = function (value) {
-          //   var params = {
-          //     search: value,
-          //     sensor: false
-          //   }
-          //   return CertificadoServices.sListarCertificadosDeAseguradosAutocomplete(params).then(function(rpta) { 
-          //     $scope.noResultsAS = false;
-          //     if( rpta.flag === 0 ){
-          //       $scope.noResultsAS = true;
-          //     }
-          //     return rpta.datos; 
-          //   });
-          // }
+          // BINDEO ESTADOS DE CITA
+          $scope.fData.estado_cita = $scope.fArr.listaEstadosCita[0]; 
           /* DATEPICKERS */
           $scope.configDP = {};
           $scope.configDP.today = function() {
@@ -617,7 +683,13 @@ app.factory("ReservaCitasFactory",function($uibModal, pinesNotifications, blockU
                 var pTitle = 'OK!';
                 var pType = 'success';
                 $uibModalInstance.dismiss('cancel');
-                angular.element('.calendar').fullCalendar( 'refetchEvents' );
+                angular.element('.calendar').fullCalendar('refetchEvents'); 
+                //console.log(rpta.datos.row,rpta.datos.estado_cita.id,'rpta.datos.row,rpta.datos.estado_cita.id');
+                if( rpta.datos.row && !(rpta.datos.estado_cita.id == 3) ){ 
+                  $timeout(function() { 
+                    $scope.metodos.btnEnviarCorreoCita(rpta.datos.row); 
+                  },1000); 
+                } 
               }else if(rpta.flag == 0){ 
                 var pTitle = 'Error!';
                 var pType = 'danger';
@@ -736,6 +808,12 @@ app.factory("ReservaCitasFactory",function($uibModal, pinesNotifications, blockU
           }
           $scope.metodos.listaProveedores(myCallBackPR); 
 
+          // BINDEO ESTADO DE CITA 
+          var objIndex = $scope.fArr.listaEstadosCita.filter(function(obj) { 
+            return obj.id == $scope.fData.estado_cita.id;
+          }).shift(); 
+          $scope.fData.estado_cita = objIndex; 
+
           $scope.cancel = function () { 
             $uibModalInstance.dismiss('cancel');
           };
@@ -748,12 +826,18 @@ app.factory("ReservaCitasFactory",function($uibModal, pinesNotifications, blockU
               $scope.fData.hora_hasta_str = $scope.fData.hora_hasta.toLocaleTimeString(); 
             }
             blockUI.start('Procesando información...'); 
+
             ReservaCitasServices.sEditarCita($scope.fData).then(function (rpta) {
               if(rpta.flag == 1){ 
                 var pTitle = 'OK!';
                 var pType = 'success';
                 $uibModalInstance.dismiss('cancel');
-                angular.element('.calendar').fullCalendar( 'refetchEvents' );
+                angular.element('.calendar').fullCalendar( 'refetchEvents' ); 
+                if( rpta.datos.row && rpta.datos.estado_cita.id == 2 ){ // confirmado 
+                  $timeout(function() { 
+                    $scope.metodos.btnEnviarCorreoCita(rpta.datos.row); 
+                  },1000); 
+                } 
               }else if(rpta.flag == 0){ 
                 var pTitle = 'Error!';
                 var pType = 'danger';

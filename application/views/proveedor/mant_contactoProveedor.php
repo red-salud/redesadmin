@@ -28,13 +28,14 @@
 			            <input type="text" class="form-control input-sm" ng-model="fContacto.apellidos" placeholder="Ingrese apellidos" tabindex="30" /> 
 					</div>
 					<div class="form-group"> 
-						<div class="inline">
-			           		<label class="control-label"> Cargo/Area: </label>
-			            	<input type="text" class="form-control input-sm" ng-model="fContacto.cargo" placeholder="Ingrese cargo o área" tabindex="40" /> 
-			            </div>
+						<div class="inline mr-sm">
+					        <label class="control-label"> Cargo/Area: </label> 
+					        <select class="form-control input-sm" ng-model="fContacto.cargo_contacto" tabindex="40" style="width: 128px;"
+					        	ng-options="item as item.descripcion for item in fArr.listaCargosContacto"> </select> 
+					    </div>
 						<div class="inline"> 
 							<label class="control-label text-ellipsis"> Teléfono Movil: </label>
-			            	<input type="tel" class="form-control input-sm" ng-model="fContacto.telefono_movil" placeholder="Ingrese tel. movil" tabindex="50" /> 
+			        		<input type="tel" class="form-control input-sm" ng-model="fContacto.telefono_movil" placeholder="Ingrese tel. movil" tabindex="50" /> 
 						</div>
 					</div> 
 					<div class="form-group">
@@ -49,7 +50,11 @@
 					</div>
 					<div class="form-group">
 						<label class="control-label"> E-mail: </label>
-			            <input type="email" class="form-control input-sm" ng-model="fContacto.email" placeholder="Ingrese correo electrónico" tabindex="80" /> 
+			      <input type="email" class="form-control input-sm" ng-model="fContacto.email" placeholder="Ingrese correo electrónico" tabindex="80" /> 
+					</div> 
+					<div class="form-group">
+						<label class="control-label"> ¿Enviar correos para separa cita?: </label> 
+			      <input type="checkbox" class="" ng-model="fContacto.chk_envio_correo" tabindex="85" /> 
 					</div> 
 					<div class="form-group" ng-if="contBotonesReg">
 						<button type="button" ng-click="agregarContacto(); $event.preventDefault();" ng-disabled="formContactoEmpresa.$invalid" tabindex="100" class="block btn btn-primary btn-sm btn-full"> <i class="fa fa-plus"></i> AGREGAR CONTACTO </button>
