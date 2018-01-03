@@ -153,7 +153,7 @@ app.controller('ContactoProveedorCtrl', ['$scope', '$filter', '$uibModal', '$boo
       });
     }
 }]);
-
+// // // 
 app.service("ContactoProveedorServices",function($http, $q, handleBehavior) {
     return({
         sListar: sListar,
