@@ -135,9 +135,8 @@ class Model_colaborador extends CI_Model {
 			'ap_materno_col' => strtoupper_total($datos['ap_materno']),
 			'fecha_nacimiento_col' => empty($datos['fecha_nacimiento'])? NULL : darFormatoYMD($datos['fecha_nacimiento']), 
 			'numero_documento_col'=> $datos['num_documento'],
-			//'estado_civil'=> empty($datos['estado_civil']) ? NULL : $datos['estado_civil'],
 			'correo_laboral' => empty($datos['email'])? NULL : strtoupper_total($datos['email']), 
-			'celular_col'=> $datos['celular'],
+			'celular_col'=> empty($datos['celular']) ? NULL : $datos['celular'],
 			'createdat' => date('Y-m-d H:i:s'),
 			'updatedat' => date('Y-m-d H:i:s')
 		);
@@ -158,9 +157,8 @@ class Model_colaborador extends CI_Model {
 			'ap_materno_col' => strtoupper_total($datos['ap_materno']),
 			'fecha_nacimiento_col' => empty($datos['fecha_nacimiento'])? NULL : darFormatoYMD($datos['fecha_nacimiento']), 
 			'numero_documento_col'=> $datos['num_documento'],
-			//'estado_civil'=> empty($datos['estado_civil']) ? NULL : $datos['estado_civil'],
 			'correo_laboral' => empty($datos['email'])? NULL : strtoupper_total($datos['email']), 
-			'celular_col'=> $datos['celular'],
+			'celular_col'=> empty($datos['celular']) ? NULL : $datos['celular'], 
 			'updatedat' => date('Y-m-d H:i:s') 
 		);
 		$this->db->where('idcolaborador',$datos['id']);
