@@ -62,18 +62,18 @@ class CitaSeguimiento extends CI_Controller {
 	{ 
 		// MANDAR CORREO A LOS INVOLUCRADOS 
 		$this->load->library('My_PHPMailer'); 
-		$fConfig = obtener_parametros_configuracion();
+		$fConfig = obtener_parametros_configuracion(); 
 		$hoydate = date("Y-m-d H:i:s"); 
 		date_default_timezone_set('UTC'); 
 		define('SMTP_HOST',$fConfig['smtp_host_notif']); // smtpout.secureserver.net 
-		define('SMTP_PORT',$fConfig['smtp_port_notif']); // 465
-		define('SMTP_USERNAME',$fConfig['email_notif']); // lluna@red-salud.com
+		define('SMTP_PORT',$fConfig['smtp_port_notif']); // 3535 - 465 
+		define('SMTP_USERNAME',$fConfig['email_notif']); // notificaciones@red-salud.com 
 		define('SMTP_PASSWORD',$fConfig['clave_notif']); // 
 		define('SMTP_SECURE',$fConfig['smtp_secure_notif']); // SSL 
 		$setFromAleas = 'NOTIFICACIONES - RED SALUD'; 
 		$mail = new PHPMailer(); 
 		$mail->IsSMTP(true);
-		$mail->SMTPDebug = 2;
+		// $mail->SMTPDebug = 2; 
 		$mail->SMTPAuth = true;
 		$mail->SMTPSecure = SMTP_SECURE;
 		$mail->Host = SMTP_HOST;
@@ -82,7 +82,7 @@ class CitaSeguimiento extends CI_Controller {
 		$mail->Password = SMTP_PASSWORD;
 		$mail->SetFrom(SMTP_USERNAME,$setFromAleas);
 		$mail->AddReplyTo(SMTP_USERNAME,$setFromAleas);
-		$mail->Subject = $this->sessionRS['nombres_col'].' '.$this->sessionRS['ap_paterno_col'].' TIENE ALGO QUE DECIRTE';
+		$mail->Subject = $this->sessionRS['nombres_col'].' TIENE ALGO QUE DECIRTE'; 
 
 		$cuerpo = '<html> 
 			<style>
@@ -95,24 +95,25 @@ class CitaSeguimiento extends CI_Controller {
 			<div style="text-align: right;">
 				<img style="width: 160px;" alt="Red Salud" src="'.base_url('assets/dinamic/empresa/'.$fConfig['logo_general_empresa']).'"> 
 			</div> <br />';
-		$cuerpo .= '<h2> SEGUIMIENTO AL AFILIADO '.$fData['asegurado'].' </h2> <br />'; 
+		$cuerpo .= '<h3> SEGUIMIENTO AL AFILIADO '.$fData['asegurado'].' </h3> <br />'; 
 		$cuerpo .= '<div style="font-size:16px;"> 
 				Estimado(a): <br /> <br />'; 
 		$cuerpo .= 'Se ha agregado un nuevo comentario en la cita del afiliado <u>'.strtoupper($fData['asegurado']).'.</u> <br /> <br />'; 
-		$cuerpo .= '<div style="background-color: #e8e8e8;font-style: italic;margin-top: 20px;padding: 16px;"> "'.$fData['contenido'].'" </div>'; 
-		$cuerpo .= '<a target="_blank" href="'.base_url().'"> RESPONDER AL COMENTARIO </a>'; 
+		$cuerpo .= '<div style="background-color: #e8e8e8;font-style: italic;margin: 20px;padding: 20px;"> "'.$fData['contenido'].'" </div>'; 
+		$cuerpo .= '<a target="_blank" href="'.base_url().'/#/app/reserva-citas//"> RESPONDER AL COMENTARIO </a>'; 
 		$cuerpo .= '<br /> <br />  
 			<span style="font-size: 12px; color: #9c9c9c;float:right; ">ATTE: <br /> 
-						ENVÍO AUTOMÁTICO DE CORREO GENERADO POR EL AREA DE TECNOLOGÍAS DE LA INFORMACIÓN.  </span>
+						ENVÍO AUTOMÁTICO DE CORREO GENERADO POR EL AREA DE T.I.  </span>
 		</div>';
 		// $cuerpo .= '<div style="width: 100%; display: block; font-size: 14px; text-align: right; line-height: 5; color: #a9b9c1;"> Atte: Área de Sistemas y Desarrollo </div>';
 		$cuerpo .= '</body></html>';
 		$mail->AltBody = $cuerpo;
 		$mail->MsgHTML($cuerpo);
-		$mail->AddAddress( 'lluna@red-salud.com', ' NOTIFICACIONES' ); 
-		// $mail->AddAddress( 'pvasquez@red-salud.com', ' NOTIFICACIONES' ); 
-		// $mail->AddAddress( 'aluna@red-salud.com', ' NOTIFICACIONES' ); 
-		// $mail->AddAddress( 'atord@red-salud.com', ' NOTIFICACIONES' ); 
+		$mail->AddAddress( 'lluna@red-salud.com', 'Luis Luna' ); 
+		$mail->AddAddress( 'acavero@red-salud.com', 'Ariel Cavero' ); 
+		$mail->AddAddress( 'pvasquez@red-salud.com', 'Pilar Vasquez' ); 
+		$mail->AddAddress( 'aluna@red-salud.com', 'Angie Luna' ); 
+		$mail->AddAddress( 'atord@red-salud.com', 'Angela Tord' ); 
 		// Activo condificación utf-8
 		$mail->CharSet = 'UTF-8';
 		// echo $cuerpo; 
