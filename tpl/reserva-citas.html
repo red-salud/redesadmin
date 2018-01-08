@@ -132,7 +132,10 @@
               <li role="menuitem" ng-if="event.estado_cita.id == 3" ng-click="btnIrAtencion(event);">
                 <a ><i class="fa fa-pencil-square-o"></i>Ir a Atención</a>
               </li>
-              <li role="menuitem" ng-if="event.estado_cita.id == 3" ng-click="btnAnularAtencion(event);">
+              <li role="menuitem" ng-click="metodos.btnHacerSeguimiento(event);">
+                <a ><i class="fa fa-eye"></i>Seguimiento</a>
+              </li>
+             	<li role="menuitem" ng-if="event.estado_cita.id == 3" ng-click="btnAnularAtencion(event);">
                 <a ><i class="fa fa-remove"></i>Anular Atención</a>
               </li>
             </ul>

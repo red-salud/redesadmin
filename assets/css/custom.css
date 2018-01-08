@@ -271,3 +271,11 @@ form.edit-form input, form.edit-form select, .edit-form input, .edit-form select
   font-size: 13px; 
   font-weight: 500; 
 }
+.line-success{
+  border-color: #27c24c;
+}
+
+.text-help{
+  font-size: 12px;
+  color: #a7acaf;
+}

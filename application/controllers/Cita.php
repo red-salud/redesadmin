@@ -7,7 +7,7 @@ class Cita extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->helper(array('security','imagen_helper','otros_helper','fechas_helper'));
-		$this->load->model(array('model_cita','model_siniestro','model_historia','model_proveedor','model_contacto_proveedor'));
+		$this->load->model(array('model_cita','model_siniestro','model_historia','model_proveedor','model_contacto_proveedor','model_cita_seguimiento'));
 		//cache
 		$this->output->set_header("Cache-Control: no-store, no-cache, must-revalidate, no-transform, max-age=0, post-check=0, pre-check=0");
 		$this->output->set_header("Pragma: no-cache");
@@ -16,7 +16,8 @@ class Cita extends CI_Controller {
 		//if(!@$this->user) redirect ('inicio/login');
 		//$permisos = cargar_permisos_del_usuario($this->user->idusuario);
 	}
-	public function listar_citas_en_calendario(){ 
+	public function listar_citas_en_calendario()
+	{
 		$allInputs = json_decode(trim($this->input->raw_input_stream),true); 
 		$lista = $this->model_cita->m_cargar_citas($allInputs); 
 		$arrListado = array();
@@ -215,7 +216,6 @@ class Cita extends CI_Controller {
 			    ->set_content_type('application/json')
 			    ->set_output(json_encode($arrData));
 		}
-		
 	}
 	public function obtener_configuracion_correo_cita()
 	{
@@ -292,6 +292,10 @@ class Cita extends CI_Controller {
 	{
 		$this->load->view('cita/popup_envio_correo'); 
 	}
+	public function ver_popup_seguimiento()
+	{
+		$this->load->view('cita/popup_seguimiento'); 
+	}
 	public function registrar()
 	{
 		$allInputs = json_decode(trim($this->input->raw_input_stream),true); 
@@ -316,7 +320,7 @@ class Cita extends CI_Controller {
 			    ->set_content_type('application/json')
 			    ->set_output(json_encode($arrData));
 			return;
-    	}
+    	} 
     	// campo producto vacio
     	if( empty($allInputs['producto']['id']) ){ 
     		$arrData['message'] = 'No se ingresó correctamente el producto. Corrija y vuelva a intentarlo';
@@ -325,7 +329,7 @@ class Cita extends CI_Controller {
 			    ->set_content_type('application/json')
 			    ->set_output(json_encode($arrData));
 			return;
-    	}
+    	} 
     	// campo estado vacio 
     	if( empty($allInputs['estado_cita']['id']) ){ 
     		$arrData['message'] = 'No se ingresó correctamente el estado de la cita. Corrija y vuelva a intentarlo. <br />';
@@ -334,13 +338,12 @@ class Cita extends CI_Controller {
 			    ->set_content_type('application/json')
 			    ->set_output(json_encode($arrData));
 			return;
-    	}
-    	
+    	} 
     	$this->db->trans_start();
 		if($this->model_cita->m_registrar($allInputs)) { // registro de cita 
 			$allInputs['idcita'] = GetLastId('idcita','cita'); 
 			$fCitaAtencion = $this->model_cita->m_validar_cita_en_atencion($allInputs['idcita']); 
-			$arrData['message'] = 'Se registraron los datos correctamente. <br />'; 
+			$arrData['message'] = '- Se registraron los datos correctamente. <br />'; 
 			$arrData['flag'] = 1; 
 			$arrData['datos']['estado_cita'] = $allInputs['estado_cita'];
 			if($allInputs['estado_cita']['id'] == 3){ // ATENCIÓN 
@@ -375,6 +378,14 @@ class Cita extends CI_Controller {
 			}else{
 				$fCita = $this->listar_esta_cita_calendario($allInputs['idcita']); 
 				$arrData['datos']['row'] = $fCita;
+			}
+			// SEGUIMIENTO DE CITA 
+			$arrSeguimiento = array( 
+				'idcita'=> $allInputs['idcita'], 
+				'contenido'=> 'Registré la cita en nuestro sistema.' 
+			); 
+			if( $this->model_cita_seguimiento->m_registrar($arrSeguimiento) ){ 
+				$arrData['message'] .= '- Se registró el seguimiento de la cita correctamente. <br />';
 			}
 		}
 		$this->db->trans_complete();

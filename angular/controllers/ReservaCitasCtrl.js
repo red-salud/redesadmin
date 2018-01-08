@@ -2,6 +2,7 @@ app.controller('ReservaCitasCtrl', ['$scope', '$filter', '$state', '$stateParams
   'ReservaCitasFactory',
   'PlanFactory',
   'ReservaCitasServices',
+  'SeguimientoCitasServices',
   'ProveedorServices', 
   'ProductoServices',
   'CertificadoServices',
@@ -10,6 +11,7 @@ app.controller('ReservaCitasCtrl', ['$scope', '$filter', '$state', '$stateParams
   ReservaCitasFactory,
   PlanFactory,
   ReservaCitasServices,
+  SeguimientoCitasServices,
   ProveedorServices,
   ProductoServices,
   CertificadoServices,
@@ -291,9 +293,92 @@ app.controller('ReservaCitasCtrl', ['$scope', '$filter', '$state', '$stateParams
         }
       });
     }
+    $scope.metodos.btnHacerSeguimiento = function(row) { 
+      blockUI.start('Abriendo formulario...'); 
+      $uibModal.open({
+        templateUrl: angular.patchURLCI+'Cita/ver_popup_seguimiento', 
+        size: 'md',
+        backdrop: 'static',
+        keyboard:false,
+        scope: $scope,
+        controller: function ($scope, $uibModalInstance) { 
+          blockUI.stop(); 
+          $scope.titleForm = 'Seguimiento de la Cita'; 
+          $scope.fData = row; 
+          $scope.fSeg = {}; 
+          $scope.fArr.listaSeguimiento = []; 
+          var arrParams = { 
+            'idcita': $scope.fData.id // idcita 
+          };
+          $scope.metodos.listarSeguimientosDeCita(arrParams); 
+          $scope.agregarSeguimiento = function() { 
+            var arrParamsReg = { 
+              'idcita': $scope.fData.id, // idcita 
+              'contenido': $scope.fSeg.contenido 
+            };
+            blockUI.start('Agregando seguimiento...');
+            SeguimientoCitasServices.sRegistrar(arrParamsReg).then(function (rpta) { 
+              if(rpta.flag == 1){ 
+                var arrParams = { 
+                  'idcita': $scope.fData.id // idcita 
+                };
+                $scope.metodos.listarSeguimientosDeCita(arrParams); 
+                $scope.fSeg.contenido = null;
+                var pTitle = 'OK!';
+                var pType = 'success';
+              }else if(rpta.flag == 0){ 
+                var pTitle = 'Error!';
+                var pType = 'danger';
+              }else{ 
+                alert('Error inesperado');
+              }
+              blockUI.stop(); 
+              pinesNotifications.notify({ title: pTitle, text: rpta.message, type: pType, delay: 2500 });
+            });
+          }
+          $scope.eliminarSeguimiento = function(idcitaseg) { 
+            var arrParamsElim = { 
+              'idcitaseg': idcitaseg 
+            };
+            var pMensaje = '¿Realmente desea anular el registro?';
+            $bootbox.confirm(pMensaje, function(result) {
+              if(result){
+                blockUI.start('Procesando información...');
+                SeguimientoCitasServices.sAnular(arrParamsElim).then(function (rpta) {
+                  if(rpta.flag == 1){
+                    var pTitle = 'OK!';
+                    var pType = 'success';
+                    $scope.metodos.listarSeguimientosDeCita(arrParams); 
+                  }else if(rpta.flag == 0){
+                    var pTitle = 'Error!';
+                    var pType = 'danger';
+                  }else{
+                    alert('Error inesperado');
+                  }
+                  pinesNotifications.notify({ title: pTitle, text: rpta.message, type: pType, delay: 2500 });
+                  blockUI.stop(); 
+                });
+              }
+            });
+          }
+          $scope.cancel = function () { 
+            $uibModalInstance.dismiss('cancel'); 
+          } 
+        } 
+      });
+    }
+    $scope.metodos.listarSeguimientosDeCita = function(arrParams) { 
+      blockUI.start('Actualizando seguimiento de citas...');
+      SeguimientoCitasServices.sListarSeguimientoCita(arrParams).then(function (rpta) { 
+        if(rpta.flag == 1){ 
+          $scope.fArr.listaSeguimiento = rpta.datos; 
+        } 
+        blockUI.stop(); 
+      }); 
+    } 
     /* EVENTOS */
     $scope.menu = angular.element('.menu-dropdown');
-    $scope.alertOnClick =function(event, jsEvent, view) {
+    $scope.alertOnClick = function(event, jsEvent, view) {
       $scope.event = event;
       //console.log(event,jsEvent,'event,jsEvent');
       $scope.menu.addClass('open');
@@ -307,11 +392,6 @@ app.controller('ReservaCitasCtrl', ['$scope', '$filter', '$state', '$stateParams
       } else if ( left > $scope.menu.width() ) {
         $scope.menu.addClass('right');
       }
-
-     /* console.log('cal.offset().bottom',cal.offset().bottom);
-      console.log('cal.offset().top',cal.offset().top);
-      console.log('$scope.menu.height()',$scope.menu.height());*/
-
       $scope.event.posX = jsEvent.pageX - cal.offset().left;
       if($scope.event.posX < 140){
         $scope.event.posX = 140;

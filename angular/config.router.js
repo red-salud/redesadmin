@@ -275,6 +275,7 @@ angular.module('app')
               'ui.select',
               'tagsinput',
               'angular/controllers/ReservaCitasCtrl.js', 
+              'angular/controllers/SeguimientoCitasCtrl.js', 
               'angular/controllers/ProveedorCtrl.js',
               'angular/controllers/ProductoCtrl.js',
               'angular/controllers/HistorialCertificadoCtrl.js',
