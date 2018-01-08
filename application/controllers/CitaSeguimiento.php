@@ -65,16 +65,17 @@ class CitaSeguimiento extends CI_Controller {
 		$fConfig = obtener_parametros_configuracion();
 		$hoydate = date("Y-m-d H:i:s"); 
 		date_default_timezone_set('UTC'); 
-		define('SMTP_HOST',$fConfig['smtp_host_notif']); 
-		define('SMTP_PORT',$fConfig['smtp_port_notif']); 
-		define('SMTP_USERNAME',$fConfig['email_notif']); 
-		define('SMTP_PASSWORD',$fConfig['clave_notif']); 
+		define('SMTP_HOST',$fConfig['smtp_host_notif']); // smtpout.secureserver.net 
+		define('SMTP_PORT',$fConfig['smtp_port_notif']); // 465
+		define('SMTP_USERNAME',$fConfig['email_notif']); // lluna@red-salud.com
+		define('SMTP_PASSWORD',$fConfig['clave_notif']); // 
+		define('SMTP_SECURE',$fConfig['smtp_secure_notif']); // SSL 
 		$setFromAleas = 'NOTIFICACIONES - RED SALUD'; 
 		$mail = new PHPMailer(); 
 		$mail->IsSMTP(true);
 		$mail->SMTPDebug = 2;
 		$mail->SMTPAuth = true;
-		$mail->SMTPSecure = "tls";
+		$mail->SMTPSecure = SMTP_SECURE;
 		$mail->Host = SMTP_HOST;
 		$mail->Port = SMTP_PORT;
 		$mail->Username =  SMTP_USERNAME;
