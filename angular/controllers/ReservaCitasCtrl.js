@@ -265,11 +265,13 @@ app.controller('ReservaCitasCtrl', ['$scope', '$filter', '$state', '$stateParams
                   'titulo': rpta.datos.titulo_confirmacion,
                   'cuerpo': rpta.datos.cuerpo_confirmacion 
                 }; 
-                $scope.changeDestinatario = function(argument) {
-                  $scope.fCorreo.solicitud.destinatario = rpta.datos.contactos_comma; 
-                  $scope.fCorreo.confirmacion.destinatario = rpta.datos.contactos_comma;
-                  $('.tg-destinatario').tagsinput('destroy');
-                  $('.tg-destinatario').tagsinput('refresh');
+                $scope.changeDestinatario = function() { 
+                  if( rpta.datos.contactos_comma ){ 
+                    $scope.fCorreo.solicitud.destinatario = rpta.datos.contactos_comma; 
+                    $scope.fCorreo.confirmacion.destinatario = rpta.datos.contactos_comma;
+                    $('.tg-destinatario').tagsinput('destroy');
+                    $('.tg-destinatario').tagsinput('refresh');
+                  } 
                 }
               }
               blockUI.stop();
