@@ -280,7 +280,8 @@ angular.module('app')
               'angular/controllers/ProductoCtrl.js',
               'angular/controllers/HistorialCertificadoCtrl.js',
               'angular/controllers/AseguradoCtrl.js',
-              'angular/controllers/PlanCtrl.js'  
+              'angular/controllers/PlanCtrl.js',
+              'angular/controllers/HistorialSiniestroCtrl.js'    
             ]) 
           })
           .state('lockme', {

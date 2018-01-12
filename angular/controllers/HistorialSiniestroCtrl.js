@@ -154,10 +154,38 @@ app.controller('HistorialSiniestroCtrl', ['$scope', '$filter', '$uibModal', '$bo
     $scope.mySelectionGrid = [];
   };
   $scope.metodos.getPaginationServerSide(true); 
+  $scope.btnAnularAtencion = function() { 
+      console.log('entroo');
+      var pMensaje = '¿Realmente desea anular el registro?';
+      $bootbox.confirm(pMensaje, function(result) {
+        if(result){
+          var arrParams = { 
+            idsiniestro: $scope.mySelectionGrid[0].idsiniestro, // idsiniestro 
+            idcita: $scope.mySelectionGrid[0].idcita // idcita
+          };
+          blockUI.start('Procesando información...'); 
+          SiniestroServices.sAnular(arrParams).then(function (rpta) {
+            if(rpta.flag == 1){
+              var pTitle = 'OK!';
+              var pType = 'success';
+              $scope.metodos.getPaginationServerSide(true); 
+            }else if(rpta.flag == 0){
+              var pTitle = 'Error!';
+              var pType = 'danger';
+            }else{
+              alert('Error inesperado');
+            }
+            pinesNotifications.notify({ title: pTitle, text: rpta.message, type: pType, delay: 2500 }); 
+            blockUI.stop(); 
+          });
+        }
+      });
+    }
 }]); 
 app.service("SiniestroServices",function($http, $q, handleBehavior) {
     return({
-        sListarHistorialSiniestros: sListarHistorialSiniestros
+        sListarHistorialSiniestros: sListarHistorialSiniestros, 
+        sAnular: sAnular 
     });
     function sListarHistorialSiniestros(datos) {
       var request = $http({
@@ -166,5 +194,44 @@ app.service("SiniestroServices",function($http, $q, handleBehavior) {
             data : datos
       });
       return (request.then(handleBehavior.success,handleBehavior.error));
+    } 
+    function sAnular (datos) { 
+      var request = $http({ 
+            method : "post",
+            url : angular.patchURLCI+"Siniestro/anular",
+            data : datos
+      });
+      return (request.then(handleBehavior.success,handleBehavior.error));
     }
+});
+app.filter('propsFilter', function() {
+  return function(items, props) {
+    var out = [];
+
+    if (angular.isArray(items)) {
+      var keys = Object.keys(props);
+
+      items.forEach(function(item) {
+        var itemMatches = false;
+
+        for (var i = 0; i < keys.length; i++) {
+          var prop = keys[i];
+          var text = props[prop].toLowerCase();
+          if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+            itemMatches = true;
+            break;
+          }
+        }
+
+        if (itemMatches) {
+          out.push(item);
+        }
+      });
+    } else {
+      // Let the output be the input untouched
+      out = items;
+    }
+
+    return out;
+  };
 });

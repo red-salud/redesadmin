@@ -70,6 +70,15 @@ class Model_cita extends CI_Model {
 		$this->db->limit(1);
 		return $this->db->get()->row_array();
 	}
+	public function m_retornar_estado_confirmado($datos)
+	{
+		$data = array(
+			'estado_cita' => 2, // confirmado: 2 
+			'updatedat' => date('Y-m-d H:i:s')
+		);
+		$this->db->where('idcita',$datos['idcita']);
+		return $this->db->update('cita', $data);
+	}
 	public function m_registrar($datos)
 	{
 		$data = array(

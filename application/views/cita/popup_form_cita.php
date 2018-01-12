@@ -22,7 +22,7 @@
 					<div class="input-group">
 		        <ui-select ng-model="fData.proveedor" theme="bootstrap" tabindex="110">
 		          <ui-select-match placeholder="Seleccione un proveedor...">{{ fData.proveedor.descripcion }} </ui-select-match>
-		          <ui-select-choices repeat="item in fArr.listaProveedores"> 
+		          <ui-select-choices repeat="item in fArr.listaProveedores | propsFilter: {descripcion: $select.search}"> 
 		            <span ng-bind-html="item.descripcion | highlight: $select.search"></span> 
 		          </ui-select-choices>
 		        </ui-select>

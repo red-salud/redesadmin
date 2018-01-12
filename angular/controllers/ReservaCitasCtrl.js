@@ -7,6 +7,7 @@ app.controller('ReservaCitasCtrl', ['$scope', '$filter', '$state', '$stateParams
   'ProductoServices',
   'CertificadoServices',
   'AseguradoServices',
+  'SiniestroServices',
   function($scope, $filter, $state, $stateParams, $uibModal, $bootbox, $log, $timeout, pinesNotifications, uiGridConstants, blockUI, 
   ReservaCitasFactory,
   PlanFactory,
@@ -15,7 +16,8 @@ app.controller('ReservaCitasCtrl', ['$scope', '$filter', '$state', '$stateParams
   ProveedorServices,
   ProductoServices,
   CertificadoServices,
-  AseguradoServices
+  AseguradoServices,
+  SiniestroServices
   ) { 
     $scope.metodos = {}; // contiene todas las funciones 
     $scope.fArr = {}; // contiene todos los arrays generados por las funciones 
@@ -213,6 +215,33 @@ app.controller('ReservaCitasCtrl', ['$scope', '$filter', '$state', '$stateParams
           };
           blockUI.start('Procesando información...');
           ReservaCitasServices.sAnular(arrParams).then(function (rpta) {
+            if(rpta.flag == 1){
+              var pTitle = 'OK!';
+              var pType = 'success';
+              angular.element('.calendar').fullCalendar( 'refetchEvents' ); 
+            }else if(rpta.flag == 0){
+              var pTitle = 'Error!';
+              var pType = 'danger';
+            }else{
+              alert('Error inesperado');
+            }
+            pinesNotifications.notify({ title: pTitle, text: rpta.message, type: pType, delay: 2500 }); 
+            blockUI.stop(); 
+          });
+        }
+      });
+    }
+    $scope.btnAnularAtencion = function(row) { 
+      console.log('entroo');
+      var pMensaje = '¿Realmente desea anular el registro?';
+      $bootbox.confirm(pMensaje, function(result) {
+        if(result){
+          var arrParams = { 
+            idsiniestro: row.siniestro.idsiniestro, // idsiniestro
+            idcita: row.id 
+          };
+          blockUI.start('Procesando información...'); 
+          SiniestroServices.sAnular(arrParams).then(function (rpta) {
             if(rpta.flag == 1){
               var pTitle = 'OK!';
               var pType = 'success';
